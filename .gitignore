@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+dist
+.env*
+npm-debug.log*
+
+# Raw source media not used by the app (keep repo lean; originals stay on disk)
+*.mp4
+/product image/
+public/models/*.glb
+!public/models/*-opt.glb
+public/models/source/
+data/*.xlsx

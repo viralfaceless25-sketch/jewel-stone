@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" role="img" aria-labelledby="title">
+  <title id="title">Floral diamond earrings</title>
+  <rect width="900" height="700" fill="#fbf7ef"/>
+  <g transform="translate(245 110)">
+    <circle cx="105" cy="90" r="54" fill="#fffaf3" stroke="#b87968" stroke-width="12"/>
+    <path d="M105 36c36 52 36 56 0 108-36-52-36-56 0-108Z" fill="#f1e8db"/>
+    <path d="M51 90c52-36 56-36 108 0-52 36-56 36-108 0Z" fill="#f8eee4"/>
+    <circle cx="105" cy="90" r="16" fill="#fff" stroke="#d9bfa4" stroke-width="5"/>
+    <path d="M105 150v110" stroke="#b87968" stroke-width="14" stroke-linecap="round"/>
+    <ellipse cx="105" cy="330" rx="62" ry="82" fill="#fffaf3" stroke="#b87968" stroke-width="12"/>
+    <path d="M105 252 158 330 105 412 52 330Z" fill="none" stroke="#d9bfa4" stroke-width="6"/>
+  </g>
+  <g transform="translate(445 110)">
+    <circle cx="105" cy="90" r="54" fill="#fffaf3" stroke="#b87968" stroke-width="12"/>
+    <path d="M105 36c36 52 36 56 0 108-36-52-36-56 0-108Z" fill="#f1e8db"/>
+    <path d="M51 90c52-36 56-36 108 0-52 36-56 36-108 0Z" fill="#f8eee4"/>
+    <circle cx="105" cy="90" r="16" fill="#fff" stroke="#d9bfa4" stroke-width="5"/>
+    <path d="M105 150v110" stroke="#b87968" stroke-width="14" stroke-linecap="round"/>
+    <ellipse cx="105" cy="330" rx="62" ry="82" fill="#fffaf3" stroke="#b87968" stroke-width="12"/>
+    <path d="M105 252 158 330 105 412 52 330Z" fill="none" stroke="#d9bfa4" stroke-width="6"/>
+  </g>
+</svg>

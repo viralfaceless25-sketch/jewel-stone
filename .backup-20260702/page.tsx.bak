@@ -1,0 +1,319 @@
+"use client";
+
+import Link from "next/link";
+import { Diamond, Gem, Gift, ShieldCheck, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import { AppointmentCTA } from "@/components/AppointmentCTA";
+import { CollectionCard } from "@/components/CollectionCard";
+import { HeroSection } from "@/components/HeroSection";
+import { PressStrip } from "@/components/PressStrip";
+import { ProductGridClient } from "@/components/ProductGridClient";
+import { ReviewsSection } from "@/components/ReviewsSection";
+import { SectionHeader } from "@/components/SectionHeader";
+import { SectionReveal, StaggerReveal, StaggerItem } from "@/components/SectionReveal";
+import { ServiceCard } from "@/components/ServiceCard";
+import { collections, homeFeaturedProducts, signatureCollection } from "@/data/products";
+import { processSteps, services } from "@/data/site";
+
+const TRUST = [
+  { icon: ShieldCheck, title: "GIA & IGI Certified",  sub: "Every diamond backed by a grading report" },
+  { icon: Sparkles,    title: "Certified Diamonds",    sub: "EF-FG/VVS in stock · D-E/VS2+ made to order" },
+  { icon: Diamond,     title: "NYC Diamond District",  sub: "62 W 47th St, Suite 505, New York" },
+  { icon: Gem,         title: "18K & 14K Solid Gold",  sub: "White, yellow, and rose gold options" },
+];
+
+const CATEGORY_ICONS = [
+  { slug: "rings", label: "Rings", icon: Gem },
+  { slug: "earrings", label: "Earrings", icon: Sparkles },
+  { slug: "pendants", label: "Pendants", icon: Diamond },
+  { slug: "bracelets", label: "Bracelets", icon: ShieldCheck, comingSoon: true },
+  { slug: "necklaces", label: "Necklaces", icon: Gift, comingSoon: true },
+];
+
+// FadeUp — starts at 0.2 opacity so content is never a blank void
+function FadeUp({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
+  return (
+    <motion.div
+      className={className}
+      initial={{ opacity: 0.2, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.01 }}
+      transition={{ duration: 0.55, delay, ease: [0.23, 1, 0.32, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <main>
+
+      {/* ── HERO + 360° ──────────────────────────────────── */}
+      <HeroSection />
+
+      {/* ── TRUST BADGES ── */}
+      <section className="border-y border-rose/10 bg-marble/60 py-7">
+        <div className="luxury-shell flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+          {[
+            { num: "11", label: "One-of-a-kind pieces" },
+            { num: "EF-FG", label: "Color · VVS" },
+            { num: "18K/14K", label: "Solid gold" },
+            { num: "GIA·IGI", label: "Certified" },
+            { num: "NYC", label: "Diamond District" },
+          ].map(({ num, label }) => (
+            <div key={num} className="text-center">
+              <p className="font-display text-xl leading-none text-ink/75">{num}</p>
+              <p className="mt-0.5 text-[0.6rem] font-medium uppercase tracking-[0.18em] text-ink/38">{label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <PressStrip />
+
+      {/* ── COLLECTIONS ── cards stagger in ─────────────────── */}
+      <section className="pt-20 pb-24">
+        <div className="luxury-shell mb-8">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <SectionHeader eyebrow="Shop by category" title="Every kind of diamond, every setting." />
+            <Link href="/collections" className="shrink-0 text-sm font-medium text-rose hover:underline underline-offset-3">
+              View all →
+            </Link>
+          </div>
+        </div>
+
+        {/* Compact category icon strip */}
+        <div className="luxury-shell mb-10 flex flex-wrap gap-2.5">
+          {CATEGORY_ICONS.map(({ slug, label, icon: Icon, comingSoon }) => (
+            <Link
+              key={slug}
+              href={`/collections/${slug}`}
+              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium transition-all duration-200 ${
+                comingSoon
+                  ? "border-ink/10 bg-ink/[0.02] text-ink/40 hover:border-ink/20"
+                  : "border-rose/20 bg-white/60 text-ink/70 hover:border-rose/50 hover:bg-rose/6"
+              }`}
+            >
+              <Icon size={13} className={comingSoon ? "text-ink/30" : "text-rose"} aria-hidden="true" />
+              {label}
+              {comingSoon && <span className="text-[0.6rem] uppercase tracking-[0.1em] text-ink/30">Soon</span>}
+            </Link>
+          ))}
+        </div>
+
+        {/* Bento layout — rings as the signature hero tile, the rest fill in around it */}
+        <StaggerReveal className="luxury-shell grid gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:auto-rows-[13rem]">
+          {collections.map((collection, i) => (
+            <StaggerItem
+              key={collection.slug}
+              className={i === 0 ? "sm:col-span-2 lg:col-span-2 lg:row-span-2" : undefined}
+            >
+              <CollectionCard collection={collection} featured={i === 0} />
+            </StaggerItem>
+          ))}
+        </StaggerReveal>
+      </section>
+
+      {/* ── IN STOCK NOW ── numbered signature list ──────────── */}
+      <section className="border-y border-rose/10 bg-[#fdf9f3] py-24">
+        <div className="luxury-shell">
+          <SectionHeader
+            eyebrow="In stock now"
+            title="Three one-of-a-kind pieces."
+            copy="Real inventory, photographed in-house. Once one sells, it's gone for good."
+          />
+          <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-rose/12 bg-rose/12 md:grid-cols-1">
+            {["heart-halo-ring", "pear-halo-pendant", "star-cluster-stud-earrings"]
+              .map((slug) => signatureCollection.find((p) => p.slug === slug))
+              .filter((p): p is (typeof signatureCollection)[number] => !!p)
+              .map((product, i) => (
+              <FadeUp key={product.id} delay={i * 0.08}>
+                <Link
+                  href={`/products/${product.slug}`}
+                  className="group flex items-center gap-5 bg-marble px-5 py-5 transition-colors duration-200 hover:bg-white sm:gap-8 sm:px-8"
+                >
+                  <span className="font-display text-3xl leading-none text-rose/40 sm:text-4xl">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div className="relative size-16 shrink-0 overflow-hidden rounded-xl sm:size-20">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-display text-lg leading-tight text-ink sm:text-xl">{product.name}</h3>
+                    <p className="mt-1 text-xs text-ink/50">
+                      {product.centerStone} · {product.material} · {product.colorClarity}
+                    </p>
+                  </div>
+                  <div className="hidden shrink-0 text-right sm:block">
+                    <p className="font-display text-lg text-velvet">{product.priceLabel}</p>
+                  </div>
+                  <span className="shrink-0 text-xs font-medium uppercase tracking-[0.1em] text-rose opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    View →
+                  </span>
+                </Link>
+              </FadeUp>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── TRUST SIGNALS ── icons stagger in ───────────────── */}
+      <section className="border-y border-rose/10 bg-[#fdf9f3] py-10">
+        <StaggerReveal className="luxury-shell grid gap-4 sm:grid-cols-2 md:grid-cols-4" staggerDelay={0.1}>
+          {TRUST.map(({ icon: Icon, title, sub }) => (
+            <StaggerItem key={title} className="flex items-start gap-3.5">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-rose/20 bg-white">
+                <Icon size={17} className="text-rose" aria-hidden="true" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-ink">{title}</p>
+                <p className="mt-0.5 text-xs leading-5 text-ink/52">{sub}</p>
+              </div>
+            </StaggerItem>
+          ))}
+        </StaggerReveal>
+      </section>
+
+      {/* ── FEATURED PRODUCTS ── fade up ─────────────────────── */}
+      <section className="py-24">
+        <div className="luxury-shell">
+          <div className="mb-10 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <SectionHeader
+              eyebrow="Featured pieces"
+              title="Selected work, ready for inquiry."
+              copy="Real products. Real prices. Inquire directly or book a private viewing."
+            />
+            <Link href="/diamonds" className="shrink-0 text-sm font-medium text-rose hover:underline underline-offset-3">
+              Search all diamonds →
+            </Link>
+          </div>
+          <ProductGridClient products={homeFeaturedProducts} />
+        </div>
+      </section>
+
+      {/* ── EDITORIAL MOSAIC ── dark overlay reveal (visible!) ── */}
+      <SectionReveal overlayColor="#0c0806">
+        <section className="relative overflow-hidden bg-[#0c0806]">
+          <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
+            {/* Image mosaic — each cell scales in with stagger */}
+            <div className="grid grid-cols-3" style={{ gridTemplateRows: "repeat(2, minmax(220px, 1fr))" }}>
+              {[
+                { src: "/images/products/emerald-halo-pendant/cover.jpg", pos: "center 40%" },
+                { src: "/images/products/pear-halo-drop-earrings/cover.jpg", pos: "center 40%" },
+                { src: "/images/products/star-cluster-stud-earrings/cover.jpg", pos: "center 40%" },
+                { src: "/images/products/heart-halo-drop-earrings/cover.jpg", pos: "center 40%" },
+                { src: "/images/products/oval-halo-drop-earrings/cover.jpg", pos: "center 40%" },
+                { src: "/images/products/emerald-halo-stud-earrings/cover.jpg", pos: "center 40%" },
+              ].map(({ src, pos }, i) => (
+                <motion.div
+                  key={i}
+                  className="relative overflow-hidden aspect-[4/5]"
+                  initial={{ opacity: 0, scale: 1.08 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true, amount: 0.01 }}
+                  transition={{ duration: 0.75, delay: i * 0.09, ease: [0.23, 1, 0.32, 1] }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={src} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-105" style={{ objectPosition: pos }} />
+                  <div className="absolute inset-0 bg-black/15" />
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Copy — slides in from right */}
+            <motion.div
+              className="flex flex-col justify-center px-8 py-20 lg:px-14 lg:py-28"
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.01 }}
+              transition={{ duration: 0.8, delay: 0.25, ease: [0.23, 1, 0.32, 1] }}
+            >
+              <p className="eyebrow text-champagne/55">The signature collection</p>
+              <h2 className="display-title mt-5 text-[clamp(2.8rem,5vw,5rem)] leading-[0.9] text-ivory">
+                Eleven pieces.<br />Zero duplicates.
+              </h2>
+              <p className="mt-7 max-w-sm text-sm leading-7 text-ivory/55">
+                Every signature ring, earring, and pendant shown here is the exact physical piece in
+                the photo — halo-set diamond clusters in 18K gold, EF–FG color, VVS clarity. Once it
+                sells, that design is gone.
+              </p>
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <Link href="/collections" className="inline-flex min-h-12 items-center justify-center rounded-full bg-rose px-7 text-sm font-medium text-ivory shadow-[0_8px_30px_rgba(184,121,104,0.35)] transition-all duration-250 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-rose/85 active:scale-[0.97]">
+                  View Collection
+                </Link>
+                <Link href="/contact" className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/22 px-7 text-sm font-medium text-ivory/80 transition-all ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-white/50 hover:text-ivory active:scale-[0.97]">
+                  Book Consultation
+                </Link>
+              </div>
+              <div className="mt-12 grid grid-cols-3 gap-4 border-t border-white/10 pt-10">
+                {[{ stat: "11", label: "Unique pieces" }, { stat: "EF-FG", label: "Color · VVS" }, { stat: "18K", label: "Gold" }].map(({ stat, label }) => (
+                  <div key={stat} className="text-center">
+                    <p className="font-display text-3xl leading-none text-ivory">{stat}</p>
+                    <p className="mt-1.5 text-[0.62rem] uppercase tracking-[0.14em] text-ivory/38">{label}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      </SectionReveal>
+
+      {/* ── SERVICES ── cards fade up with stagger ───────────── */}
+      <section className="py-24">
+        <div className="luxury-shell">
+          <SectionHeader eyebrow="What we offer" title="Diamond guidance, stone to setting." />
+          <div className="mt-12 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {services.map((service, i) => (
+              <ServiceCard key={service} service={service} index={i} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── PROCESS ── dark overlay reveal + steps slide in ─── */}
+      <SectionReveal overlayColor="#0c0806" delay={0.04}>
+        <section className="bg-[#0c0806] py-28 text-ivory overflow-hidden">
+          <div className="luxury-shell grid gap-16 lg:grid-cols-[0.7fr_1.3fr]">
+            <motion.div
+              initial={{ opacity: 0, x: -32 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.01 }}
+              transition={{ duration: 0.75, ease: [0.23, 1, 0.32, 1] }}
+            >
+              <p className="eyebrow text-champagne/55">Custom jewelry process</p>
+              <h2 className="display-title mt-5 text-[clamp(2.8rem,5vw,5rem)] leading-[0.9] text-ivory">
+                Made with intention,<br />not inventory pressure.
+              </h2>
+            </motion.div>
+            <div className="grid gap-3">
+              {processSteps.map((step, index) => (
+                <motion.article
+                  key={step.title}
+                  initial={{ opacity: 0, x: 24 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.01 }}
+                  transition={{ duration: 0.6, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] }}
+                  className="grid gap-4 border border-white/7 bg-white/[0.03] p-6 md:grid-cols-[5rem_1fr]"
+                >
+                  <span className="font-display text-5xl leading-none text-rose/50">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <h3 className="font-display text-2xl leading-none text-ivory">{step.title}</h3>
+                    <p className="mt-2.5 text-sm leading-7 text-ivory/48">{step.copy}</p>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+          </div>
+        </section>
+      </SectionReveal>
+
+      <ReviewsSection />
+
+      <AppointmentCTA />
+    </main>
+  );
+}

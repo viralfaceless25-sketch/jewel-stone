@@ -1,0 +1,518 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - paragraph [ref=e4]:
+      - generic [ref=e5]: Free Shipping on All Orders
+    - button "Dismiss announcement" [ref=e6] [cursor=pointer]
+  - banner:
+    - navigation "Main navigation" [ref=e10]:
+      - link "Jewel Stone Jewel Stone" [ref=e11] [cursor=pointer]:
+        - /url: /
+        - img "Jewel Stone" [ref=e12]
+        - generic [ref=e13]: Jewel Stone
+      - generic [ref=e15]:
+        - button "Engagement" [ref=e16] [cursor=pointer]
+        - button "Wedding" [ref=e19] [cursor=pointer]
+        - button "Jewelry" [ref=e22] [cursor=pointer]
+        - button "Diamonds" [ref=e25] [cursor=pointer]
+        - button "Custom Design" [ref=e28] [cursor=pointer]
+        - link "About" [ref=e31] [cursor=pointer]:
+          - /url: /about
+      - generic [ref=e33]:
+        - link "Search diamonds" [ref=e34] [cursor=pointer]:
+          - /url: /diamonds
+        - link "Wishlist" [ref=e38] [cursor=pointer]:
+          - /url: /wishlist
+        - link "Inquiry" [ref=e41] [cursor=pointer]:
+          - /url: /inquiry
+  - main [ref=e45]:
+    - region "Jewel Stone — rare piecut and diamond jewelry, NYC Diamond District" [ref=e46]:
+      - generic [ref=e47]:
+        - paragraph [ref=e48]: ◆NYC Diamond District · Set by hand
+        - heading "Light, held by hand." [level=1] [ref=e49]:
+          - generic [ref=e50]: Light,
+          - generic [ref=e52]: held by
+          - generic [ref=e54]: hand.
+        - paragraph [ref=e56]: Lab-grown & signature diamonds — cut, graded and set at our bench. One-of-a-kind piecut pieces, and made-to-order brilliance.
+        - generic [ref=e57]:
+          - link "Shop the collection" [ref=e58] [cursor=pointer]:
+            - /url: /collections
+          - link "The Signature Vault" [ref=e59] [cursor=pointer]:
+            - /url: "#vault"
+        - generic [ref=e60]:
+          - generic [ref=e61]:
+            - generic [ref=e62]: "69"
+            - generic [ref=e63]: Signature pieces
+          - generic [ref=e64]:
+            - generic [ref=e65]: GIA
+            - generic [ref=e66]: Certified stones
+          - generic [ref=e67]:
+            - generic [ref=e68]: ∞
+            - generic [ref=e69]: Lifetime service
+      - generic [ref=e71]: Scroll
+    - region [ref=e74]:
+      - generic [ref=e75]:
+        - paragraph [ref=e76]: ◆Welcome to Jewel Stone
+        - heading [level=2] [ref=e77]:
+          - text: A small house of diamond-cutters, making
+          - emphasis [ref=e78]: one-of-a-kind
+          - text: pieces the world will only see once.
+        - paragraph [ref=e79]: Lab-grown and natural diamonds, chosen, cut and set by hand at our NYC Diamond District bench.
+    - region [ref=e80]:
+      - generic [ref=e81]:
+        - figure "Piece 01 / 11 Drag view in the Vault" [ref=e82]:
+          - img "Emerald-Cut Cascade diamond drop earrings" [ref=e85]
+          - generic [ref=e86]:
+            - generic [ref=e87]: Piece 01 / 11
+            - generic [ref=e88]: Drag view in the Vault
+        - generic [ref=e89]:
+          - paragraph [ref=e90]: ◆Piece of the season
+          - heading [level=2] [ref=e91]:
+            - text: The Emerald-Cut
+            - emphasis [ref=e92]: Cascade.
+          - paragraph [ref=e93]: A ladder of emerald- and baguette-cut diamonds, hand-matched for step and colour, articulated so each stone moves with the light. Step-cuts hide nothing — every inclusion has to be flawless, which is why so few are ever made. This is the one we made.
+          - paragraph [ref=e94]: Price on request
+          - generic [ref=e95]:
+            - generic [ref=e96]:
+              - term [ref=e97]: Cut
+              - definition [ref=e98]: Emerald & baguette
+            - generic [ref=e99]:
+              - term [ref=e100]: Origin
+              - definition [ref=e101]: Lab-grown or natural
+            - generic [ref=e102]:
+              - term [ref=e103]: Metal
+              - definition [ref=e104]: 18K white gold
+            - generic [ref=e105]:
+              - term [ref=e106]: Edition
+              - definition [ref=e107]: One of one
+          - generic [ref=e108]:
+            - link "Enquire privately" [ref=e110] [cursor=pointer]:
+              - /url: /contact
+            - link "See the Vault" [ref=e112] [cursor=pointer]:
+              - /url: "#vault"
+    - region [ref=e113]:
+      - generic [ref=e114]:
+        - generic [ref=e115]:
+          - generic [ref=e116]:
+            - paragraph [ref=e117]: ◆Worn in the light
+            - heading [level=2] [ref=e118]:
+              - text: The house,
+              - emphasis [ref=e119]: in motion.
+          - generic [ref=e120]: New York · Issue 01
+        - generic [ref=e121]:
+          - figure "On the ear" [ref=e122]:
+            - img "Model wearing Jewel Stone Asscher drop earrings" [ref=e124]
+          - figure "In the hand" [ref=e127]:
+            - img "Diamond eternity band worn on the hand" [ref=e129]
+          - figure "The heart, framed" [ref=e132]:
+            - img "Jewel Stone heart halo diamond ring" [ref=e134]
+          - figure "From the bench · Coming soon" [ref=e136]:
+            - generic [ref=e137]:
+              - generic [ref=e138]: ◆
+              - generic [ref=e139]: A new signature is taking shape
+    - region [ref=e141]:
+      - generic [ref=e142]:
+        - generic [ref=e143]:
+          - paragraph [ref=e144]: ◆The signature collection
+          - heading [level=2] [ref=e145]:
+            - text: Our most
+            - emphasis [ref=e146]: loved pieces.
+        - generic [ref=e147]:
+          - link "View all →" [ref=e148] [cursor=pointer]:
+            - /url: /collections
+          - button "Previous featured products" [ref=e149] [cursor=pointer]
+          - button "Next featured products" [ref=e152] [cursor=pointer]
+      - generic "Featured jewelry" [ref=e155]:
+        - article [ref=e157]:
+          - link "Heart Halo Ring Rings One of a Kind Video" [ref=e158] [cursor=pointer]:
+            - /url: /products/heart-halo-ring
+            - generic [ref=e159]:
+              - img "Heart Halo Ring" [ref=e160]
+              - generic [ref=e161]:
+                - generic [ref=e162]: Rings
+                - generic [ref=e163]: One of a Kind
+                - generic [ref=e164]: Video
+          - generic [ref=e165]:
+            - generic [ref=e166]:
+              - generic [ref=e167]:
+                - paragraph [ref=e168]: EF/VVS · Heart-shaped cluster
+                - link [ref=e169] [cursor=pointer]:
+                  - /url: /products/heart-halo-ring
+                  - heading "Heart Halo Ring" [level=3] [ref=e170]
+                - paragraph [ref=e171]: $2,585
+                - paragraph [ref=e172]: From $216/mo with Affirm
+              - button "Add Heart Halo Ring to wishlist" [ref=e174] [cursor=pointer]
+            - button "Add to inquiry" [ref=e177] [cursor=pointer]
+        - article [ref=e180]:
+          - link "Asscher Halo Drop Earrings Earrings One of a Kind Video" [ref=e181] [cursor=pointer]:
+            - /url: /products/asscher-halo-drop-earrings
+            - generic [ref=e182]:
+              - img "Asscher Halo Drop Earrings" [ref=e183]
+              - generic [ref=e184]:
+                - generic [ref=e185]: Earrings
+                - generic [ref=e186]: One of a Kind
+                - generic [ref=e187]: Video
+          - generic [ref=e188]:
+            - generic [ref=e189]:
+              - generic [ref=e190]:
+                - paragraph [ref=e191]: EF/VVS · Asscher-cut cluster
+                - link [ref=e192] [cursor=pointer]:
+                  - /url: /products/asscher-halo-drop-earrings
+                  - heading "Asscher Halo Drop Earrings" [level=3] [ref=e193]
+                - paragraph [ref=e194]: $4,970
+                - paragraph [ref=e195]: From $415/mo with Affirm
+              - button "Add Asscher Halo Drop Earrings to wishlist" [ref=e197] [cursor=pointer]
+            - button "Add to inquiry" [ref=e200] [cursor=pointer]
+        - article [ref=e203]:
+          - link "Emerald Halo Split-Shank Ring Rings One of a Kind Video" [ref=e204] [cursor=pointer]:
+            - /url: /products/emerald-halo-engagement-ring
+            - generic [ref=e205]:
+              - img "Emerald Halo Split-Shank Ring" [ref=e206]
+              - generic [ref=e207]:
+                - generic [ref=e208]: Rings
+                - generic [ref=e209]: One of a Kind
+                - generic [ref=e210]: Video
+          - generic [ref=e211]:
+            - generic [ref=e212]:
+              - generic [ref=e213]:
+                - paragraph [ref=e214]: EF/VVS · Emerald-cut cluster
+                - link [ref=e215] [cursor=pointer]:
+                  - /url: /products/emerald-halo-engagement-ring
+                  - heading "Emerald Halo Split-Shank Ring" [level=3] [ref=e216]
+                - paragraph [ref=e217]: $2,375
+                - paragraph [ref=e218]: From $198/mo with Affirm
+              - button "Add Emerald Halo Split-Shank Ring to wishlist" [ref=e220] [cursor=pointer]
+            - button "Add to inquiry" [ref=e223] [cursor=pointer]
+        - article [ref=e226]:
+          - link "Heart Halo Pendant Pendants One of a Kind Video" [ref=e227] [cursor=pointer]:
+            - /url: /products/heart-halo-pendant
+            - generic [ref=e228]:
+              - img "Heart Halo Pendant" [ref=e229]
+              - generic [ref=e230]:
+                - generic [ref=e231]: Pendants
+                - generic [ref=e232]: One of a Kind
+                - generic [ref=e233]: Video
+          - generic [ref=e234]:
+            - generic [ref=e235]:
+              - generic [ref=e236]:
+                - paragraph [ref=e237]: EF/VVS · Heart-shaped cluster
+                - link [ref=e238] [cursor=pointer]:
+                  - /url: /products/heart-halo-pendant
+                  - heading "Heart Halo Pendant" [level=3] [ref=e239]
+                - paragraph [ref=e240]: $2,480
+                - paragraph [ref=e241]: From $207/mo with Affirm
+              - button "Add Heart Halo Pendant to wishlist" [ref=e243] [cursor=pointer]
+            - button "Add to inquiry" [ref=e246] [cursor=pointer]
+        - article [ref=e249]:
+          - link "Emerald Halo Stud Earrings Earrings One of a Kind Video" [ref=e250] [cursor=pointer]:
+            - /url: /products/emerald-halo-stud-earrings
+            - generic [ref=e251]:
+              - img "Emerald Halo Stud Earrings" [ref=e252]
+              - generic [ref=e253]:
+                - generic [ref=e254]: Earrings
+                - generic [ref=e255]: One of a Kind
+                - generic [ref=e256]: Video
+          - generic [ref=e257]:
+            - generic [ref=e258]:
+              - generic [ref=e259]:
+                - paragraph [ref=e260]: EF/VVS · Emerald-cut cluster
+                - link [ref=e261] [cursor=pointer]:
+                  - /url: /products/emerald-halo-stud-earrings
+                  - heading "Emerald Halo Stud Earrings" [level=3] [ref=e262]
+                - paragraph [ref=e263]: $4,045
+                - paragraph [ref=e264]: From $338/mo with Affirm
+              - button "Add Emerald Halo Stud Earrings to wishlist" [ref=e266] [cursor=pointer]
+            - button "Add to inquiry" [ref=e269] [cursor=pointer]
+        - article [ref=e272]:
+          - link "Pear Halo Drop Earrings Earrings One of a Kind Video" [ref=e273] [cursor=pointer]:
+            - /url: /products/pear-halo-drop-earrings
+            - generic [ref=e274]:
+              - img "Pear Halo Drop Earrings" [ref=e275]
+              - generic [ref=e276]:
+                - generic [ref=e277]: Earrings
+                - generic [ref=e278]: One of a Kind
+                - generic [ref=e279]: Video
+          - generic [ref=e280]:
+            - generic [ref=e281]:
+              - generic [ref=e282]:
+                - paragraph [ref=e283]: EF/VVS · Pear-shaped cluster
+                - link [ref=e284] [cursor=pointer]:
+                  - /url: /products/pear-halo-drop-earrings
+                  - heading "Pear Halo Drop Earrings" [level=3] [ref=e285]
+                - paragraph [ref=e286]: $3,500
+                - paragraph [ref=e287]: From $292/mo with Affirm
+              - button "Add Pear Halo Drop Earrings to wishlist" [ref=e289] [cursor=pointer]
+            - button "Add to inquiry" [ref=e292] [cursor=pointer]
+        - article [ref=e295]:
+          - link "Emerald Halo Pendant Pendants One of a Kind Video" [ref=e296] [cursor=pointer]:
+            - /url: /products/emerald-halo-pendant
+            - generic [ref=e297]:
+              - img "Emerald Halo Pendant" [ref=e298]
+              - generic [ref=e299]:
+                - generic [ref=e300]: Pendants
+                - generic [ref=e301]: One of a Kind
+                - generic [ref=e302]: Video
+          - generic [ref=e303]:
+            - generic [ref=e304]:
+              - generic [ref=e305]:
+                - paragraph [ref=e306]: FG/VVS · Emerald-cut cluster
+                - link [ref=e307] [cursor=pointer]:
+                  - /url: /products/emerald-halo-pendant
+                  - heading "Emerald Halo Pendant" [level=3] [ref=e308]
+                - paragraph [ref=e309]: $2,245
+                - paragraph [ref=e310]: From $188/mo with Affirm
+              - button "Add Emerald Halo Pendant to wishlist" [ref=e312] [cursor=pointer]
+            - button "Add to inquiry" [ref=e315] [cursor=pointer]
+        - article [ref=e318]:
+          - link "Pear Halo Pendant Pendants One of a Kind Video" [ref=e319] [cursor=pointer]:
+            - /url: /products/pear-halo-pendant
+            - generic [ref=e320]:
+              - img "Pear Halo Pendant" [ref=e321]
+              - generic [ref=e322]:
+                - generic [ref=e323]: Pendants
+                - generic [ref=e324]: One of a Kind
+                - generic [ref=e325]: Video
+          - generic [ref=e326]:
+            - generic [ref=e327]:
+              - generic [ref=e328]:
+                - paragraph [ref=e329]: EF/VVS · Pear-shaped cluster
+                - link [ref=e330] [cursor=pointer]:
+                  - /url: /products/pear-halo-pendant
+                  - heading "Pear Halo Pendant" [level=3] [ref=e331]
+                - paragraph [ref=e332]: $2,720
+                - paragraph [ref=e333]: From $227/mo with Affirm
+              - button "Add Pear Halo Pendant to wishlist" [ref=e335] [cursor=pointer]
+            - button "Add to inquiry" [ref=e338] [cursor=pointer]
+        - article [ref=e341]:
+          - link "10CT Diamond Stud Earrings Earrings Coming Soon" [ref=e342] [cursor=pointer]:
+            - /url: /products/st10-10ct-diamond-studs
+            - generic [ref=e343]:
+              - img "10CT Diamond Stud Earrings" [ref=e344]
+              - generic [ref=e345]:
+                - generic [ref=e346]: Earrings
+                - generic [ref=e347]: Coming Soon
+          - generic [ref=e348]:
+            - generic [ref=e349]:
+              - generic [ref=e350]:
+                - paragraph [ref=e351]: E/VS1 · Round Brilliant
+                - link [ref=e352] [cursor=pointer]:
+                  - /url: /products/st10-10ct-diamond-studs
+                  - heading "10CT Diamond Stud Earrings" [level=3] [ref=e353]
+                - paragraph [ref=e354]: From $3,500
+                - paragraph [ref=e355]: From $292/mo with Affirm
+              - button "Add 10CT Diamond Stud Earrings to wishlist" [ref=e357] [cursor=pointer]
+            - button "Join the waitlist" [ref=e360] [cursor=pointer]
+    - navigation "Shop by category" [ref=e362]:
+      - generic [ref=e363]:
+        - link "Rings ↗" [ref=e364] [cursor=pointer]:
+          - /url: /collections?category=rings
+          - text: Rings
+          - generic [ref=e365]: ↗
+        - link "Earrings ↗" [ref=e366] [cursor=pointer]:
+          - /url: /collections?category=earrings
+          - text: Earrings
+          - generic [ref=e367]: ↗
+        - link "Pendants ↗" [ref=e368] [cursor=pointer]:
+          - /url: /collections?category=pendants
+          - text: Pendants
+          - generic [ref=e369]: ↗
+        - link "Bracelets ↗" [ref=e370] [cursor=pointer]:
+          - /url: /collections?category=bracelets
+          - text: Bracelets
+          - generic [ref=e371]: ↗
+        - link "Necklaces ↗" [ref=e372] [cursor=pointer]:
+          - /url: /collections?category=necklaces
+          - text: Necklaces
+          - generic [ref=e373]: ↗
+        - link "Custom ↗" [ref=e374] [cursor=pointer]:
+          - /url: /custom
+          - text: Custom
+          - generic [ref=e375]: ↗
+    - region [ref=e376]:
+      - generic [ref=e377]:
+        - figure "The bench · 47th Street, New York" [ref=e378]:
+          - img "A Jewel Stone piece being set by hand at the NYC Diamond District bench" [ref=e380]
+        - generic [ref=e382]:
+          - paragraph [ref=e383]: ◆Our philosophy
+          - heading [level=2] [ref=e384]:
+            - text: Beauty is in the eye of the
+            - emphasis [ref=e385]: beholder.
+          - paragraph [ref=e386]: Every Jewel Stone piece begins with a person, not a production line. We choose the silhouette, metal, proportions and stone together; then matched diamonds are cut, balanced and set one prong at a time by hand.
+          - paragraph [ref=e387]: Finished to your fit, engraved when you wish, inspected and boxed — ready to leave our hands and become part of your story.
+          - link "Begin a custom piece" [ref=e390] [cursor=pointer]:
+            - /url: /custom
+    - region [ref=e392]:
+      - generic [ref=e393]:
+        - generic [ref=e394]:
+          - generic [ref=e395]: ◆ The Piecut Vault
+          - paragraph [ref=e396]: Eleven pieces. Never repeated.
+          - heading "Pieces you won’t find twice." [level=2] [ref=e397]: Pieces you won’tfind twice.
+          - paragraph [ref=e398]:
+            - text: "Our specialty: rare"
+            - emphasis [ref=e399]: piecut
+            - text: and antique diamond work — lab-grown and natural — built one at a time and never restocked. When it’s gone, it’s gone.
+          - paragraph [ref=e400]: Rare · One of a kind · Not restocked
+        - generic [ref=e401]:
+          - article [ref=e402]:
+            - generic [ref=e403]: Piecut cluster
+            - img "Illusion Cluster Studs — drag to rotate and view every angle" [ref=e405]:
+              - img "Illusion Cluster Studs — drag to rotate and view every angle" [ref=e406]
+              - generic [ref=e407]: Loading view
+            - generic [ref=e410]:
+              - heading "Illusion Cluster Studs" [level=3] [ref=e411]
+              - paragraph [ref=e412]: Multi-stone piecut illusion · 18K white gold
+              - link "Enquire" [ref=e413] [cursor=pointer]:
+                - /url: /collections
+          - article [ref=e416]:
+            - generic [ref=e417]: One of a kind
+            - img "Cascade Drop Pendant — drag to rotate and view every angle" [ref=e419]:
+              - img "Cascade Drop Pendant — drag to rotate and view every angle" [ref=e420]
+              - generic [ref=e421]: Loading view
+            - generic [ref=e424]:
+              - heading "Cascade Drop Pendant" [level=3] [ref=e425]
+              - paragraph [ref=e426]: Mixed-cut piecut cascade · hand-strung
+              - link "Enquire" [ref=e427] [cursor=pointer]:
+                - /url: /collections
+          - article [ref=e430]:
+            - generic [ref=e431]: Antique cut
+            - img "Baguette Cascade Drops — drag to rotate and view every angle" [ref=e433]:
+              - img "Baguette Cascade Drops — drag to rotate and view every angle" [ref=e434]
+              - generic [ref=e435]: Loading view
+            - generic [ref=e438]:
+              - heading "Baguette Cascade Drops" [level=3] [ref=e439]
+              - paragraph [ref=e440]: Straight & taper baguette · articulated
+              - link "Enquire" [ref=e441] [cursor=pointer]:
+                - /url: /collections
+        - link "Enter the vault" [ref=e446] [cursor=pointer]:
+          - /url: /collections
+    - region [ref=e447]:
+      - generic [ref=e448]:
+        - figure "Loved in real life · New York" [ref=e449]:
+          - img "Client wearing Jewel Stone diamond cluster studs" [ref=e451]
+        - generic [ref=e453]:
+          - paragraph [ref=e454]: ◆4.9 on Google · 300+ reviews
+          - heading "Client testimonials" [level=2] [ref=e455]
+          - blockquote [ref=e456]: “They had a piecut pendant I couldn't find anywhere else in the district. Certified, gorgeous, and half what I expected to pay. This is the one.”
+          - paragraph [ref=e457]: ★★★★★ Amara Okafor
+          - generic [ref=e458]:
+            - blockquote [ref=e459]:
+              - paragraph [ref=e460]: “Designed an engagement ring from scratch with them. They walked me through lab vs natural honestly, no pressure. She said yes.”
+              - generic [ref=e461]: David Rosen
+            - blockquote [ref=e462]:
+              - paragraph [ref=e463]: “The 360 view online is exactly what showed up in the box. Set by hand, and you can tell. Cluster studs are unreal in person.”
+              - generic [ref=e464]: Priya Nair
+    - region [ref=e465]:
+      - heading "The Jewel Stone standard" [level=2] [ref=e466]
+      - generic [ref=e467]:
+        - article [ref=e468]:
+          - generic [ref=e472]:
+            - heading "GIA graded" [level=3] [ref=e473]
+            - paragraph [ref=e474]: Independent diamond grading
+        - article [ref=e475]:
+          - generic [ref=e479]:
+            - heading "30-day returns" [level=3] [ref=e480]
+            - paragraph [ref=e481]: A considered window to decide
+        - article [ref=e482]:
+          - generic [ref=e486]:
+            - heading "Insured shipping" [level=3] [ref=e487]
+            - paragraph [ref=e488]: Protected from our bench to you
+        - article [ref=e489]:
+          - generic [ref=e492]:
+            - heading "Lifetime service" [level=3] [ref=e493]
+            - paragraph [ref=e494]: Cleaning and prong care, always
+  - contentinfo [ref=e495]:
+    - generic [ref=e498]:
+      - generic [ref=e499]:
+        - paragraph [ref=e500]: ◆Stay in the loop
+        - heading "Private drops & diamond education." [level=3] [ref=e501]
+        - paragraph [ref=e502]: Appointment openings and new signature pieces from the Diamond District, straight to your inbox.
+      - generic [ref=e503]:
+        - generic [ref=e504]: Email address
+        - textbox "Email address" [ref=e505]:
+          - /placeholder: Your email
+        - button "Join newsletter" [ref=e506] [cursor=pointer]: Join
+    - generic [ref=e509]:
+      - generic [ref=e510]:
+        - generic [ref=e511]:
+          - link [ref=e512] [cursor=pointer]:
+            - /url: /
+            - img "Jewel Stone" [ref=e513]
+            - generic [ref=e514]:
+              - paragraph [ref=e515]: Jewel Stone
+              - paragraph [ref=e516]: Shine With You
+          - paragraph [ref=e517]: Fine lab-grown diamond jewelry, certified loose diamonds, and custom design consultations from New York's Diamond District.
+          - generic [ref=e518]:
+            - generic [ref=e519]: GIA · IGI Certified
+            - generic [ref=e522]: 62 W 47th St · New York, NY
+          - generic [ref=e525]:
+            - paragraph [ref=e526]: Connect
+            - generic [ref=e527]:
+              - link "Instagram" [ref=e528] [cursor=pointer]:
+                - /url: "#"
+              - link "Facebook" [ref=e532] [cursor=pointer]:
+                - /url: "#"
+              - link "YouTube" [ref=e535] [cursor=pointer]:
+                - /url: "#"
+              - link "TikTok" [ref=e539] [cursor=pointer]:
+                - /url: "#"
+            - generic [ref=e546]:
+              - link "+1 551-341-3256" [ref=e547] [cursor=pointer]:
+                - /url: tel:+1551-341-3256
+              - link "ishan@thejewelstone.com" [ref=e548] [cursor=pointer]:
+                - /url: mailto:ishan@thejewelstone.com
+        - generic [ref=e549]:
+          - generic [ref=e550]:
+            - paragraph [ref=e551]: Shop
+            - generic [ref=e552]:
+              - link "Engagement Rings" [ref=e553] [cursor=pointer]:
+                - /url: /collections/rings
+              - link "Wedding Bands" [ref=e554] [cursor=pointer]:
+                - /url: /collections/bands
+              - link "Diamond Studs" [ref=e555] [cursor=pointer]:
+                - /url: /collections/earrings
+              - link "Necklaces" [ref=e556] [cursor=pointer]:
+                - /url: /collections/necklaces
+              - link "Bracelets" [ref=e557] [cursor=pointer]:
+                - /url: /collections/bracelets
+              - link "Loose Diamonds" [ref=e558] [cursor=pointer]:
+                - /url: /diamonds
+              - link "Custom Design" [ref=e559] [cursor=pointer]:
+                - /url: /custom
+              - link "My Wishlist" [ref=e560] [cursor=pointer]:
+                - /url: /wishlist
+          - generic [ref=e561]:
+            - paragraph [ref=e562]: Customer Service
+            - generic [ref=e563]:
+              - link "Shipping Policy" [ref=e564] [cursor=pointer]:
+                - /url: /pages/shipping
+              - link "Returns & Exchanges" [ref=e565] [cursor=pointer]:
+                - /url: /pages/returns
+              - link "Warranty" [ref=e566] [cursor=pointer]:
+                - /url: /pages/warranty
+              - link "FAQ" [ref=e567] [cursor=pointer]:
+                - /url: /pages/faq
+              - link "Contact Us" [ref=e568] [cursor=pointer]:
+                - /url: /contact
+              - link "Book Appointment" [ref=e569] [cursor=pointer]:
+                - /url: /contact
+          - generic [ref=e570]:
+            - paragraph [ref=e571]: About
+            - generic [ref=e572]:
+              - link "Our Story" [ref=e573] [cursor=pointer]:
+                - /url: /about
+              - link "Sustainability" [ref=e574] [cursor=pointer]:
+                - /url: /about#sustainability
+              - link "Press" [ref=e575] [cursor=pointer]:
+                - /url: /about#press
+              - link "Careers" [ref=e576] [cursor=pointer]:
+                - /url: /about#careers
+              - link "Education" [ref=e577] [cursor=pointer]:
+                - /url: /education
+      - paragraph [ref=e580]: Jewel Stone
+      - generic [ref=e582]:
+        - generic [ref=e583]: © 2026 Jewel Stone NY LLC. All rights reserved.
+        - generic [ref=e584]:
+          - generic [ref=e585]: VISA
+          - generic [ref=e586]: MC
+          - generic [ref=e587]: AMEX
+          - generic [ref=e588]: PAYPAL
+          - generic [ref=e589]: AFFIRM

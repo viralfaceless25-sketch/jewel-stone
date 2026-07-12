@@ -1,0 +1,314 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import { ButtonLink } from "@/components/Buttons";
+
+const TAGLINES = [
+  "Shine With You",
+  "Certified Lab-Grown Diamonds",
+  "Custom Jewelry, Your Vision",
+  "NYC Diamond District",
+  "D-E Color · VVS2–VS2 Clarity",
+] as const;
+
+const SLIDE_MS = 3500;
+
+const QUICK_SHOP = [
+  {
+    label: "Rings",
+    href: "/collections/rings",
+  },
+  {
+    label: "Earrings",
+    href: "/collections/earrings",
+  },
+  {
+    label: "Pendants",
+    href: "/collections/pendants",
+  },
+] as const;
+
+const SPOTLIGHT_ANGLES = [
+  "/images/products/emerald-halo-engagement-ring/angle-1.jpg",
+  "/images/products/emerald-halo-engagement-ring/angle-3.jpg",
+  "/images/products/emerald-halo-engagement-ring/angle-8.jpg",
+] as const;
+
+export function HeroSection() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [idx, setIdx] = useState(0);
+  const [angleIdx, setAngleIdx] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setIdx((i) => (i + 1) % TAGLINES.length), SLIDE_MS);
+    return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      videoRef.current?.pause();
+    }
+  }, []);
+
+  return (
+    <>
+      {/* ── HERO — full-bleed collection film ──────────────────────── */}
+      <section className="relative isolate flex min-h-[92svh] flex-col justify-end overflow-hidden bg-[#0a0806] pb-8 pt-32 text-ivory lg:pb-10">
+        <div className="absolute inset-0 -z-10">
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/videos/hero/collection-poster.jpg"
+            aria-hidden="true"
+            className="h-full w-full object-cover"
+          >
+            <source src="/videos/hero/collection-loop.mp4" type="video/mp4" />
+          </video>
+        </div>
+
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/10"
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a0806] via-[#0a0806]/40 to-transparent"
+          aria-hidden="true"
+        />
+
+        <div className="luxury-shell relative z-10 mb-12 w-full lg:mb-16">
+          <div className="max-w-xl">
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
+              className="inline-flex w-fit items-center gap-2.5 rounded-full border border-champagne/30 bg-white/5 px-4 py-2 backdrop-blur-md"
+            >
+              <span className="size-1.5 animate-pulse rounded-full bg-rose" aria-hidden="true" />
+              <span className="text-[0.62rem] font-medium uppercase tracking-[0.24em] text-champagne/80">
+                Lab-Grown · GIA Certified · NYC Diamond District
+              </span>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 26 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.1, ease: [0.23, 1, 0.32, 1] }}
+              className="display-title mt-6 text-[clamp(2.5rem,4.6vw,4.25rem)] text-ivory"
+            >
+              Diamonds,
+              <br />
+              <span
+                className="bg-gradient-to-br from-champagne via-rose to-[#8a4f43] bg-clip-text text-transparent"
+                style={{ WebkitBoxDecorationBreak: "clone" }}
+              >
+                Made To Wear.
+              </span>
+            </motion.h1>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2, ease: [0.23, 1, 0.32, 1] }}
+              className="relative mt-5 h-9 overflow-hidden"
+            >
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={idx}
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -18 }}
+                  transition={{ duration: 0.48, ease: [0.23, 1, 0.32, 1] }}
+                  className="absolute font-display text-[clamp(1.15rem,2.2vw,1.55rem)] italic text-champagne"
+                >
+                  {TAGLINES[idx]}
+                </motion.p>
+              </AnimatePresence>
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.24, ease: [0.23, 1, 0.32, 1] }}
+              className="mt-6 max-w-md text-[0.95rem] leading-7 text-ivory/70"
+            >
+              One-of-a-kind signature pieces photographed in-house, plus made-to-order lab-grown
+              diamonds set by hand in the NYC Diamond District — GIA &amp; IGI certified, every time.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.36, ease: [0.23, 1, 0.32, 1] }}
+              className="mt-9 flex flex-wrap gap-3"
+            >
+              <ButtonLink href="/collections" variant="gold">Explore Collection</ButtonLink>
+              <ButtonLink href="/contact" variant="dark">Book Consultation</ButtonLink>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* ── Bottom rail — category selector + slide counter ─────────── */}
+        <div className="luxury-shell relative z-10 w-full">
+          <div className="flex flex-col gap-5 border-t border-champagne/15 pt-5 lg:flex-row lg:items-center lg:justify-between">
+            {/* Category selector */}
+            <div className="flex flex-wrap items-center gap-x-7 gap-y-3">
+              <span className="text-[0.6rem] font-medium uppercase tracking-[0.24em] text-ivory/35">
+                Shop
+              </span>
+              {QUICK_SHOP.map(({ label, href }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  className="group flex min-h-11 items-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-champagne"
+                >
+                  <span className="font-display text-2xl leading-none text-ivory/70 transition-colors duration-300 group-hover:text-ivory lg:text-[1.7rem]">
+                    {label}
+                  </span>
+                  <ArrowUpRight
+                    size={15}
+                    className="shrink-0 text-ivory/30 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-champagne"
+                    aria-hidden="true"
+                  />
+                </Link>
+              ))}
+            </div>
+
+            {/* Slide counter for the rotating tagline */}
+            <div className="flex items-center gap-3">
+              <span className="font-display text-sm text-ivory/70">{String(idx + 1).padStart(2, "0")}</span>
+              <span className="text-ivory/25">—</span>
+              <div className="flex items-center gap-1.5" role="tablist" aria-label="Tagline slides">
+                {TAGLINES.map((t, i) => (
+                  <button
+                    key={t}
+                    type="button"
+                    role="tab"
+                    aria-selected={i === idx}
+                    aria-label={t}
+                    onClick={() => setIdx(i)}
+                    className={`min-h-11 rounded-full transition-all duration-500 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne ${
+                      i === idx ? "w-7 bg-champagne" : "w-2 bg-ivory/20 hover:bg-ivory/40"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SIGNATURE PIECE SECTION — framed spotlight ────────────────────────── */}
+      <section className="relative overflow-hidden bg-[#0a0806] py-24 lg:py-32" aria-labelledby="feature-heading">
+        <div
+          className="pointer-events-none absolute left-0 top-1/3 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full opacity-40 blur-3xl"
+          style={{ background: "radial-gradient(circle, rgba(184,121,104,0.25), transparent 70%)" }}
+          aria-hidden="true"
+        />
+
+        <div className="luxury-shell relative z-10 grid gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+          {/* Left — framed spotlight with angle-swap */}
+          <div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.9, ease: [0.23, 1, 0.32, 1] }}
+              className="bezel-outer relative mx-auto max-w-sm lg:max-w-none"
+            >
+              <span className="absolute -top-3.5 left-5 z-10 inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#171110]/95 px-3.5 py-1.5 shadow-[0_8px_24px_rgba(0,0,0,0.35)]">
+                <span className="size-1.5 rounded-full bg-rose" aria-hidden="true" />
+                <span className="text-[0.6rem] font-medium uppercase tracking-[0.18em] text-ivory/80">
+                  One of a kind
+                </span>
+              </span>
+
+              <div className="bezel-inner relative aspect-[4/5]">
+                <AnimatePresence mode="sync">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <motion.img
+                    key={SPOTLIGHT_ANGLES[angleIdx]}
+                    src={SPOTLIGHT_ANGLES[angleIdx]}
+                    alt="Emerald halo split-shank diamond ring — Jewel Stone signature collection"
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.55, ease: [0.23, 1, 0.32, 1] }}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    style={{ objectPosition: "center 35%" }}
+                  />
+                </AnimatePresence>
+              </div>
+            </motion.div>
+
+            {/* Angle-swap thumbnails */}
+            <div className="mx-auto mt-5 flex max-w-sm items-center justify-center gap-2.5 lg:mx-0 lg:justify-start">
+              {SPOTLIGHT_ANGLES.map((src, i) => (
+                <button
+                  key={src}
+                  type="button"
+                  aria-label={`View angle ${i + 1}`}
+                  aria-pressed={angleIdx === i}
+                  onClick={() => setAngleIdx(i)}
+                  className="size-14 shrink-0 overflow-hidden rounded-xl border-2 transition-all duration-200"
+                  style={{ borderColor: angleIdx === i ? "rgba(184,121,104,0.8)" : "rgba(255,255,255,0.12)" }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={src} alt="" aria-hidden="true" className="h-full w-full object-cover" style={{ objectPosition: "center 35%" }} />
+                </button>
+              ))}
+              <span className="ml-1 hidden text-[0.62rem] uppercase tracking-[0.14em] text-ivory/35 sm:inline">
+                Tap to rotate view
+              </span>
+            </div>
+          </div>
+
+          {/* Right — editorial copy */}
+          <motion.div
+            initial={{ opacity: 0, x: 32 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.05 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.23, 1, 0.32, 1] }}
+          >
+            <p className="eyebrow text-champagne/55">The signature collection</p>
+            <h2
+              id="feature-heading"
+              className="display-title mt-5 text-[clamp(2.8rem,5.5vw,5rem)] leading-[0.9] text-ivory"
+            >
+              The Emerald<br />Halo Ring.
+            </h2>
+            <p className="mt-7 max-w-sm text-[0.95rem] leading-7 text-ivory/55">
+              A 0.23ct emerald-cut illusion center built from 9 diamonds, held in a pavé halo on a
+              split shank. 0.49ct total weight, 18K white gold, EF color VVS clarity — this exact
+              physical piece, photographed in-house.
+            </p>
+
+            <div className="mt-9 flex flex-wrap gap-3">
+              <ButtonLink href="/products/emerald-halo-engagement-ring">View This Ring</ButtonLink>
+              <ButtonLink href="/collections/rings" variant="dark">Shop All Rings</ButtonLink>
+            </div>
+
+            <div className="mt-10 flex flex-wrap gap-2.5 border-t border-white/10 pt-8">
+              {[
+                { v: "Emerald", l: "Cut" },
+                { v: "White Gold", l: "Setting" },
+                { v: "EF/VVS", l: "Grade" },
+                { v: "0.49ct", l: "Total weight" },
+              ].map(({ v, l }) => (
+                <div key={l} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5">
+                  <p className="font-display text-lg leading-none text-ivory">{v}</p>
+                  <p className="mt-1 text-[0.58rem] uppercase tracking-[0.14em] text-ivory/35">{l}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    </>
+  );
+}

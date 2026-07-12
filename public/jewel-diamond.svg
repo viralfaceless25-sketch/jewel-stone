@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" role="img" aria-labelledby="title">
+  <title id="title">Loose oval diamond</title>
+  <rect width="900" height="700" fill="#fbf7ef"/>
+  <ellipse cx="450" cy="350" rx="168" ry="230" fill="#fffaf3" stroke="#b87968" stroke-width="16"/>
+  <ellipse cx="450" cy="350" rx="116" ry="174" fill="none" stroke="#d9bfa4" stroke-width="8"/>
+  <path d="M450 120v460M314 230l272 240M586 230 314 470M282 350h336M356 164l188 372M544 164 356 536" stroke="#b87968" stroke-width="5" opacity=".58"/>
+  <circle cx="392" cy="268" r="13" fill="#fff"/><circle cx="512" cy="420" r="10" fill="#fff"/><circle cx="475" cy="210" r="8" fill="#fff"/>
+</svg>

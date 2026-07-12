@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" role="img" aria-labelledby="title">
+  <title id="title">Diamond solitaire necklace</title>
+  <rect width="900" height="700" fill="#fbf7ef"/>
+  <path d="M180 120c88 202 170 302 270 302s182-100 270-302" fill="none" stroke="#b87968" stroke-width="16" stroke-linecap="round"/>
+  <path d="M450 422v62" stroke="#b87968" stroke-width="12" stroke-linecap="round"/>
+  <path d="M450 484 530 574 450 650 370 574Z" fill="#fffaf3" stroke="#b87968" stroke-width="14"/>
+  <path d="M370 574h160M450 484v166M405 528l90 88M495 528l-90 88" stroke="#d9bfa4" stroke-width="7"/>
+  <circle cx="450" cy="422" r="19" fill="#fff" stroke="#d9bfa4" stroke-width="5"/>
+</svg>

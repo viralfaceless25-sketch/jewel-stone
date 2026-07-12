@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" role="img" aria-labelledby="title">
+  <title id="title">Diamond tennis bracelet</title>
+  <rect width="900" height="700" fill="#fbf7ef"/>
+  <ellipse cx="450" cy="350" rx="282" ry="142" fill="none" stroke="#b87968" stroke-width="28"/>
+  <ellipse cx="450" cy="350" rx="224" ry="96" fill="none" stroke="#d9bfa4" stroke-width="8"/>
+  <g fill="#fff" stroke="#d9bfa4" stroke-width="6">
+    <circle cx="184" cy="350" r="28"/><circle cx="226" cy="278" r="25"/><circle cx="310" cy="230" r="25"/><circle cx="414" cy="211" r="25"/><circle cx="524" cy="217" r="25"/><circle cx="620" cy="252" r="25"/><circle cx="694" cy="320" r="28"/><circle cx="675" cy="396" r="25"/><circle cx="592" cy="454" r="25"/><circle cx="486" cy="482" r="25"/><circle cx="376" cy="476" r="25"/><circle cx="278" cy="430" r="25"/>
+  </g>
+</svg>

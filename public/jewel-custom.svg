@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" role="img" aria-labelledby="title">
+  <title id="title">Custom jewelry design sketch</title>
+  <rect width="900" height="700" fill="#fbf7ef"/>
+  <path d="M196 508c124-158 262-232 414-222 54 4 92 26 95 61 4 50-68 77-155 52-101-29-180-14-238 46" fill="none" stroke="#b87968" stroke-width="13" stroke-linecap="round"/>
+  <path d="M318 206h256l76 92-204 246-204-246Z" fill="#fffaf3" stroke="#b87968" stroke-width="13"/>
+  <path d="M242 298h408M318 206l128 338M574 206 446 544M370 298l76-92 76 92" fill="none" stroke="#d9bfa4" stroke-width="7"/>
+  <path d="M650 151l71-71 55 55-71 71z" fill="#f1e8db" stroke="#b87968" stroke-width="10"/>
+  <path d="m705 206-70 130" stroke="#b87968" stroke-width="11" stroke-linecap="round"/>
+</svg>
