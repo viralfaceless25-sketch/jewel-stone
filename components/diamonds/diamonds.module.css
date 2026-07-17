@@ -10,6 +10,11 @@
 .shapeActive { background: var(--js-garnet); color: #fff; border-color: var(--js-garnet); border-radius:var(--js-radius-control); }
 .shapeIcon { width: 30px; height: 30px; background: currentColor; opacity: 0.85; }
 .dot { position: absolute; top: 8px; right: 8px; width: 6px; height: 6px; border-radius: 999px; background: var(--js-gold); }
+.filterBar { display:grid; grid-template-columns:repeat(2,minmax(0,220px)) auto; align-items:end; justify-content:center; gap:.8rem; margin:1.2rem 0 0; }
+.filterBar label { display:grid; gap:.35rem; font-size:.64rem; letter-spacing:.13em; text-transform:uppercase; color:var(--js-platinum); }
+.filterBar select { min-height:44px; padding:0 2rem 0 .8rem; border:1px solid var(--js-line); border-radius:0; background:var(--js-porcelain); color:var(--js-ink); font:inherit; letter-spacing:0; text-transform:none; }
+.filterBar select:focus-visible,.clearFilters:focus-visible { outline:2px solid var(--js-gold); outline-offset:2px; }
+.clearFilters { min-height:44px; padding:0 1rem; border:1px solid var(--js-line); background:transparent; color:var(--js-ink); cursor:pointer; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; }
 
 /* simple diamond-shape silhouettes via clip-path */
 .sRound { clip-path: circle(48%); }
@@ -48,4 +53,8 @@
 .csPanel h3 { margin: 0 0 0.8rem; font-family: var(--font-display); font-weight: 500; font-size: 1.6rem; color: #f7f5f0; }
 .csPanel p { margin: 0 auto; max-width: 52ch; line-height: 1.7; color: rgba(242,240,235,.75); }
 
-@media (max-width: 720px) { .shapeGrid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 720px) {
+  .shapeGrid { grid-template-columns: repeat(3, 1fr); }
+  .filterBar { grid-template-columns:1fr 1fr; }
+  .clearFilters { grid-column:1 / -1; }
+}

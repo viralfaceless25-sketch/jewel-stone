@@ -7,7 +7,13 @@ export const DIAMOND_SHAPES = [
   "Marquise",
   "Radiant",
   "Princess",
+  "Heart",
+  "Asscher",
 ] as const;
+
+export const COMPACT_DIAMOND_SHAPES = DIAMOND_SHAPES.filter(
+  (shape) => shape !== "Heart" && shape !== "Asscher",
+);
 
 export const DIAMOND_ORIGINS = ["Natural", "Lab-Grown"] as const;
 export const CARAT_RANGES = ["under-1", "1-2", "2-3", "3-5", "5-plus"] as const;
@@ -67,8 +73,9 @@ function inCaratRange(carats: number, range: DiamondFilters["carat"]) {
 }
 
 export function matchesDiamondFilters(product: DiamondProduct, filters: DiamondFilters) {
+  const matchesShape = !filters.shape || product.shape === filters.shape || product.shape?.startsWith(`${filters.shape} `);
   return (
-    (!filters.shape || product.shape === filters.shape) &&
+    matchesShape &&
     (!filters.origin || product.origin === filters.origin) &&
     inCaratRange(product.carats, filters.carat)
   );

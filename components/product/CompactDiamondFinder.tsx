@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   DIAMOND_ORIGINS,
-  DIAMOND_SHAPES,
+  COMPACT_DIAMOND_SHAPES,
   EMPTY_DIAMOND_FILTERS,
   diamondSearchHref,
   type DiamondFilters,
@@ -43,7 +43,7 @@ export function CompactDiamondFinder() {
           onChange={(event) => setFilters({ ...filters, shape: event.target.value as DiamondFilters["shape"] })}
         >
           <option value="">Any</option>
-          {DIAMOND_SHAPES.map((value) => <option key={value} value={value}>{value}</option>)}
+          {COMPACT_DIAMOND_SHAPES.map((value) => <option key={value} value={value}>{value}</option>)}
         </select>
       </label>
       <label className={styles.finderField}>

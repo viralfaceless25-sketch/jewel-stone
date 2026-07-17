@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { DiamondsExplorer } from "@/components/diamonds/DiamondsExplorer";
 import { products } from "@/data/products";
 import pages from "@/components/pages/pages.module.css";
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/diamonds" },
 };
 
-const pieces = products.filter((p) => p.source === "signature");
+const pieces = products.filter((p) => p.carats > 0);
 
 export default function DiamondsPage() {
   return (
@@ -26,7 +27,9 @@ export default function DiamondsPage() {
         </p>
       </section>
 
-      <DiamondsExplorer pieces={pieces} />
+      <Suspense fallback={<div className={pages.lede}>Preparing the diamond selection…</div>}>
+        <DiamondsExplorer pieces={pieces} />
+      </Suspense>
 
       <section className={pages.cta}>
         <h2 className={pages.h2}>Can&apos;t find your stone?</h2>

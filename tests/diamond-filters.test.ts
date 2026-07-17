@@ -52,3 +52,13 @@ test("applies carat boundaries consistently", () => {
   assert.equal(matchesDiamondFilters(product, { shape: "", origin: "", carat: "1-2" }), false);
   assert.equal(matchesDiamondFilters(product, { shape: "", origin: "", carat: "2-3" }), true);
 });
+
+test("matches detailed inventory shape names to their shopper-facing shape", () => {
+  assert.equal(
+    matchesDiamondFilters(
+      { shape: "Cushion Brilliant", origin: "Lab-Grown", carats: 3 },
+      { shape: "Cushion", origin: "", carat: "" },
+    ),
+    true,
+  );
+});
