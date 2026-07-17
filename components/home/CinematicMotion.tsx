@@ -6,8 +6,11 @@ export function CinematicHome({ className, children }: { className: string; chil
   const root = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) return;
     const scenes = Array.from(root.current?.querySelectorAll<HTMLElement>("[data-lux-scene]") ?? []);
+    const videos = Array.from(root.current?.querySelectorAll<HTMLVideoElement>("[data-lux-video]") ?? []);
+    const parallaxItems = Array.from(root.current?.querySelectorAll<HTMLElement>("[data-lux-parallax]") ?? []);
     const seen = new WeakSet<Element>();
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
@@ -26,7 +29,42 @@ export function CinematicHome({ className, children }: { className: string; chil
       }
     }, { threshold: 0.08, rootMargin: "0px 0px -8% 0px" });
     scenes.forEach((scene) => observer.observe(scene));
-    return () => observer.disconnect();
+
+    const videoObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        const video = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting) void video.play().catch(() => undefined);
+        else video.pause();
+      }
+    }, { threshold: 0.22, rootMargin: "8% 0px 8% 0px" });
+    videos.forEach((video) => videoObserver.observe(video));
+
+    let frame = 0;
+    const updateParallax = () => {
+      frame = 0;
+      for (const item of parallaxItems) {
+        const rect = item.getBoundingClientRect();
+        if (rect.bottom < -80 || rect.top > window.innerHeight + 80) continue;
+        const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+        const depth = Number(item.dataset.luxParallax ?? 18);
+        item.style.setProperty("--lux-y", `${(progress - 0.5) * depth}px`);
+      }
+    };
+    const requestParallax = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateParallax);
+    };
+    updateParallax();
+    window.addEventListener("scroll", requestParallax, { passive: true });
+    window.addEventListener("resize", requestParallax);
+
+    return () => {
+      observer.disconnect();
+      videoObserver.disconnect();
+      videos.forEach((video) => video.pause());
+      window.removeEventListener("scroll", requestParallax);
+      window.removeEventListener("resize", requestParallax);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   return <main ref={root} className={className}>{children}</main>;

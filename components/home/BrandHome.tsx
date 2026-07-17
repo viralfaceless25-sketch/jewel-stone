@@ -104,9 +104,9 @@ export function BrandHome() {
 
       <section className={styles.stories} aria-labelledby="story-title">
         <header className={styles.sectionHead}>
-          <p>Three ways into the collection</p>
-          <h2 id="story-title">Natural. PIECUT. Lab-grown.</h2>
-          <span>Each piece gets context—not empty luxury language.</span>
+          <p>The collection, three ways</p>
+          <h2 id="story-title">Three ways to find your diamond.</h2>
+          <span>Explore one-of-a-kind PIECUT, certified natural, and lab-grown jewelry.</span>
         </header>
 
         {STORIES.map((item, index) => (
@@ -141,25 +141,49 @@ export function BrandHome() {
           <p>Sharp studio film and high-resolution jewelry studies. No haze, no placeholder imagery—only pieces worth looking at twice.</p>
         </header>
         <div className={styles.houseBento}>
-          <Link href="/collections/bracelets" className={`${styles.bentoTile} ${styles.bentoFilm}`}>
+          <Link href="/collections" className={`${styles.bentoTile} ${styles.bentoLead}`} data-lux-parallax="26">
             <video
-              src="/images/home/house-selection.mp4"
+              src="/videos/jewelry-collage.mp4"
               poster="/images/new/tennis-bracelet.jpg"
-              autoPlay muted loop playsInline preload="metadata"
+              muted loop playsInline preload="metadata" data-lux-video
               aria-label="Jewel Stone high jewelry collection film"
             />
-            <span>House selection film · 01:1</span>
+            <span>House selection · in motion</span>
           </Link>
-          <Link href="/products/fr4-emerald-hidden-halo-ring" className={`${styles.bentoTile} ${styles.bentoRing}`}>
-            <Image src="/images/products/fr4-emerald-hidden-halo-ring/angle-front-wg.webp" alt="Emerald hidden-halo lab-grown diamond ring" fill sizes="(max-width:800px) 100vw, 34vw" />
+          <Link href="/products/fr4-emerald-hidden-halo-ring" className={`${styles.bentoTile} ${styles.bentoPortrait}`} data-lux-parallax="-18">
+            <video
+              src="/videos/hero-ring.mp4"
+              poster="/images/products/fr4-emerald-hidden-halo-ring/angle-front-wg.webp"
+              muted loop playsInline preload="metadata" data-lux-video
+              aria-label="Emerald hidden halo ring film"
+            />
+            <span>Emerald hidden halo · ring study</span>
+          </Link>
+          <Link href="/collections/bracelets" className={`${styles.bentoTile} ${styles.bentoWide}`} data-lux-parallax="18">
+            <video
+              src="/videos/gallery-bracelet.mp4"
+              poster="/images/products/tb8-8ct-tennis-bracelet/model.webp"
+              muted loop playsInline preload="metadata" data-lux-video
+              aria-label="Diamond tennis bracelet film"
+            />
+            <span>Tennis bracelet · light in motion</span>
+          </Link>
+          <Link href="/products/heart-halo-ring" className={`${styles.bentoTile} ${styles.bentoSquare}`} data-lux-parallax="-14">
+            <video
+              src="/videos/ring-360.mp4"
+              poster="/images/products/heart-halo-ring/cover.jpg"
+              muted loop playsInline preload="metadata" data-lux-video
+              aria-label="Heart halo ring rotating through every angle"
+            />
+            <span>Heart halo · every angle</span>
+          </Link>
+          <Link href="/products/fr4-emerald-hidden-halo-ring" className={`${styles.bentoTile} ${styles.bentoSquare} ${styles.bentoStill}`} data-lux-parallax="14">
+            <Image src="/images/products/fr4-emerald-hidden-halo-ring/angle-front-wg.webp" alt="Emerald hidden-halo lab-grown diamond ring in its presentation box" fill sizes="(max-width:800px) 100vw, 42vw" />
             <span>Emerald hidden halo · 5 ct</span>
           </Link>
-          <Link href="/products/fn2-graduated-diamond-necklace" className={`${styles.bentoTile} ${styles.bentoBracelet}`}>
+          <Link href="/products/fn2-graduated-diamond-necklace" className={`${styles.bentoTile} ${styles.bentoWide} ${styles.bentoStill}`} data-lux-parallax="-18">
             <Image src="/images/products/fn2-graduated-diamond-necklace/model.webp" alt="Graduated diamond necklace worn on model" fill sizes="(max-width:800px) 100vw, 42vw" />
             <span>Graduated necklace · 15 ct</span>
-          </Link>
-          <Link href="/about" className={`${styles.bentoTile} ${styles.bentoBrand}`}>
-            <Image src="/brand/jewel-stone-logo.jpeg" alt="Jewel Stone — Shine With You" fill sizes="(max-width:800px) 100vw, 34vw" />
           </Link>
         </div>
       </CinematicSection>
