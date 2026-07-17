@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import {
   DIAMOND_CLARITY_OPTIONS,
   DIAMOND_COLOR_OPTIONS,
@@ -14,6 +14,8 @@ import { PieceViewer } from "@/components/ar/PieceViewer";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
 import { Reveal } from "@/components/home/vitrine/Reveal";
+import { CompactDiamondFinder } from "@/components/product/CompactDiamondFinder";
+import { swipeDelta, wrappedIndex } from "@/lib/commerce/gallery-navigation";
 import styles from "./product.module.css";
 
 const METALS: { key: MetalVariant; label: string; swatch: string }[] = [
@@ -55,6 +57,23 @@ export function ProductView({ product, related }: { product: Product; related: P
   const [activeImg, setActiveImg] = useState(0);
   const [showModel, setShowModel] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
+  const stepGallery = useCallback((delta: -1 | 1) => {
+    setShowModel(false);
+    setShowVideo(false);
+    setActiveImg((current) => wrappedIndex(current, gallery.length, delta));
+  }, [gallery.length]);
+  const onStagePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (gallery.length < 2 || showModel || showVideo) return;
+    pointerStart.current = { x: event.clientX, y: event.clientY };
+  };
+  const onStagePointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const start = pointerStart.current;
+    pointerStart.current = null;
+    if (!start || gallery.length < 2 || showModel || showVideo) return;
+    const delta = swipeDelta(event.clientX - start.x, event.clientY - start.y);
+    if (delta) stepGallery(delta);
+  };
   const isRing = product.category === "Rings";
   const isNeck = product.category === "Pendants" || product.category === "Necklaces";
   const [size, setSize] = useState<string>(isRing ? "6.5" : isNeck ? '18"' : "");
@@ -105,7 +124,24 @@ export function ProductView({ product, related }: { product: Product; related: P
       <section className={styles.top}>
         {/* Media */}
         <div className={styles.media}>
-          <div className={styles.stage}>
+          <div
+            className={styles.stage}
+            tabIndex={gallery.length > 1 && !showModel && !showVideo ? 0 : -1}
+            onKeyDown={(event) => {
+              if (event.key === "ArrowLeft") {
+                event.preventDefault();
+                stepGallery(-1);
+              }
+              if (event.key === "ArrowRight") {
+                event.preventDefault();
+                stepGallery(1);
+              }
+            }}
+            onPointerDown={onStagePointerDown}
+            onPointerUp={onStagePointerUp}
+            onPointerCancel={() => { pointerStart.current = null; }}
+            aria-label={`${product.name} gallery`}
+          >
             {selectedVideo && showVideo ? (
               <video className={styles.productVideo} src={selectedVideo} controls autoPlay muted loop playsInline preload="metadata" aria-label={`${product.name} product film in ${metalLabel}`} />
             ) : model && showModel ? (
@@ -117,9 +153,33 @@ export function ProductView({ product, related }: { product: Product; related: P
                 fill
                 sizes="(max-width: 900px) 92vw, 52vw"
                 className={styles.stageImg}
+                draggable={false}
                 priority
               />
             )}
+            {gallery.length > 1 && !showModel && !showVideo ? (
+              <>
+                <button
+                  type="button"
+                  className={`${styles.galleryArrow} ${styles.galleryPrev}`}
+                  onClick={() => stepGallery(-1)}
+                  aria-label="Previous product image"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden><path d="m14.5 5-7 7 7 7" /></svg>
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.galleryArrow} ${styles.galleryNext}`}
+                  onClick={() => stepGallery(1)}
+                  aria-label="Next product image"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden><path d="m9.5 5 7 7-7 7" /></svg>
+                </button>
+                <span className={styles.galleryCount} aria-live="polite">
+                  {activeImg + 1} / {gallery.length}
+                </span>
+              </>
+            ) : null}
             {model && showModel ? (
               <span className={styles.arChip}>3D · tap “View in your space” on mobile</span>
             ) : null}
@@ -189,6 +249,7 @@ export function ProductView({ product, related }: { product: Product; related: P
           </ul>
 
           <p className={styles.desc}>{product.description}</p>
+          <CompactDiamondFinder />
 
           <ul className={styles.mediaProof} aria-label="Available product media">
             {photographedMetals ? <li><b>{photographedMetals}</b><span>photographed metal finishes</span></li> : null}
