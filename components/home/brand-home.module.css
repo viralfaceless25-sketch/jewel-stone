@@ -148,8 +148,15 @@
 .houseStudyHead > p { max-width:45ch; margin:0; color:rgba(249,248,246,.68); line-height:1.72; }
 .houseBento { display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); grid-auto-rows:minmax(150px,12vw); gap:clamp(.7rem,1.2vw,1.2rem); overflow:hidden; padding-block:1.5rem; }
 .bentoTile { position:relative; display:block; min-height:0; overflow:hidden; background:#080808; color:#fff; transform:translate3d(0,var(--lux-y,0),0); }
-.bentoTile img,.bentoTile video { width:100%; height:100%; object-fit:cover; transition:transform .8s cubic-bezier(.2,.8,.2,1); }
-.bentoTile:hover img,.bentoTile:hover video { transform:scale(1.018); }
+.bentoTile img,.bentoTile video {
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  padding:clamp(.5rem,1.15vw,1rem);
+  background:#080808;
+  transition:opacity .25s ease;
+}
+.bentoTile:hover img,.bentoTile:hover video { opacity:.96; }
 .bentoTile > span { position:absolute; z-index:2; left:1rem; bottom:1rem; padding:.65rem .8rem; background:rgba(10,8,8,.72); backdrop-filter:blur(10px); color:#fff; font-size:.62rem; letter-spacing:.13em; text-transform:uppercase; }
 .bentoLead { grid-column:span 8; grid-row:span 3; }
 .bentoPortrait { grid-column:span 4; grid-row:span 3; }
