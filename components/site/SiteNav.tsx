@@ -88,7 +88,7 @@ export function SiteNav() {
             aria-expanded={selected}
             onClick={() => {
               clearTimers();
-              setActive(selected ? null : index);
+              setActive(index);
             }}
             onFocus={() => {
               clearTimers();
@@ -118,10 +118,9 @@ export function SiteNav() {
   return (
     <header
       className={`${styles.nav} ${scrolled || active !== null ? styles.navScrolled : ""}`}
-      onMouseLeave={leave}
       onKeyDown={onHeaderKeyDown}
     >
-      <div className={styles.navInner}>
+      <div className={styles.navInner} onMouseLeave={leave}>
         <button
           type="button"
           className={`${styles.burger} ${open ? styles.burgerOpen : ""}`}
@@ -230,7 +229,7 @@ export function SiteNav() {
               return (
                 <section key={item.label} className={styles.mobileSection}>
                   <div className={styles.mobileTop}>
-                    <Link href={item.href}>{item.label}</Link>
+                    <Link href={item.href} onClick={() => setOpen(false)}>{item.label}</Link>
                     {item.groups ? (
                       <button
                         type="button"
@@ -245,7 +244,7 @@ export function SiteNav() {
                   {expanded && item.groups ? (
                     <div className={styles.mobileChildren}>
                       {item.groups.flatMap((group) => group.items).map((link, index) => (
-                        <Link key={`${link.label}-${index}`} href={link.href}>{link.label}</Link>
+                        <Link key={`${link.label}-${index}`} href={link.href} onClick={() => setOpen(false)}>{link.label}</Link>
                       ))}
                     </div>
                   ) : null}
@@ -253,9 +252,8 @@ export function SiteNav() {
               );
             })}
             <div className={styles.mobileUtility}>
-              <Link href="/about">Our House</Link>
-              <Link href="/contact">Contact</Link>
-              <Link href="/wishlist">Wishlist</Link>
+              <Link href="/contact" onClick={() => setOpen(false)}>Contact</Link>
+              <Link href="/wishlist" onClick={() => setOpen(false)}>Wishlist</Link>
             </div>
           </div>
         </nav>
