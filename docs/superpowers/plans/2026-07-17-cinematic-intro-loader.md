@@ -193,6 +193,7 @@ export function BrandPreloader() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     setReducedMotion(reduce);
     if (reduce) video.current?.pause();
+    else void video.current?.play().catch(close);
 
     const skipTimer = window.setTimeout(() => setSkipAvailable(true), SKIP_DELAY_MS);
     const fallbackTimer = window.setTimeout(close, reduce ? REDUCED_MOTION_MS : VIDEO_FAILSAFE_MS);

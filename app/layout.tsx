@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { SiteNav } from "@/components/site/SiteNav";
 import { SiteFooter } from "@/components/site/SiteFooter";
+import { BrandPreloader } from "@/components/site/BrandPreloader";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationSchema, SITE_URL, websiteSchema } from "@/lib/seo/schema";
+import { INTRO_SESSION_KEY } from "@/lib/site/intro-state";
 
 // New "AR Vitrine" skin: high-contrast luxury serif for display, Inter for UI.
 const display = Playfair_Display({
@@ -66,8 +69,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${display.variable} ${body.variable}`}>
       <body>
+        <Script id="intro-session-marker" strategy="beforeInteractive">
+          {`try { if (sessionStorage.getItem("${INTRO_SESSION_KEY}") === "1") document.documentElement.dataset.introSeen = "true"; } catch {}`}
+        </Script>
+        <BrandPreloader />
         <a className="skip-link" href="#main-content">Skip to main content</a>
         <SiteNav />
         <div id="main-content" tabIndex={-1} className="site-shell">{children}</div>
