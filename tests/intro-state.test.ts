@@ -1,6 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { INTRO_SESSION_KEY, hasSeenIntro, markIntroSeen } from "../lib/site/intro-state.ts";
+import {
+  INTRO_DURATION_MS,
+  INTRO_REDUCED_DURATION_MS,
+  getIntroDuration,
+} from "../lib/site/intro-timing.ts";
 
 class MemoryStorage {
   values = new Map<string, string>();
@@ -31,4 +36,9 @@ test("does not throw when completion cannot be stored", () => {
   const unavailable = { setItem: () => { throw new Error("blocked"); } };
 
   assert.doesNotThrow(() => markIntroSeen(unavailable));
+});
+
+test("selects a shorter intro for reduced motion", () => {
+  assert.equal(getIntroDuration(false), INTRO_DURATION_MS);
+  assert.equal(getIntroDuration(true), INTRO_REDUCED_DURATION_MS);
 });
