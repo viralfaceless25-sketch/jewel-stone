@@ -5,16 +5,22 @@ import { brand } from "@/data/site";
 import pages from "@/components/pages/pages.module.css";
 
 export const metadata: Metadata = {
-  title: "About — The Maison on 47th Street",
+  title: "About — Family Jewelry Knowledge Since 1980",
   description:
-    "Jewel Stone is a Diamond District maison led by Ishan Vaghani — one-of-a-kind PIECUT and antique diamond jewelry, hand-finished in New York.",
+    "Jewel Stone grows from a family jewelry business operating since 1980, with natural, PIECUT, and lab-grown diamond jewelry made in-house.",
   alternates: { canonical: "/about" },
 };
 
 const values = [
   { num: "01", title: "One of one", body: "Every signature piece is made a single time. When it sells, it is gone — no reorders, no duplicates." },
-  { num: "02", title: "Stone first", body: "We start from the diamond, hand-selected on 47th Street, GIA & IGI certified, then build the setting around it." },
+  { num: "02", title: "Stone first", body: "We start from the diamond, selected for proportion and character, then build the setting around it." },
   { num: "03", title: "Made to be worn", body: "Finished to order in rose, white, yellow gold or platinum, sized and insured — heirlooms, not display pieces." },
+];
+
+const diamondWorlds = [
+  { num: "01", title: "Natural", body: "Selected for rarity, proportion, and individual character. Certified stones with geological provenance." },
+  { num: "02", title: "PIECUT", body: "Precisely matched diamonds assembled into one larger geometric silhouette—our most distinctive design language." },
+  { num: "03", title: "Lab-grown", body: "The same crystal structure and optical performance, with more freedom in scale, grade, and budget." },
 ];
 
 export default function AboutPage() {
@@ -22,38 +28,47 @@ export default function AboutPage() {
     <main className={pages.page}>
       <section className={pages.hero}>
         <p className={pages.eyebrow}><span /> The maison</p>
-        <h1 className={pages.h1}>Quietly made,<br /><em>on 47th Street.</em></h1>
+        <h1 className={pages.h1}>A new name.<br /><em>Deep family roots.</em></h1>
         <p className={pages.lede}>
-          A family house on 47th Street since 1980 — now in its third generation.
-          Everything is produced under one roof, and we make each piece once. What
-          you turn on screen, in 3D and AR, is the exact piece that arrives at your door.
+          Jewel Stone grows from a family jewelry business operating since 1980.
+          That experience now guides every stone we select, every proportion we refine,
+          and every piece we make in-house.
         </p>
       </section>
 
       <section className={pages.section}>
         <div className={`${pages.wrap} ${pages.split}`}>
           <div className={pages.mediaFrame}>
-            <Image src="/images/products/emerald-halo-engagement-ring/cover.jpg" alt="A Jewel Stone piece" fill sizes="(max-width:860px) 92vw, 46vw" className={pages.mediaImg} />
+            <Image src="/images/atelier/bench-setting.jpg" alt="Jeweler setting a diamond by hand at the bench" fill sizes="(max-width:860px) 92vw, 46vw" className={pages.mediaCover} />
           </div>
           <div>
             <p className={pages.eyebrow}><span /> The family · est. 1980</p>
             <h2 className={pages.h2}>Three generations at the bench</h2>
             <p className={pages.p}>
-              Jewel Stone opened on 47th Street in 1980 and has been family-run ever
-              since — the trade passed down, hand to hand, across three generations.
-              {" "}{brand.owner} continues it today, selecting every diamond in the
-              Diamond District and overseeing each piece from sketch to setting.
+              Our family jewelry business began in 1980. The trade passed down,
+              hand to hand, across three generations. {brand.owner} carries that
+              knowledge into Jewel Stone today, overseeing each piece from stone
+              selection and first sketch through setting and final finish.
             </p>
             <p className={pages.p}>
-              Everything is made <strong>in-house</strong> — designed, cast, hand-set,
-              and finished on our own bench, never outsourced. No mass production, no
-              catalog reruns. Just rare stones, honestly graded, and the patience of
-              a family that has done this for forty years.
+              Work stays <strong>in-house</strong> — design, casting, setting, and finish.
+              No mass production and no anonymous catalog story. Just carefully chosen
+              stones, honest grading, and judgment built over more than forty years.
             </p>
             <div className={pages.actions}>
               <Link href="/contact" className={pages.btnPrimary}>Book a private viewing</Link>
               <Link href="/collections" className={pages.btnGhost}>See the vitrine</Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className={pages.section}>
+        <div className={pages.wrap}>
+          <p className={pages.eyebrow}><span /> Three diamond languages</p>
+          <h2 className={pages.h2}>Different origins. One standard of judgment.</h2>
+          <div className={pages.cards} style={{ marginTop: "2.5rem" }}>
+            {diamondWorlds.map((world) => <div key={world.num} className={pages.card}><div className={pages.num}>{world.num}</div><h3 className={pages.h3}>{world.title}</h3><p className={pages.p} style={{ margin:0 }}>{world.body}</p></div>)}
           </div>
         </div>
       </section>

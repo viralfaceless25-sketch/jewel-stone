@@ -14,6 +14,7 @@ export default function EducationPage() {
       eyebrow="Learn"
       title="Diamond education"
       intro="No jargon. A jeweller's plain-English guide to choosing a stone you'll love for a lifetime."
+      media={{ src: "/images/atelier/loose-diamonds.jpg", alt: "Loose diamonds examined at the Jewel Stone worktable" }}
       sections={[
         { h: "Cut — the one that matters most", body: ["Cut isn't shape; it's how well a diamond is proportioned to return light. A superbly cut stone throws fire and brilliance; a poorly cut one looks dull no matter its size. We favour Excellent and Ideal cuts."] },
         { h: "Colour — D to Z", body: ["Colour runs from D (icy colourless) toward Z (warm). Most of our pieces sit in the EF–GH band: bright and white to the eye, without paying a premium for a difference only a lab can see."] },

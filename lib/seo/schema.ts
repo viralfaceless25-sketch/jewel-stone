@@ -1,4 +1,4 @@
-import type { Product } from "@/data/products";
+import { COLOR_CLARITY_LABEL, type Product } from "@/data/products";
 
 export const SITE_URL = "https://www.jewelstone.com";
 
@@ -35,7 +35,7 @@ export function organizationSchema() {
     logo: absoluteUrl("/logo-transparent.png"),
     foundingDate: "1980",
     description:
-      "Family-owned since 1980, Jewel Stone crafts one-of-a-kind diamond jewelry entirely in-house in NYC's Diamond District.",
+      "Built on family jewelry knowledge since 1980, Jewel Stone creates one-of-a-kind diamond jewelry in-house.",
     slogan: "Made in-house since 1980",
     address: {
       "@type": "PostalAddress",
@@ -84,10 +84,11 @@ export function productSchema(product: Product) {
       "@type": "Brand",
       name: "Jewel Stone",
     },
+    // Pricing is quote-only, so no `price` is published here. Emitting one would
+    // surface a price in search results that the site itself never shows.
     offers: {
       "@type": "Offer",
       url: `${SITE_URL}/products/${product.slug}`,
-      price: product.price,
       priceCurrency: "USD",
       availability: `https://schema.org/${product.comingSoon ? "PreOrder" : "InStock"}`,
     },
@@ -101,7 +102,7 @@ export function productSchema(product: Product) {
       {
         "@type": "PropertyValue",
         name: "Clarity",
-        value: product.colorClarity,
+        value: COLOR_CLARITY_LABEL,
       },
       {
         "@type": "PropertyValue",

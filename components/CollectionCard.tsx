@@ -68,11 +68,9 @@ export function CollectionCard({
           ) : (
             <span />
           )}
-          {collection.priceFrom && (
-            <div className="rounded-full border border-champagne/20 bg-marble/40 px-3 py-1 text-[0.62rem] font-medium uppercase tracking-[0.16em] text-chromehi/85 backdrop-blur-sm">
-              {collection.priceFrom}
-            </div>
-          )}
+          <div className="rounded-full border border-champagne/20 bg-marble/40 px-3 py-1 text-[0.62rem] font-medium uppercase tracking-[0.16em] text-chromehi/85 backdrop-blur-sm">
+            Enquire
+          </div>
         </div>
 
         {/* Bottom content */}

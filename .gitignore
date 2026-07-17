@@ -4,11 +4,38 @@ out
 dist
 .env*
 npm-debug.log*
+*.tsbuildinfo
+__pycache__/
+*.py[cod]
 
 # Raw source media not used by the app (keep repo lean; originals stay on disk)
 *.mp4
+!public/images/**/video-web.mp4
+!public/images/home/*.mp4
 /product image/
 public/models/*.glb
 !public/models/*-opt.glb
 public/models/source/
 data/*.xlsx
+/source-assets/
+
+# Local source libraries. Optimized, product-mapped derivatives live in public/.
+/Lab AI jewelry/
+/Pie-cut jewelry photo video/
+/img/
+/hero/
+/logo.jpeg
+
+# Local agent/editor configuration and generated working specs.
+/.clinerules/
+/.cursor/
+/.opencode/
+/.windsurf/
+/.codex-spec-*.md
+/.DS_Store
+**/.DS_Store
+
+# Supplier inventory + cost sheets. The PDFs carry wholesale cost, labour and
+# margin ("Net payable Jewelstone") — reference only, never published, never committed.
+*.xlsx
+*.pdf

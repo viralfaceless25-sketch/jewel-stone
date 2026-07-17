@@ -5,6 +5,6 @@ import Stripe from "stripe";
 // switch on real payments.
 const key = process.env.STRIPE_SECRET_KEY;
 
-export const stripe = key ? new Stripe(key, { apiVersion: "2024-06-20" }) : null;
+export const stripe = key ? new Stripe(key, { apiVersion: "2026-06-24.dahlia" }) : null;
 
 export const isStripeEnabled = Boolean(key);

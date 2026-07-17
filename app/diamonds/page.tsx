@@ -31,8 +31,8 @@ export default function DiamondsPage() {
       <section className={pages.cta}>
         <h2 className={pages.h2}>Can&apos;t find your stone?</h2>
         <p className={pages.lede}>
-          We hold access to 160,000+ certified diamonds. Tell us shape, budget, and
-          timeline — we&apos;ll bring options to your private viewing.
+          Tell us shape, budget, and timeline. We&apos;ll compare certified natural and
+          lab-grown options, then bring a focused selection to your private viewing.
         </p>
         <div className={`${pages.actions} ${pages.centerActions}`}>
           <Link href="/contact" className={pages.btnPrimary}>Book a diamond viewing</Link>

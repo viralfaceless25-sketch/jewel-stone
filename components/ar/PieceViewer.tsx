@@ -68,14 +68,16 @@ export function PieceViewer({
       "touch-action": "pan-y",
       "interaction-prompt": "none",
       "shadow-intensity": "1",
-      "shadow-softness": "1",
-      exposure: "1.05",
+      "shadow-softness": ".65",
+      exposure: ".92",
       "environment-image": "neutral",
+      "tone-mapping": "aces",
       "camera-orbit": "0deg 78deg 105%",
       "min-camera-orbit": "auto auto 60%",
       "max-camera-orbit": "auto auto 160%",
       loading: "eager",
       reveal: "auto",
+      "interpolation-decay": "120",
       style: { width: "100%", height: "100%", backgroundColor: "transparent" },
       ...(autoRotate
         ? { "auto-rotate": "", "rotation-per-second": "16deg", "auto-rotate-delay": "0" }

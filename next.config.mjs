@@ -4,7 +4,11 @@ const nextConfig = {
   // work. Deploy on Vercel (or any Node host). Set Stripe env vars in .env.local.
   reactStrictMode: true,
   images: {
-    unoptimized: true,
+    // `unoptimized` was required by the old static export; that export is gone
+    // (see note above), so optimisation is back on. Without it every <Image>
+    // ships the raw 1600x1600 catalogue JPEG — even into a 76px thumbnail.
+    // Needs `sharp`, which is a dependency.
+    formats: ["image/webp"],
     remotePatterns: [
       { protocol: "https", hostname: "d360.tech", pathname: "/imaged/**" },
       { protocol: "https", hostname: "viw-us.s3.amazonaws.com", pathname: "/js/**" },

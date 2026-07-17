@@ -5,7 +5,7 @@
   font-size: 0.78rem;
   color: var(--js-platinum);
 }
-.crumbs a { color: var(--js-platinum); text-decoration: none; }
+.crumbs a { display:inline-flex; align-items:center; min-height:32px; color: var(--js-platinum); text-decoration: none; }
 .crumbs a:hover { color: var(--js-ink); }
 .crumbs em { color: var(--js-ink); font-style: normal; }
 .crumbs span { margin: 0 0.15rem; opacity: 0.6; }
@@ -17,20 +17,25 @@
   padding: 1rem 0 clamp(3rem, 6vw, 5rem);
   align-items: start;
 }
-.media { position: sticky; top: 92px; }
+/* min-width:0 stops the thumbnail strip's intrinsic width from blowing the
+   grid column out past its 1.1fr share (fr tracks floor at min-content). */
+.media { position: sticky; top: 92px; min-width: 0; }
 
 /* Consistent media tile: dark "vitrine", contain, centred, never over-zoomed. */
 .stage {
   position: relative;
   aspect-ratio: 1 / 1;
-  border-radius: 22px;
+  border-radius: var(--js-radius-card);
   overflow: hidden;
-  background: radial-gradient(120% 120% at 50% 25%, #1c1b1f 0%, #101014 70%);
+  /* Pure black: the photography sits on a black sweep, so the tile must match
+     or the letterboxed area shows as a seam around the shot. */
+  background: #000;
   border: 1px solid var(--js-line);
   box-shadow: 0 40px 90px -55px rgba(23, 22, 26, 0.5);
 }
 .viewer { position: relative; width: 100%; height: 100%; }
 .stageImg { object-fit: contain; padding: 6%; }
+.productVideo { width:100%; height:100%; object-fit:contain; background:#000; }
 .arChip {
   position: absolute;
   left: 50%;
@@ -38,7 +43,7 @@
   transform: translateX(-50%);
   z-index: 2;
   padding: 0.4rem 0.85rem;
-  border-radius: 999px;
+  border-radius: var(--js-radius-control);
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: #f2f0eb;
@@ -46,20 +51,47 @@
   letter-spacing: 0.02em;
   backdrop-filter: blur(6px);
 }
-.thumbs { display: flex; gap: 0.6rem; margin-top: 0.8rem; }
+/* Signature pieces carry 16+ angles, so the strip scrolls rather than forcing
+   the column wider than the viewport. */
+.thumbs {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  padding-bottom: 4px;
+}
 .thumb {
   position: relative;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
   width: 76px;
   height: 76px;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--js-line);
-  background: #141416;
+  background: #000;
   cursor: pointer;
   padding: 0;
 }
 .thumb :global(img) { object-fit: contain; padding: 8%; }
 .thumbActive { border-color: var(--js-gold); }
+
+/* The 3D/AR entry in the thumbnail strip: same tile, dimmed cover + badge. */
+.thumb3d :global(img) { opacity: 0.45; }
+.thumb3dTag {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #f2f0eb;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
 
 .info { padding-top: 0.5rem; }
 .eyebrow {
@@ -89,20 +121,25 @@
 .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.4rem; padding: 0; list-style: none; }
 .chips li {
   padding: 0.4rem 0.8rem;
-  border-radius: 999px;
+  border-radius: var(--js-radius-control);
   border: 1px solid var(--js-line);
   background: #fff;
   font-size: 0.78rem;
   color: var(--js-ink-soft);
 }
 .desc { margin: 0 0 1.8rem; font-size: 0.98rem; line-height: 1.65; color: var(--js-ink-soft); max-width: 48ch; }
+.mediaProof { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1px; margin:0 0 1.8rem; padding:1px; list-style:none; background:var(--js-line); }
+.mediaProof li { min-height:68px; display:flex; flex-direction:column; justify-content:center; gap:.2rem; padding:.8rem 1rem; background:var(--js-card); }
+.mediaProof b { font-family:var(--font-display); font-size:1rem; font-weight:500; color:var(--js-ink); }
+.mediaProof span { color:var(--js-platinum); font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; }
 
 .config { display: flex; flex-direction: column; gap: 1.4rem; margin-bottom: 1.8rem; }
 .configRow label { display: block; font-size: 0.78rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--js-platinum); margin-bottom: 0.7rem; }
 .configRow label em { font-style: normal; color: var(--js-ink); text-transform: none; letter-spacing: 0; }
 .swatches { display: flex; gap: 0.7rem; }
+.mediaNotice { margin:.75rem 0 0; max-width:46ch; color:var(--js-platinum); font-size:.72rem; line-height:1.5; }
 .swatch {
-  width: 38px; height: 38px; border-radius: 999px; cursor: pointer;
+  width: 44px; height: 44px; border-radius: 999px; cursor: pointer;
   border: 2px solid transparent; box-shadow: 0 0 0 1px var(--js-line);
   transition: transform 0.2s ease;
 }
@@ -110,7 +147,7 @@
 .swatchActive { border-color: var(--js-porcelain); box-shadow: 0 0 0 2px var(--js-ink); }
 .sizes { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .size {
-  min-width: 46px;
+  min-width: 46px; min-height:44px;
   padding: 0.5rem 0.7rem;
   border-radius: 10px;
   border: 1px solid var(--js-line);
@@ -128,22 +165,23 @@
   flex: 1;
   min-width: 200px;
   padding: 1rem 1.6rem;
-  border-radius: 999px;
-  border: none;
-  background: var(--js-ink);
-  color: var(--js-porcelain);
+  border-radius: var(--js-radius-control);
+  border: 1px solid var(--js-garnet);
+  background: var(--js-garnet);
+  color: #fff;
   font-family: var(--font-body);
-  font-size: 0.9rem;
-  letter-spacing: 0.03em;
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   cursor: pointer;
   transition: background 0.25s ease, transform 0.2s ease;
 }
-.addBtn:hover { background: var(--js-gold-deep); transform: translateY(-2px); }
+.addBtn:hover { background: transparent; color: var(--js-garnet); }
 .viewingBtn {
   display: inline-flex;
   align-items: center;
   padding: 1rem 1.5rem;
-  border-radius: 999px;
+  border-radius: var(--js-radius-control);
   border: 1px solid var(--js-line);
   color: var(--js-ink);
   text-decoration: none;
@@ -152,12 +190,12 @@
 .viewingBtn:hover { border-color: var(--js-ink); }
 .wishBtn {
   display: grid; place-items: center; width: 54px; min-width: 54px; height: 54px;
-  border-radius: 999px; border: 1px solid var(--js-line); background: #fff; color: var(--js-ink);
+  border-radius: 50%; border: 1px solid var(--js-line); background: transparent; color: var(--js-ink);
   cursor: pointer; transition: color .2s ease, border-color .2s ease, background .2s ease;
 }
 .wishBtn[aria-pressed="true"] { color: var(--js-gold-deep); border-color: var(--js-gold); background: rgba(184,151,90,.08); }
 .wishBtn:hover { border-color: var(--js-ink); }
-.viewingLink { display: inline-block; margin: 0 0 1.8rem; font-size: 0.85rem; color: var(--js-ink-soft); text-decoration: none; }
+.viewingLink { display: inline-flex; align-items:center; min-height:32px; margin: 0 0 1.8rem; font-size: 0.85rem; color: var(--js-ink-soft); text-decoration: none; }
 .viewingLink:hover { color: var(--js-ink); text-decoration: underline; }
 
 .assurance { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.2rem; margin: 0; padding: 1.4rem 0 0; border-top: 1px solid var(--js-line); list-style: none; }
@@ -186,7 +224,7 @@
 .relFrame {
   position: relative;
   aspect-ratio: 1 / 1;
-  border-radius: 16px;
+  border-radius: var(--js-radius-card);
   overflow: hidden;
   background: radial-gradient(120% 120% at 50% 25%, #1c1b1f, #101014 72%);
   border: 1px solid var(--js-line);

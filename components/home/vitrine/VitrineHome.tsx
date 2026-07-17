@@ -105,12 +105,12 @@ export function VitrineHome() {
             <p className={styles.spotDesc}>{spotPiece.description}</p>
             <div className={styles.spotSpecs}>
               <div><strong>{spotPiece.carats} ct</strong><span>total weight</span></div>
-              <div><strong>{spotPiece.colorClarity}</strong><span>colour · clarity</span></div>
+              <div><strong>D–J · FL–SI2</strong><span>colour · clarity</span></div>
               <div><strong>{spotPiece.material.replace("18K ", "")}</strong><span>18K metal</span></div>
             </div>
             <div className={styles.spotActions}>
               <Link href={`/products/${spotPiece.slug}`} className={styles.btnLight}>View & configure</Link>
-              <span className={styles.spotPrice}>{spotPiece.priceLabel}</span>
+
             </div>
           </Parallax>
         </div>
@@ -143,7 +143,7 @@ export function VitrineHome() {
       {/* ── Craft editorial + counters ── */}
       <Reveal as="section" className={styles.craft}>
         <Parallax speed={0.1} className={styles.craftImg} data-reveal-item>
-          <Image src={arPiece.image} alt="Crafted in the NYC Diamond District" fill sizes="(max-width: 900px) 92vw, 46vw" className={styles.craftImgInner} />
+          <Image src={arPiece.image} alt="Jewel Stone diamond jewelry crafted in-house" fill sizes="(max-width: 900px) 92vw, 46vw" className={styles.craftImgInner} />
         </Parallax>
         <div className={styles.craftCopy} data-reveal-item>
           <p className={styles.kicker}><span /> The maker · since 1980</p>

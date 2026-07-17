@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
-export default function ContactPage() {
+export default function ContactPage({ searchParams }: { searchParams?: { brief?: string } }) {
   return (
     <main className={pages.page}>
       <section className={pages.hero}>
@@ -33,11 +33,11 @@ export default function ContactPage() {
               </div>
               <div>
                 <dt style={{ fontSize: ".72rem", letterSpacing: ".14em", textTransform: "uppercase", color: "var(--js-platinum)" }}>Phone</dt>
-                <dd style={{ margin: ".3rem 0 0" }}><a href={`tel:${brand.phone.replace(/[^+\d]/g, "")}`} style={{ color: "var(--js-gold-deep)", textDecoration: "none", fontSize: "1.1rem", fontFamily: "var(--font-display)" }}>{brand.phone}</a></dd>
+                <dd style={{ margin: ".3rem 0 0" }}><a href={`tel:${brand.phone.replace(/[^+\d]/g, "")}`} style={{ display: "inline-flex", alignItems: "center", minHeight: 32, color: "var(--js-gold-deep)", textDecoration: "none", fontSize: "1.1rem", fontFamily: "var(--font-display)" }}>{brand.phone}</a></dd>
               </div>
               <div>
                 <dt style={{ fontSize: ".72rem", letterSpacing: ".14em", textTransform: "uppercase", color: "var(--js-platinum)" }}>Email</dt>
-                <dd style={{ margin: ".3rem 0 0" }}><a href={`mailto:${brand.email}`} style={{ color: "var(--js-gold-deep)", textDecoration: "none", fontSize: "1.1rem", fontFamily: "var(--font-display)" }}>{brand.email}</a></dd>
+                <dd style={{ margin: ".3rem 0 0" }}><a href={`mailto:${brand.email}`} style={{ display: "inline-flex", alignItems: "center", minHeight: 32, color: "var(--js-gold-deep)", textDecoration: "none", fontSize: "1.1rem", fontFamily: "var(--font-display)" }}>{brand.email}</a></dd>
               </div>
               <div>
                 <dt style={{ fontSize: ".72rem", letterSpacing: ".14em", textTransform: "uppercase", color: "var(--js-platinum)" }}>Hours</dt>
@@ -48,7 +48,7 @@ export default function ContactPage() {
           <div>
             <h2 className={pages.h2}>Send a message</h2>
             <div style={{ marginTop: "1.5rem" }}>
-              <EnquiryForm context="Contact page" />
+            <EnquiryForm context={searchParams?.brief ? "Custom design brief" : "Contact page"} initialMessage={searchParams?.brief ?? ""} />
             </div>
           </div>
         </div>

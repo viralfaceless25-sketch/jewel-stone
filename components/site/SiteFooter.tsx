@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { brand } from "@/data/site";
 import styles from "./site-chrome.module.css";
@@ -35,12 +36,18 @@ const columns: { title: string; links: { href: string; label: string }[] }[] = [
 export function SiteFooter() {
   return (
     <footer className={styles.footer}>
+      <div className={styles.serviceRail} aria-label="Client services">
+        <span><b>01</b> Certified diamonds</span>
+        <span><b>02</b> Fully insured delivery</span>
+        <span><b>03</b> Lifetime craftsmanship care</span>
+        <span><b>04</b> Private appointments</span>
+      </div>
       <div className={styles.footerTop}>
         <div className={styles.footerBrand}>
-          <Link href="/" className={styles.footerWordmark}>
-            Jewel Stone
+          <Link href="/" className={styles.footerWordmark} aria-label="Jewel Stone home">
+            <Image src="/brand/jewel-stone-wordmark.webp" alt="Jewel Stone — Shine with You" width={360} height={100} />
           </Link>
-          <p>Family-owned since 1980 · every piece made in-house on 47th Street.</p>
+          <p>Natural, PIECUT, and lab-grown diamond jewelry. Family knowledge since 1980. Every piece developed in-house.</p>
           <p className={styles.footerMeta}>{brand.address}</p>
           <p className={styles.footerMeta}>
             <a href={`tel:${brand.phone.replace(/[^+\d]/g, "")}`}>{brand.phone}</a> ·{" "}
@@ -60,6 +67,7 @@ export function SiteFooter() {
           ))}
         </div>
       </div>
+      <div className={styles.footerSignature} aria-hidden="true">Jewel Stone</div>
       <div className={styles.footerBottom}>
         <span>© {new Date().getFullYear()} Jewel Stone NY LLC · Est. 1980 · GIA & IGI certified diamonds</span>
         <span className={styles.footerDistrict}>NYC Diamond District</span>

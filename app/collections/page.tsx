@@ -11,7 +11,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/collections" },
 };
 
-const signature = products.filter((p) => p.source === "signature");
+// Signature pieces lead, then the made-to-order lab-grown range — otherwise the
+// lab-grown catalogue is unreachable except by direct URL.
+const signature = [...products].sort(
+  (a, b) => Number(b.source === "signature") - Number(a.source === "signature"),
+);
 
 const madeToOrder = [
   { title: "Tennis Bracelets", note: "2ct–30ct continuous diamond lines", href: "/custom" },
@@ -26,13 +30,13 @@ export default function CollectionsPage() {
       <section className={styles.hero}>
         <p className={styles.heroEyebrow}><span /> The signature vitrine</p>
         <h1 className={styles.heroTitle}>
-          Every piece,<br /><em>made once.</em>
+          Every piece,<br /><em>considered.</em>
         </h1>
         <p className={styles.heroSub}>
-          Eleven one-of-a-kind PIECUT and antique diamond pieces — designed, cast,
-          and set in-house on 47th Street, a family craft since 1980. Filter, turn
-          them in 3D, and see them in AR — the piece you choose is the exact piece
-          you receive.
+          Natural diamonds, rare PIECUT compositions, and lab-grown essentials —
+          developed in-house with family knowledge carried since 1980. Explore
+          signature pieces available as photographed alongside made-to-order designs,
+          with studio views, film, 3D, and AR wherever media is complete.
         </p>
       </section>
 
@@ -45,7 +49,7 @@ export default function CollectionsPage() {
             <h2>Not on the shelf? We&apos;ll make it.</h2>
             <span>
               Beyond the signature vitrine, we craft bracelets, necklaces, bands, and
-              fully bespoke pieces to order in the Diamond District — from a loose
+              fully bespoke pieces to order in-house — from a loose
               stone up.
             </span>
           </div>

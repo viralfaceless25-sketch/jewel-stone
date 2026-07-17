@@ -595,45 +595,63 @@ a {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   AR VITRINE — LIGHT THEME · FINAL OVERRIDE (Jewel Stone, 2026)
-   Loaded last so it supersedes every prior (dark Obsidian) theme layer.
-   ═══════════════════════════════════════════════════════════════════ */
+/* Jewel Stone house system. One source of truth for every route. */
 :root {
-  --js-porcelain: #FAF8F5;
-  --js-card: #FFFFFF;
-  --js-ink: #17161A;
-  --js-ink-soft: #56524C;
-  --js-line: #E7E1D8;
-  --js-gold: #B8975A;
-  --js-gold-deep: #9A7B41;
-  --js-platinum: #6E6A63;
+  --js-porcelain: #F7F3EE;
+  --js-card: #FCFAF7;
+  --js-ink: #28231F;
+  --js-ink-soft: #655D56;
+  --js-line: #DED5CC;
+  --js-gold: #7A624C;
+  --js-gold-light: #E8D4B6;
+  --js-gold-deep: #69523F;
+  --js-garnet: #49413A;
+  --js-platinum: #6E6963;
+  --js-radius-card: 22px;
+  --js-radius-control: 999px;
   --js-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Remap legacy tokens so older pages flip to light automatically */
-  --color-ink: #17161A;
-  --color-ivory: #FAF8F5;
-  --color-pearl: #FFFFFF;
-  --color-espresso: #FAF8F5;
-  --color-rose: #B8975A;
-  --color-champagne: #9A7B41;
-  --chrome: #6E6A63;
-  --chrome-hi: #17161A;
-  --hair: rgba(23,22,26,.10);
-  --hair2: rgba(23,22,26,.16);
+  --color-ink: #28231F;
+  --color-ivory: #F7F3EE;
+  --color-pearl: #FCFAF7;
+  --color-espresso: #F7F3EE;
+  --color-rose: #69523F;
+  --color-champagne: #7A624C;
+  --chrome: #6E6963;
+  --chrome-hi: #28231F;
+  --hair: rgba(48,42,40,.11);
+  --hair2: rgba(48,42,40,.18);
 }
 
-html { background: var(--js-porcelain) !important; }
+html { background: var(--js-porcelain) !important; color-scheme: light; }
 body {
   background: var(--js-porcelain) !important;
   background-attachment: initial !important;
   color: var(--js-ink);
   font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 body::after { display: none !important; }         /* kill dark film grain */
-::selection { background: rgba(184,151,90,.22); color: #17161A; }
+::selection { background: rgba(122,98,76,.22); color: var(--js-ink); }
 
-.site-shell { min-height: 60vh; padding-top: 72px; }
+.skip-link {
+  position: fixed; z-index: 1000; top: 0; left: 1rem;
+  transform: translateY(-120%); padding: .8rem 1rem;
+  background: var(--js-ink); color: var(--js-porcelain);
+  text-decoration: none; font-size: .78rem; letter-spacing: .08em;
+  text-transform: uppercase; transition: transform .25s var(--js-ease);
+}
+.skip-link:focus { transform: translateY(0); }
+
+.site-shell { min-height: 60vh; padding-top: 72px; overflow: clip; }
+
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--js-garnet);
+  outline-offset: 4px;
+}
 
 /* Neutralize dark decorations legacy pages may still emit */
 .app-viewport {
@@ -649,7 +667,8 @@ body::after { display: none !important; }         /* kill dark film grain */
 .glass-panel, .glass, .aurora-card, .stack-panel {
   background: var(--js-card) !important;
   border-color: var(--js-line) !important;
-  box-shadow: 0 24px 60px -40px rgba(23,22,26,.35) !important;
+  border-radius:var(--js-radius-card) !important;
+  box-shadow: 0 24px 60px -44px rgba(40,35,31,.24) !important;
   color: var(--js-ink);
 }
 .aurora-btn { background: var(--js-ink) !important; color: var(--js-porcelain) !important; box-shadow: none !important; }
@@ -673,9 +692,9 @@ model-viewer {
 .pv-ar-btn {
   position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%);
   display: inline-flex; align-items: center; gap: .45rem;
-  padding: .62rem 1.15rem; border-radius: 999px;
+  min-height: 48px; padding: .62rem 1.15rem; border-radius: var(--js-radius-control);
   border: 1px solid var(--js-line);
-  background: rgba(255,255,255,.92); backdrop-filter: blur(6px);
+  background: rgba(251,247,242,.94); backdrop-filter: blur(6px);
   color: #17161A; font-family: var(--font-body);
   font-size: .78rem; letter-spacing: .02em; cursor: pointer;
   box-shadow: 0 10px 30px -12px rgba(23,22,26,.4);

@@ -16,20 +16,20 @@
 .field label { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.78rem; color: var(--js-ink-soft); flex: 1; }
 .row { display: flex; gap: 0.8rem; }
 .field input, .field textarea {
-  padding: 0.75rem 0.9rem; border: 1px solid var(--js-line); border-radius: 10px;
-  background: #fff; font-family: var(--font-body); font-size: 0.92rem; color: var(--js-ink);
+  padding: 0.85rem 0; border: 0; border-bottom: 1px solid var(--js-line); border-radius: 0;
+  background: transparent; font-family: var(--font-body); font-size: 0.92rem; color: var(--js-ink);
   width: 100%;
 }
 .field input:focus, .field textarea:focus { outline: 2px solid var(--js-gold); outline-offset: 1px; border-color: var(--js-gold); }
 .submit {
-  margin-top: 0.5rem; padding: 1rem 1.6rem; border: none; border-radius: 999px;
-  background: var(--js-ink); color: var(--js-porcelain); font-size: 0.9rem; letter-spacing: 0.02em; cursor: pointer;
+  margin-top: 0.5rem; padding: 1rem 1.6rem; border: 1px solid var(--js-garnet); border-radius: var(--js-radius-control);
+  background: var(--js-garnet); color: #fff; font-size: .76rem; letter-spacing: .1em; text-transform:uppercase; cursor: pointer;
   transition: background 0.25s ease, transform 0.2s ease;
 }
-.submit:hover { background: var(--js-gold-deep); transform: translateY(-2px); }
+.submit:hover { background: transparent; color:var(--js-garnet); }
 .secure { margin: 0.8rem 0 0; font-size: 0.74rem; color: var(--js-platinum); text-align: center; }
 
-.summary { position: sticky; top: 92px; padding: 1.6rem; border: 1px solid var(--js-line); border-radius: 20px; background: #fff; }
+.summary { position: sticky; top: 92px; padding: 1.6rem; border: 1px solid var(--js-line); border-radius: var(--js-radius-card); background: rgba(252,250,247,.68); }
 .summary h2 { margin: 0 0 1.2rem; font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; color: var(--js-ink); }
 .lines { display: flex; flex-direction: column; gap: 1rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--js-line); }
 .line { display: grid; grid-template-columns: 60px 1fr auto; gap: 0.9rem; align-items: center; }
@@ -47,14 +47,16 @@
 .totals > div { display: flex; justify-content: space-between; font-size: 0.88rem; color: var(--js-ink-soft); }
 .totals dt, .totals dd { margin: 0; }
 .grand { padding-top: 0.8rem; border-top: 1px solid var(--js-line); font-family: var(--font-display); font-size: 1.15rem !important; color: var(--js-ink) !important; }
-.keep { display: block; text-align: center; margin-top: 1.2rem; font-size: 0.82rem; color: var(--js-ink-soft); text-decoration: none; }
+.keep { display: flex; align-items:center; justify-content:center; min-height:32px; text-align: center; margin-top: 1.2rem; font-size: 0.82rem; color: var(--js-ink-soft); text-decoration: none; }
 .keep:hover { text-decoration: underline; }
 
 .confirm, .empty { width: min(100% - 2.5rem, 640px); margin: 0 auto; padding: clamp(4rem, 10vw, 8rem) 0; text-align: center; }
 .check { width: 64px; height: 64px; margin: 0 auto 1.5rem; border-radius: 999px; background: var(--js-ink); color: var(--js-porcelain); display: grid; place-items: center; font-size: 1.6rem; }
 .confirm h1, .empty h1 { margin: 0 0 1rem; font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 5vw, 3rem); color: var(--js-ink); }
 .confirm p, .empty p { margin: 0 auto 2rem; max-width: 46ch; color: var(--js-ink-soft); line-height: 1.6; }
-.primary { display: inline-block; padding: 0.9rem 1.6rem; border-radius: 999px; background: var(--js-ink); color: var(--js-porcelain); text-decoration: none; font-size: 0.86rem; }
+.primary { display: inline-block; padding: 0.9rem 1.6rem; border-radius: var(--js-radius-control); background: var(--js-garnet); color: #fff; text-decoration: none; font-size: .76rem; letter-spacing:.1em; text-transform:uppercase; }
 .primary:hover { background: var(--js-gold-deep); }
 
 @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .summary { position: relative; top: 0; order: -1; } }
+.error { margin:0; padding:.85rem 1rem; border:1px solid #9b4d5b; color:#7f2f3e; background:#fff7f7; font-size:.86rem; }
+.submit:disabled { cursor:wait; opacity:.62; }

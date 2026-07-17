@@ -56,8 +56,6 @@ function Label({ children }: { children: React.ReactNode }) {
 
 const SORT_OPTIONS = [
   { key: "featured", label: "Featured" },
-  { key: "price-asc", label: "Price: Low → High" },
-  { key: "price-desc", label: "Price: High → Low" },
   { key: "carat-asc", label: "Carat: Low → High" },
   { key: "carat-desc", label: "Carat: High → Low" },
 ] as const;
@@ -81,12 +79,6 @@ export function CollectionFilterClient({ products }: { products: Product[] }) {
     return [...s].sort();
   }, [products]);
 
-  const maxPrice = useMemo(
-    () => Math.ceil(Math.max(...products.map((p) => p.price)) / 500) * 500,
-    [products]
-  );
-  const [priceMax, setPriceMax] = useState<number | null>(null);
-  const effectivePriceMax = priceMax ?? maxPrice;
 
   const hasFilters =
     selectedShapes.size > 0 ||
@@ -96,8 +88,7 @@ export function CollectionFilterClient({ products }: { products: Product[] }) {
     antique ||
     piecut ||
     !!caratMin ||
-    !!caratMax ||
-    (priceMax !== null && priceMax < maxPrice);
+    !!caratMax;
 
   function clearAll() {
     setSelectedShapes(new Set());
@@ -108,7 +99,6 @@ export function CollectionFilterClient({ products }: { products: Product[] }) {
     setPiecut(false);
     setCaratMin("");
     setCaratMax("");
-    setPriceMax(null);
     setSort("featured");
   }
 
@@ -132,16 +122,13 @@ export function CollectionFilterClient({ products }: { products: Product[] }) {
     if (piecut) list = list.filter((p) => getProductDiamondMetadata(p).piecut);
     if (caratMin) list = list.filter((p) => p.carats >= parseFloat(caratMin));
     if (caratMax) list = list.filter((p) => p.carats <= parseFloat(caratMax));
-    list = list.filter((p) => p.price <= effectivePriceMax);
     switch (sort) {
-      case "price-asc":  list.sort((a, b) => a.price - b.price); break;
-      case "price-desc": list.sort((a, b) => b.price - a.price); break;
       case "carat-asc":  list.sort((a, b) => a.carats - b.carats); break;
       case "carat-desc": list.sort((a, b) => b.carats - a.carats); break;
       default: list.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
     }
     return list;
-  }, [products, selectedShapes, selectedStyles, selectedClarities, selectedOrigins, antique, piecut, caratMin, caratMax, effectivePriceMax, sort]);
+  }, [products, selectedShapes, selectedStyles, selectedClarities, selectedOrigins, antique, piecut, caratMin, caratMax, sort]);
 
   return (
     <>
@@ -317,23 +304,6 @@ export function CollectionFilterClient({ products }: { products: Product[] }) {
                 </div>
               </div>
 
-              {/* Max Price */}
-              <div className="min-w-[180px]">
-                <Label>Max Price — ${effectivePriceMax.toLocaleString("en-US")}</Label>
-                <input
-                  type="range"
-                  min={0}
-                  max={maxPrice}
-                  step={Math.max(100, Math.round(maxPrice / 20 / 100) * 100)}
-                  value={effectivePriceMax}
-                  onChange={(e) => setPriceMax(Number(e.target.value))}
-                  className="h-1 w-full cursor-pointer appearance-none rounded-full bg-rose/20 accent-rose"
-                />
-                <div className="mt-1 flex justify-between text-[0.6rem] text-ink/35">
-                  <span>$0</span>
-                  <span>${maxPrice.toLocaleString("en-US")}</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>

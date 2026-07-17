@@ -30,6 +30,7 @@ const METALS = [
   { name: "Yellow Gold", swatch: "bg-[#C7C2B8]" },
   { name: "Rose Gold", swatch: "bg-[#8B877E]" },
   { name: "Platinum", swatch: "bg-[#C7C2B8]" },
+  { name: "Sterling Silver", swatch: "bg-[#BFC3C5]" },
 ] as const;
 
 const UPGRADES = [

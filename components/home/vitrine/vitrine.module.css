@@ -9,17 +9,9 @@
 
 /* Reveal choreography */
 .reveal [data-reveal-item] {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.7s var(--js-ease, cubic-bezier(0.22, 1, 0.36, 1)),
-    transform 0.7s var(--js-ease, cubic-bezier(0.22, 1, 0.36, 1));
+  opacity: 1;
+  transform: none;
 }
-.reveal[data-visible="true"] [data-reveal-item] { opacity: 1; transform: none; }
-.reveal[data-visible="true"] [data-reveal-item]:nth-child(2) { transition-delay: 0.09s; }
-.reveal[data-visible="true"] [data-reveal-item]:nth-child(3) { transition-delay: 0.18s; }
-.reveal[data-visible="true"] [data-reveal-item]:nth-child(4) { transition-delay: 0.27s; }
-.reveal[data-visible="true"] [data-reveal-item]:nth-child(5) { transition-delay: 0.36s; }
-.reveal[data-visible="true"] [data-reveal-item]:nth-child(6) { transition-delay: 0.45s; }
 
 .eyebrow,
 .kicker {

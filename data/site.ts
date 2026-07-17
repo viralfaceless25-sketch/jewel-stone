@@ -95,9 +95,9 @@ export const megaNav: NavItem[] = [
       },
     ],
     featured: {
-      image: '/images/placeholder-coming-soon-portrait.jpg',
+      image: '/images/lifestyle/model-eternity-band-hand.jpg',
       title: 'Wedding Collections',
-      subtitle: 'Timeless bands crafted in New York — coming soon',
+      subtitle: 'Bands shaped around your ceremony and stack',
       cta: 'View All Bands',
       href: '/collections/wedding-bands',
     },
@@ -137,7 +137,7 @@ export const megaNav: NavItem[] = [
     featured: {
       image: '/images/products/asscher-halo-drop-earrings/cover.jpg',
       title: 'Fine Jewelry',
-      subtitle: 'Handcrafted pieces for every occasion',
+      subtitle: 'Natural, PIECUT, and lab-grown pieces',
       cta: 'Shop All Jewelry',
       href: '/collections',
     },
@@ -170,8 +170,8 @@ export const megaNav: NavItem[] = [
     ],
     featured: {
       image: '/images/products/emerald-halo-stud-earrings/cover.jpg',
-      title: '160,000+ Certified Stones',
-      subtitle: 'GIA & IGI certified natural and lab diamonds',
+      title: 'Compare Certified Stones',
+      subtitle: 'Natural and lab-grown, selected with guidance',
       cta: 'Search Diamonds',
       href: '/diamonds',
     },
@@ -203,9 +203,9 @@ export const megaNav: NavItem[] = [
       },
     ],
     featured: {
-      image: '/images/placeholder-coming-soon-portrait.jpg',
+      image: '/images/atelier/bench-setting.jpg',
       title: 'Bespoke Jewelry',
-      subtitle: 'Made to order in New York\'s Diamond District',
+      subtitle: 'Designed, resolved, and finished in-house',
       cta: 'Book a Consultation',
       href: '/contact',
     },

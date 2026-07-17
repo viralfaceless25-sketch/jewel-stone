@@ -14,7 +14,7 @@ export default function WishlistPage() {
       <section className={pages.hero}>
         <p className={pages.eyebrow}><span /> Saved</p>
         <h1 className={pages.h1}>Your wishlist</h1>
-        <p className={pages.lede}>The pieces you&apos;re considering. Each is one of one — when it&apos;s gone, it&apos;s gone.</p>
+        <p className={pages.lede}>Signature pieces and made-to-order designs you&apos;re considering, kept together for comparison.</p>
       </section>
       <WishlistView />
     </main>

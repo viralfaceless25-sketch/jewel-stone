@@ -22,7 +22,7 @@ export function CollectionV2() {
             </div>
             <div className={styles.productMeta}>
               <div><h3>{product.name}</h3><p>{product.material} · {product.carats} CTW</p></div>
-              <strong>{product.priceLabel}</strong>
+              <strong>View</strong>
             </div>
           </Link>
         ))}

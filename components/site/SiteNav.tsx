@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { megaNav } from "@/data/site";
 import { cartCount, useCartStore } from "@/store/cart";
 import styles from "./site-chrome.module.css";
@@ -38,16 +38,25 @@ export function SiteNav() {
 
   const activeItem = active !== null ? megaNav[active] : null;
 
+  const onHeaderKeyDown = (event: ReactKeyboardEvent<HTMLElement>) => {
+    if (event.key === "Escape") {
+      setActive(null);
+      setOpen(false);
+    }
+  };
+
   return (
     <header
       className={`${styles.nav} ${scrolled || active !== null ? styles.navScrolled : ""}`}
       onMouseLeave={leave}
+      onKeyDown={onHeaderKeyDown}
     >
       <div className={styles.navInner}>
         <button
           className={styles.burger}
           aria-label="Menu"
           aria-expanded={open}
+          aria-controls="mobile-navigation"
           onClick={() => setOpen((v) => !v)}
         >
           <span />
@@ -62,6 +71,7 @@ export function SiteNav() {
                 className={`${styles.navLink} ${active === i ? styles.navLinkActive : ""}`}
                 aria-haspopup={item.groups ? "true" : undefined}
                 aria-expanded={active === i}
+                onFocus={() => enter(i)}
               >
                 {item.label}
                 {item.groups ? <i className={styles.caret} aria-hidden /> : null}
@@ -71,7 +81,8 @@ export function SiteNav() {
         </nav>
 
         <Link href="/" className={styles.wordmark} aria-label="Jewel Stone home">
-          Jewel Stone
+          <Image className={styles.navMark} src="/brand/jewel-stone-mark.webp" alt="" width={34} height={42} />
+          <Image className={styles.navWordmark} src="/brand/jewel-stone-nav-wordmark.webp" alt="Jewel Stone" width={166} height={23} priority />
         </Link>
 
         <div className={styles.navRight}>
@@ -151,14 +162,14 @@ export function SiteNav() {
 
       {/* ── Mobile menu ── */}
       {open && (
-        <div className={styles.mobileMenu}>
+        <nav id="mobile-navigation" className={styles.mobileMenu} aria-label="Mobile">
           {megaNav.map((item) => (
             <Link key={item.label} href={item.href} onClick={() => setOpen(false)}>
               {item.label}
             </Link>
           ))}
           <Link href="/contact" onClick={() => setOpen(false)}>Contact</Link>
-        </div>
+        </nav>
       )}
     </header>
   );

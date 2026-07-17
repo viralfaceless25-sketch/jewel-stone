@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { cartTotal, useCartStore } from "@/store/cart";
+import { useCartStore } from "@/store/cart";
 import styles from "./cart.module.css";
 
 export function CartDrawer() {
@@ -22,7 +22,6 @@ export function CartDrawer() {
 
   if (!mounted) return null;
 
-  const total = cartTotal(items);
 
   return (
     <>
@@ -48,7 +47,7 @@ export function CartDrawer() {
         {items.length === 0 ? (
           <div className={styles.empty}>
             <p>Your bag is empty.</p>
-            <span>One-of-a-kind pieces, made once. Add one before it&apos;s gone.</span>
+            <span>Signature pieces and made-to-order designs, selected your way.</span>
             <Link href="/collections" onClick={closeCart} className={styles.emptyBtn}>
               Browse the collection
             </Link>
@@ -84,7 +83,6 @@ export function CartDrawer() {
                         <span>{i.qty}</span>
                         <button onClick={() => setQty(i, i.qty + 1)} aria-label="Increase quantity">+</button>
                       </div>
-                      <strong>${(i.price * i.qty).toLocaleString("en-US")}</strong>
                     </div>
                   </div>
                 </div>
@@ -92,11 +90,7 @@ export function CartDrawer() {
             </div>
 
             <footer className={styles.foot}>
-              <div className={styles.subtotal}>
-                <span>Subtotal</span>
-                <strong>${total.toLocaleString("en-US")}</strong>
-              </div>
-              <p className={styles.footNote}>Shipping &amp; duties calculated at checkout · insured FedEx</p>
+              <p className={styles.footNote}>Pricing confirmed at checkout · insured FedEx</p>
               <Link href="/checkout" onClick={closeCart} className={styles.checkout}>
                 Secure checkout
               </Link>

@@ -56,7 +56,12 @@ export default function CollectionCategoryPage({ params }: { params: { category:
   const copy = COPY[params.category];
   if (!category || !copy) notFound();
 
-  const items = getProductsByCategory(category).filter((p) => p.source === "signature");
+  // The whole catalogue, not just the signature vitrine: the made-to-order
+  // lab-grown pieces have product pages, and this is the only place that links
+  // to them. One-of-a-kind pieces lead, then the made-to-order range.
+  const items = getProductsByCategory(category).sort(
+    (a, b) => Number(b.source === "signature") - Number(a.source === "signature"),
+  );
 
   return (
     <main className={pages.page}>

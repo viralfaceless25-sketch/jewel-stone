@@ -6,7 +6,7 @@ import { animated, useSpring } from "@react-spring/web";
 import { cn } from "@/lib/utils";
 
 const base =
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 text-sm font-medium transition-all duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 active:scale-[0.97] select-none";
+  "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 text-sm font-medium transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 active:scale-[0.99] select-none";
 
 export function ButtonLink({
   href,

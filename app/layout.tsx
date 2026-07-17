@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Fraunces } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { SiteNav } from "@/components/site/SiteNav";
 import { SiteFooter } from "@/components/site/SiteFooter";
@@ -8,9 +8,9 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationSchema, SITE_URL, websiteSchema } from "@/lib/seo/schema";
 
 // New "AR Vitrine" skin: high-contrast luxury serif for display, Inter for UI.
-const display = Fraunces({
+const display = Playfair_Display({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   style: ["normal", "italic"],
   variable: "--font-display",
   display: "swap",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | Jewel Stone",
   },
   description:
-    "Family-owned since 1980, made entirely in-house on 47th Street. Jewel Stone crafts rare, one-of-a-kind PIECUT and antique diamond pieces, lab-grown and natural diamonds, and bespoke jewelry in NYC's Diamond District — viewable in 3D and AR.",
+    "Built on family jewelry knowledge since 1980. Jewel Stone crafts rare, one-of-a-kind PIECUT and antique diamond pieces, lab-grown and natural diamonds, and bespoke jewelry made in-house — viewable in 3D and AR.",
   keywords: [
     "Jewel Stone",
     "PIECUT diamond jewelry",
@@ -68,8 +68,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body>
+        <a className="skip-link" href="#main-content">Skip to main content</a>
         <SiteNav />
-        <div className="site-shell">{children}</div>
+        <div id="main-content" tabIndex={-1} className="site-shell">{children}</div>
         <SiteFooter />
         <CartDrawer />
         <JsonLd data={organizationSchema()} />

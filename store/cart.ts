@@ -11,19 +11,21 @@ export type CartItem = {
   image: string;
   metal: string;
   size?: string;
+  /** Chosen colour/clarity, e.g. "F/VS1" — part of the variant identity. */
+  grade?: string;
   qty: number;
 };
 
-function keyOf(i: Pick<CartItem, "slug" | "metal" | "size">) {
-  return `${i.slug}__${i.metal}__${i.size ?? ""}`;
+function keyOf(i: Pick<CartItem, "slug" | "metal" | "size" | "grade">) {
+  return `${i.slug}__${i.metal}__${i.size ?? ""}__${i.grade ?? ""}`;
 }
 
 type CartState = {
   items: CartItem[];
   open: boolean;
   add: (item: Omit<CartItem, "qty">, qty?: number) => void;
-  remove: (item: Pick<CartItem, "slug" | "metal" | "size">) => void;
-  setQty: (item: Pick<CartItem, "slug" | "metal" | "size">, qty: number) => void;
+  remove: (item: Pick<CartItem, "slug" | "metal" | "size" | "grade">) => void;
+  setQty: (item: Pick<CartItem, "slug" | "metal" | "size" | "grade">, qty: number) => void;
   clear: () => void;
   openCart: () => void;
   closeCart: () => void;

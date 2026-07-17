@@ -1,0 +1,866 @@
+{
+  "generatedAt": "2026-07-17T03:11:54.058Z",
+  "imported": [
+    {
+      "source": "img/10ct stud 45 YG.png",
+      "product": "st10-10ct-diamond-studs",
+      "output": "public/images/products/st10-10ct-diamond-studs/angle-45-yg.webp"
+    },
+    {
+      "source": "img/10ct stud 45view WG.png",
+      "product": "st10-10ct-diamond-studs",
+      "output": "public/images/products/st10-10ct-diamond-studs/angle-45-wg.webp"
+    },
+    {
+      "source": "img/10ct stud Front WG.png",
+      "product": "st10-10ct-diamond-studs",
+      "output": "public/images/products/st10-10ct-diamond-studs/angle-front-wg.webp"
+    },
+    {
+      "source": "img/10ct stud close-up WG.png",
+      "product": "st10-10ct-diamond-studs",
+      "output": "public/images/products/st10-10ct-diamond-studs/angle-close-wg.webp"
+    },
+    {
+      "source": "img/10ct stud close-up YG.png",
+      "product": "st10-10ct-diamond-studs",
+      "output": "public/images/products/st10-10ct-diamond-studs/angle-close-yg.webp"
+    },
+    {
+      "source": "img/10ct stud front YG.png",
+      "product": "st10-10ct-diamond-studs",
+      "output": "public/images/products/st10-10ct-diamond-studs/angle-front-yg.webp"
+    },
+    {
+      "source": "img/10ct stud side Wg.png",
+      "product": "st10-10ct-diamond-studs",
+      "output": "public/images/products/st10-10ct-diamond-studs/angle-side-wg.webp"
+    },
+    {
+      "source": "img/10ct stud side YG.png",
+      "product": "st10-10ct-diamond-studs",
+      "output": "public/images/products/st10-10ct-diamond-studs/angle-side-yg.webp"
+    },
+    {
+      "source": "img/12ct stud 45 WG.png",
+      "product": "st12-12ct-diamond-studs",
+      "output": "public/images/products/st12-12ct-diamond-studs/angle-45-wg.webp"
+    },
+    {
+      "source": "img/12ct stud front WG.png",
+      "product": "st12-12ct-diamond-studs",
+      "output": "public/images/products/st12-12ct-diamond-studs/angle-front-wg.webp"
+    },
+    {
+      "source": "img/15ct stud 45 RG.png",
+      "product": "st15-15ct-diamond-studs",
+      "output": "public/images/products/st15-15ct-diamond-studs/angle-45-rg.webp"
+    },
+    {
+      "source": "img/15ct stud 45 WG.png",
+      "product": "st15-15ct-diamond-studs",
+      "output": "public/images/products/st15-15ct-diamond-studs/angle-45-wg.webp"
+    },
+    {
+      "source": "img/15ct stud close-up RG.png",
+      "product": "st15-15ct-diamond-studs",
+      "output": "public/images/products/st15-15ct-diamond-studs/angle-close-rg.webp"
+    },
+    {
+      "source": "img/15ct stud close-up WG.png",
+      "product": "st15-15ct-diamond-studs",
+      "output": "public/images/products/st15-15ct-diamond-studs/angle-close-wg.webp"
+    },
+    {
+      "source": "img/15ct stud front RG.png",
+      "product": "st15-15ct-diamond-studs",
+      "output": "public/images/products/st15-15ct-diamond-studs/angle-front-rg.webp"
+    },
+    {
+      "source": "img/15ct stud front WG.png",
+      "product": "st15-15ct-diamond-studs",
+      "output": "public/images/products/st15-15ct-diamond-studs/angle-front-wg.webp"
+    },
+    {
+      "source": "img/15ct stud side RG.png",
+      "product": "st15-15ct-diamond-studs",
+      "output": "public/images/products/st15-15ct-diamond-studs/angle-side-rg.webp"
+    },
+    {
+      "source": "img/15ct stud side WG.png",
+      "product": "st15-15ct-diamond-studs",
+      "output": "public/images/products/st15-15ct-diamond-studs/angle-side-wg.webp"
+    },
+    {
+      "source": "img/1ct RD soliter ring close-up RG.png",
+      "product": "sr1-round-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-round-1ct-solitaire-ring/angle-close-rg.webp"
+    },
+    {
+      "source": "img/1ct RD soliter ring close-up WG.png",
+      "product": "sr1-round-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-round-1ct-solitaire-ring/angle-close-wg.webp"
+    },
+    {
+      "source": "img/1ct RD soliter ring close-up YG.png",
+      "product": "sr1-round-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-round-1ct-solitaire-ring/angle-close-yg.webp"
+    },
+    {
+      "source": "img/1ct RD soliter ring front RG.png",
+      "product": "sr1-round-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-round-1ct-solitaire-ring/angle-front-rg.webp"
+    },
+    {
+      "source": "img/1ct RD soliter ring front YG.png",
+      "product": "sr1-round-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-round-1ct-solitaire-ring/angle-front-yg.webp"
+    },
+    {
+      "source": "img/1ct RD soliter ring front side WG.png",
+      "product": "sr1-round-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-round-1ct-solitaire-ring/angle-front-wg.webp"
+    },
+    {
+      "source": "img/1ct RD soliter ring side RG.png",
+      "product": "sr1-round-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-round-1ct-solitaire-ring/angle-side-rg.webp"
+    },
+    {
+      "source": "img/1ct RD soliter ring side WG.png",
+      "product": "sr1-round-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-round-1ct-solitaire-ring/angle-side-wg.webp"
+    },
+    {
+      "source": "img/1ct RD soliter ring side YG.png",
+      "product": "sr1-round-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-round-1ct-solitaire-ring/angle-side-yg.webp"
+    },
+    {
+      "source": "img/1ct RD soliter ring with Model.png",
+      "product": "sr1-round-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-round-1ct-solitaire-ring/model.webp"
+    },
+    {
+      "source": "img/1ct oval soliter eing front WG.png",
+      "product": "sr1-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-1ct-solitaire-ring/angle-front-wg.webp"
+    },
+    {
+      "source": "img/1ct oval soliter ring close-up RG.png",
+      "product": "sr1-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-1ct-solitaire-ring/angle-close-rg.webp"
+    },
+    {
+      "source": "img/1ct oval soliter ring close-up WG.png",
+      "product": "sr1-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-1ct-solitaire-ring/angle-close-wg.webp"
+    },
+    {
+      "source": "img/1ct oval soliter ring close-up YG.png",
+      "product": "sr1-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-1ct-solitaire-ring/angle-close-yg.webp"
+    },
+    {
+      "source": "img/1ct oval soliter ring front RG.png",
+      "product": "sr1-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-1ct-solitaire-ring/angle-front-rg.webp"
+    },
+    {
+      "source": "img/1ct oval soliter ring front YG.png",
+      "product": "sr1-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-1ct-solitaire-ring/angle-front-yg.webp"
+    },
+    {
+      "source": "img/1ct oval soliter ring side RG.png",
+      "product": "sr1-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-1ct-solitaire-ring/angle-side-rg.webp"
+    },
+    {
+      "source": "img/1ct oval soliter ring side WG .png",
+      "product": "sr1-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-1ct-solitaire-ring/angle-side-wg.webp"
+    },
+    {
+      "source": "img/1ct oval soliter ring side YG.png",
+      "product": "sr1-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-1ct-solitaire-ring/angle-side-yg.webp"
+    },
+    {
+      "source": "img/1ct oval soliter ring with Model.png",
+      "product": "sr1-1ct-solitaire-ring",
+      "output": "public/images/products/sr1-1ct-solitaire-ring/model.webp"
+    },
+    {
+      "source": "img/1ct stud RG.png",
+      "product": "st1-1ct-diamond-studs",
+      "output": "public/images/products/st1-1ct-diamond-studs/sheet-rg.webp"
+    },
+    {
+      "source": "img/1ct stud WG.png",
+      "product": "st1-1ct-diamond-studs",
+      "output": "public/images/products/st1-1ct-diamond-studs/sheet-wg.webp"
+    },
+    {
+      "source": "img/1ct stud YG.png",
+      "product": "st1-1ct-diamond-studs",
+      "output": "public/images/products/st1-1ct-diamond-studs/sheet-yg.webp"
+    },
+    {
+      "source": "img/2ct EM soliter ring close-up WG.png",
+      "product": "sr2-2ct-solitaire-ring",
+      "output": "public/images/products/sr2-2ct-solitaire-ring/angle-close-wg.webp"
+    },
+    {
+      "source": "img/2ct EM soliter ring close-up.png",
+      "product": "sr2-2ct-solitaire-ring",
+      "output": "public/images/products/sr2-2ct-solitaire-ring/angle-close-yg.webp"
+    },
+    {
+      "source": "img/2ct EM soliter ring front RG.png",
+      "product": "sr2-2ct-solitaire-ring",
+      "output": "public/images/products/sr2-2ct-solitaire-ring/angle-front-rg.webp"
+    },
+    {
+      "source": "img/2ct EM soliter ring front WG.png",
+      "product": "sr2-2ct-solitaire-ring",
+      "output": "public/images/products/sr2-2ct-solitaire-ring/angle-front-wg.webp"
+    },
+    {
+      "source": "img/2ct EM soliter ring front YG.png",
+      "product": "sr2-2ct-solitaire-ring",
+      "output": "public/images/products/sr2-2ct-solitaire-ring/angle-front-yg.webp"
+    },
+    {
+      "source": "img/2ct EM soliter ring side RG.png",
+      "product": "sr2-2ct-solitaire-ring",
+      "output": "public/images/products/sr2-2ct-solitaire-ring/angle-side-rg.webp"
+    },
+    {
+      "source": "img/2ct EM soliter ring side WG.png",
+      "product": "sr2-2ct-solitaire-ring",
+      "output": "public/images/products/sr2-2ct-solitaire-ring/angle-side-wg.webp"
+    },
+    {
+      "source": "img/2ct Em soliter ring close-up RG.png",
+      "product": "sr2-2ct-solitaire-ring",
+      "output": "public/images/products/sr2-2ct-solitaire-ring/angle-close-rg.webp"
+    },
+    {
+      "source": "img/2ct Em soliter ring side YG.png",
+      "product": "sr2-2ct-solitaire-ring",
+      "output": "public/images/products/sr2-2ct-solitaire-ring/angle-side-yg.webp"
+    },
+    {
+      "source": "img/2ct Em soliter ring with Model.png",
+      "product": "sr2-2ct-solitaire-ring",
+      "output": "public/images/products/sr2-2ct-solitaire-ring/model.webp"
+    },
+    {
+      "source": "img/2ct stud RG.png",
+      "product": "st2-2ct-diamond-studs",
+      "output": "public/images/products/st2-2ct-diamond-studs/sheet-rg.webp"
+    },
+    {
+      "source": "img/2ct stud WG.png",
+      "product": "st2-2ct-diamond-studs",
+      "output": "public/images/products/st2-2ct-diamond-studs/sheet-wg.webp"
+    },
+    {
+      "source": "img/2ct stud YG.png",
+      "product": "st2-2ct-diamond-studs",
+      "output": "public/images/products/st2-2ct-diamond-studs/sheet-yg.webp"
+    },
+    {
+      "source": "img/2ct tennis bracelate 45 view RG .png",
+      "product": "tb2-2ct-tennis-bracelet",
+      "output": "public/images/products/tb2-2ct-tennis-bracelet/angle-45-rg.webp"
+    },
+    {
+      "source": "img/2ct tennis bracelate 45 view WG.png",
+      "product": "tb2-2ct-tennis-bracelet",
+      "output": "public/images/products/tb2-2ct-tennis-bracelet/angle-45-wg.webp"
+    },
+    {
+      "source": "img/2ct tennis bracelate 45 view YG.png",
+      "product": "tb2-2ct-tennis-bracelet",
+      "output": "public/images/products/tb2-2ct-tennis-bracelet/angle-45-yg.webp"
+    },
+    {
+      "source": "img/2ct tennis bracelate Model photo.png",
+      "product": "tb2-2ct-tennis-bracelet",
+      "output": "public/images/products/tb2-2ct-tennis-bracelet/model.webp"
+    },
+    {
+      "source": "img/2ct tennis bracelate close-up RG.png",
+      "product": "tb2-2ct-tennis-bracelet",
+      "output": "public/images/products/tb2-2ct-tennis-bracelet/angle-close-rg.webp"
+    },
+    {
+      "source": "img/2ct tennis bracelate close-up YG.png",
+      "product": "tb2-2ct-tennis-bracelet",
+      "output": "public/images/products/tb2-2ct-tennis-bracelet/angle-close-yg.webp"
+    },
+    {
+      "source": "img/2ct tennis bracelate close-up view WG.png",
+      "product": "tb2-2ct-tennis-bracelet",
+      "output": "public/images/products/tb2-2ct-tennis-bracelet/angle-close-wg.webp"
+    },
+    {
+      "source": "img/2ct tennis bracelate front RG.png",
+      "product": "tb2-2ct-tennis-bracelet",
+      "output": "public/images/products/tb2-2ct-tennis-bracelet/angle-front-rg.webp"
+    },
+    {
+      "source": "img/2ct tennis bracelate front WG.png",
+      "product": "tb2-2ct-tennis-bracelet",
+      "output": "public/images/products/tb2-2ct-tennis-bracelet/angle-front-wg.webp"
+    },
+    {
+      "source": "img/2ct tennis bracelate front YG.png",
+      "product": "tb2-2ct-tennis-bracelet",
+      "output": "public/images/products/tb2-2ct-tennis-bracelet/angle-front-yg.webp"
+    },
+    {
+      "source": "img/3ct PE soliter ring close-up RG.png",
+      "product": "sr3-3ct-solitaire-ring",
+      "output": "public/images/products/sr3-3ct-solitaire-ring/angle-close-rg.webp"
+    },
+    {
+      "source": "img/3ct PE soliter ring close-up WG.png",
+      "product": "sr3-3ct-solitaire-ring",
+      "output": "public/images/products/sr3-3ct-solitaire-ring/angle-close-wg.webp"
+    },
+    {
+      "source": "img/3ct PE soliter ring close-up YG.png",
+      "product": "sr3-3ct-solitaire-ring",
+      "output": "public/images/products/sr3-3ct-solitaire-ring/angle-close-yg.webp"
+    },
+    {
+      "source": "img/3ct PE soliter ring front RG.png",
+      "product": "sr3-3ct-solitaire-ring",
+      "output": "public/images/products/sr3-3ct-solitaire-ring/angle-front-rg.webp"
+    },
+    {
+      "source": "img/3ct PE soliter ring front Wg.png",
+      "product": "sr3-3ct-solitaire-ring",
+      "output": "public/images/products/sr3-3ct-solitaire-ring/angle-front-wg.webp"
+    },
+    {
+      "source": "img/3ct PE soliter ring front YG.png",
+      "product": "sr3-3ct-solitaire-ring",
+      "output": "public/images/products/sr3-3ct-solitaire-ring/angle-front-yg.webp"
+    },
+    {
+      "source": "img/3ct PE soliter ring side RG.png",
+      "product": "sr3-3ct-solitaire-ring",
+      "output": "public/images/products/sr3-3ct-solitaire-ring/angle-side-rg.webp"
+    },
+    {
+      "source": "img/3ct PE soliter ring side Wg.png",
+      "product": "sr3-3ct-solitaire-ring",
+      "output": "public/images/products/sr3-3ct-solitaire-ring/angle-side-wg.webp"
+    },
+    {
+      "source": "img/3ct PE soliter ring side YG.png",
+      "product": "sr3-3ct-solitaire-ring",
+      "output": "public/images/products/sr3-3ct-solitaire-ring/angle-side-yg.webp"
+    },
+    {
+      "source": "img/3ct PE soliter ring with Model.png",
+      "product": "sr3-3ct-solitaire-ring",
+      "output": "public/images/products/sr3-3ct-solitaire-ring/model.webp"
+    },
+    {
+      "source": "img/3ct stud RG.png",
+      "product": "st3-3ct-diamond-studs",
+      "output": "public/images/products/st3-3ct-diamond-studs/sheet-rg.webp"
+    },
+    {
+      "source": "img/3ct stud WG.png",
+      "product": "st3-3ct-diamond-studs",
+      "output": "public/images/products/st3-3ct-diamond-studs/sheet-wg.webp"
+    },
+    {
+      "source": "img/3ct stud YG.png",
+      "product": "st3-3ct-diamond-studs",
+      "output": "public/images/products/st3-3ct-diamond-studs/sheet-yg.webp"
+    },
+    {
+      "source": "img/3ct tennis bracelate 45 view .png",
+      "product": "tb3-3ct-tennis-bracelet",
+      "output": "public/images/products/tb3-3ct-tennis-bracelet/angle-45-rg.webp"
+    },
+    {
+      "source": "img/3ct tennis bracelate 45 view WG.png",
+      "product": "tb3-3ct-tennis-bracelet",
+      "output": "public/images/products/tb3-3ct-tennis-bracelet/angle-45-wg.webp"
+    },
+    {
+      "source": "img/3ct tennis bracelate 45 view YG.png",
+      "product": "tb3-3ct-tennis-bracelet",
+      "output": "public/images/products/tb3-3ct-tennis-bracelet/angle-45-yg.webp"
+    },
+    {
+      "source": "img/3ct tennis bracelate close-up RG.png",
+      "product": "tb3-3ct-tennis-bracelet",
+      "output": "public/images/products/tb3-3ct-tennis-bracelet/angle-close-rg.webp"
+    },
+    {
+      "source": "img/3ct tennis bracelate close-up WG.png",
+      "product": "tb3-3ct-tennis-bracelet",
+      "output": "public/images/products/tb3-3ct-tennis-bracelet/angle-close-wg.webp"
+    },
+    {
+      "source": "img/3ct tennis bracelate close-up YG.png",
+      "product": "tb3-3ct-tennis-bracelet",
+      "output": "public/images/products/tb3-3ct-tennis-bracelet/angle-close-yg.webp"
+    },
+    {
+      "source": "img/3ct tennis bracelate front RG.png",
+      "product": "tb3-3ct-tennis-bracelet",
+      "output": "public/images/products/tb3-3ct-tennis-bracelet/angle-front-rg.webp"
+    },
+    {
+      "source": "img/3ct tennis bracelate front WG.png",
+      "product": "tb3-3ct-tennis-bracelet",
+      "output": "public/images/products/tb3-3ct-tennis-bracelet/angle-front-wg.webp"
+    },
+    {
+      "source": "img/3ct tennis bracelate front view YG.png",
+      "product": "tb3-3ct-tennis-bracelet",
+      "output": "public/images/products/tb3-3ct-tennis-bracelet/angle-front-yg.webp"
+    },
+    {
+      "source": "img/3ct tennis bracelate with Model photo.png",
+      "product": "tb3-3ct-tennis-bracelet",
+      "output": "public/images/products/tb3-3ct-tennis-bracelet/model.webp"
+    },
+    {
+      "source": "img/4ct stud RG.png",
+      "product": "st4-4ct-diamond-studs",
+      "output": "public/images/products/st4-4ct-diamond-studs/sheet-rg.webp"
+    },
+    {
+      "source": "img/4ct stud WG.png",
+      "product": "st4-4ct-diamond-studs",
+      "output": "public/images/products/st4-4ct-diamond-studs/sheet-wg.webp"
+    },
+    {
+      "source": "img/4ct stud YG.png",
+      "product": "st4-4ct-diamond-studs",
+      "output": "public/images/products/st4-4ct-diamond-studs/sheet-yg.webp"
+    },
+    {
+      "source": "img/4ct tennis bracelate 45 view RG.png",
+      "product": "tb4-4ct-tennis-bracelet",
+      "output": "public/images/products/tb4-4ct-tennis-bracelet/angle-45-rg.webp"
+    },
+    {
+      "source": "img/4ct tennis bracelate 45 view YG.png",
+      "product": "tb4-4ct-tennis-bracelet",
+      "output": "public/images/products/tb4-4ct-tennis-bracelet/angle-45-yg.webp"
+    },
+    {
+      "source": "img/4ct tennis bracelate 45view WG.png",
+      "product": "tb4-4ct-tennis-bracelet",
+      "output": "public/images/products/tb4-4ct-tennis-bracelet/angle-45-wg.webp"
+    },
+    {
+      "source": "img/4ct tennis bracelate close-up RG.png",
+      "product": "tb4-4ct-tennis-bracelet",
+      "output": "public/images/products/tb4-4ct-tennis-bracelet/angle-close-rg.webp"
+    },
+    {
+      "source": "img/4ct tennis bracelate close-up WG.png",
+      "product": "tb4-4ct-tennis-bracelet",
+      "output": "public/images/products/tb4-4ct-tennis-bracelet/angle-close-wg.webp"
+    },
+    {
+      "source": "img/4ct tennis bracelate close-up YG.png",
+      "product": "tb4-4ct-tennis-bracelet",
+      "output": "public/images/products/tb4-4ct-tennis-bracelet/angle-close-yg.webp"
+    },
+    {
+      "source": "img/4ct tennis bracelate front view RG.png",
+      "product": "tb4-4ct-tennis-bracelet",
+      "output": "public/images/products/tb4-4ct-tennis-bracelet/angle-front-rg.webp"
+    },
+    {
+      "source": "img/4ct tennis bracelate front view WG.png",
+      "product": "tb4-4ct-tennis-bracelet",
+      "output": "public/images/products/tb4-4ct-tennis-bracelet/angle-front-wg.webp"
+    },
+    {
+      "source": "img/4ct tennis bracelate front view YG.png",
+      "product": "tb4-4ct-tennis-bracelet",
+      "output": "public/images/products/tb4-4ct-tennis-bracelet/angle-front-yg.webp"
+    },
+    {
+      "source": "img/4ct tennis bracelate with Model photo.png",
+      "product": "tb4-4ct-tennis-bracelet",
+      "output": "public/images/products/tb4-4ct-tennis-bracelet/model.webp"
+    },
+    {
+      "source": "img/5ct MQ soliter ring close-up RG.png",
+      "product": "sr5-5ct-solitaire-ring",
+      "output": "public/images/products/sr5-5ct-solitaire-ring/angle-close-rg.webp"
+    },
+    {
+      "source": "img/5ct MQ soliter ring close-up WG.png",
+      "product": "sr5-5ct-solitaire-ring",
+      "output": "public/images/products/sr5-5ct-solitaire-ring/angle-close-wg.webp"
+    },
+    {
+      "source": "img/5ct MQ soliter ring close-up YG.png",
+      "product": "sr5-5ct-solitaire-ring",
+      "output": "public/images/products/sr5-5ct-solitaire-ring/angle-close-yg.webp"
+    },
+    {
+      "source": "img/5ct MQ soliter ring front RG.png",
+      "product": "sr5-5ct-solitaire-ring",
+      "output": "public/images/products/sr5-5ct-solitaire-ring/angle-front-rg.webp"
+    },
+    {
+      "source": "img/5ct MQ soliter ring front WG.png",
+      "product": "sr5-5ct-solitaire-ring",
+      "output": "public/images/products/sr5-5ct-solitaire-ring/angle-front-wg.webp"
+    },
+    {
+      "source": "img/5ct MQ soliter ring front YG.png",
+      "product": "sr5-5ct-solitaire-ring",
+      "output": "public/images/products/sr5-5ct-solitaire-ring/angle-front-yg.webp"
+    },
+    {
+      "source": "img/5ct MQ soliter ring side RG.png",
+      "product": "sr5-5ct-solitaire-ring",
+      "output": "public/images/products/sr5-5ct-solitaire-ring/angle-side-rg.webp"
+    },
+    {
+      "source": "img/5ct MQ soliter ring side WG.png",
+      "product": "sr5-5ct-solitaire-ring",
+      "output": "public/images/products/sr5-5ct-solitaire-ring/angle-side-wg.webp"
+    },
+    {
+      "source": "img/5ct MQ soliter ring side YG.png",
+      "product": "sr5-5ct-solitaire-ring",
+      "output": "public/images/products/sr5-5ct-solitaire-ring/angle-side-yg.webp"
+    },
+    {
+      "source": "img/5ct MQ soliter ring with Model.png",
+      "product": "sr5-5ct-solitaire-ring",
+      "output": "public/images/products/sr5-5ct-solitaire-ring/model.webp"
+    },
+    {
+      "source": "img/5ct stud RG.png",
+      "product": "st5-5ct-diamond-studs",
+      "output": "public/images/products/st5-5ct-diamond-studs/sheet-rg.webp"
+    },
+    {
+      "source": "img/5ct stud WG.png",
+      "product": "st5-5ct-diamond-studs",
+      "output": "public/images/products/st5-5ct-diamond-studs/sheet-wg.webp"
+    },
+    {
+      "source": "img/5ct stud YG.png",
+      "product": "st5-5ct-diamond-studs",
+      "output": "public/images/products/st5-5ct-diamond-studs/sheet-yg.webp"
+    },
+    {
+      "source": "img/5ct tennis bracelate 45 view RG.png",
+      "product": "tb5-5ct-tennis-bracelet",
+      "output": "public/images/products/tb5-5ct-tennis-bracelet/angle-45-rg.webp"
+    },
+    {
+      "source": "img/5ct tennis bracelate 45 view WG.png",
+      "product": "tb5-5ct-tennis-bracelet",
+      "output": "public/images/products/tb5-5ct-tennis-bracelet/angle-45-wg.webp"
+    },
+    {
+      "source": "img/5ct tennis bracelate 45 view YG.png",
+      "product": "tb5-5ct-tennis-bracelet",
+      "output": "public/images/products/tb5-5ct-tennis-bracelet/angle-45-yg.webp"
+    },
+    {
+      "source": "img/5ct tennis bracelate close-up RG.png",
+      "product": "tb5-5ct-tennis-bracelet",
+      "output": "public/images/products/tb5-5ct-tennis-bracelet/angle-close-rg.webp"
+    },
+    {
+      "source": "img/5ct tennis bracelate close-up WG.png",
+      "product": "tb5-5ct-tennis-bracelet",
+      "output": "public/images/products/tb5-5ct-tennis-bracelet/angle-close-wg.webp"
+    },
+    {
+      "source": "img/5ct tennis bracelate close-up YG.png",
+      "product": "tb5-5ct-tennis-bracelet",
+      "output": "public/images/products/tb5-5ct-tennis-bracelet/angle-close-yg.webp"
+    },
+    {
+      "source": "img/5ct tennis bracelate front view RG.png",
+      "product": "tb5-5ct-tennis-bracelet",
+      "output": "public/images/products/tb5-5ct-tennis-bracelet/angle-front-rg.webp"
+    },
+    {
+      "source": "img/5ct tennis bracelate front view WG.png",
+      "product": "tb5-5ct-tennis-bracelet",
+      "output": "public/images/products/tb5-5ct-tennis-bracelet/angle-front-wg.webp"
+    },
+    {
+      "source": "img/5ct tennis bracelate front view YG.png",
+      "product": "tb5-5ct-tennis-bracelet",
+      "output": "public/images/products/tb5-5ct-tennis-bracelet/angle-front-yg.webp"
+    },
+    {
+      "source": "img/5ct tennis bracelate with Model photo.png",
+      "product": "tb5-5ct-tennis-bracelet",
+      "output": "public/images/products/tb5-5ct-tennis-bracelet/model.webp"
+    },
+    {
+      "source": "img/6ct RAD soliter ring close-up RG.png",
+      "product": "sr6-6ct-solitaire-ring",
+      "output": "public/images/products/sr6-6ct-solitaire-ring/angle-close-rg.webp"
+    },
+    {
+      "source": "img/6ct RAD soliter ring close-up WG.png",
+      "product": "sr6-6ct-solitaire-ring",
+      "output": "public/images/products/sr6-6ct-solitaire-ring/angle-close-wg.webp"
+    },
+    {
+      "source": "img/6ct RAD soliter ring close-up YG.png",
+      "product": "sr6-6ct-solitaire-ring",
+      "output": "public/images/products/sr6-6ct-solitaire-ring/angle-close-yg.webp"
+    },
+    {
+      "source": "img/6ct RAD soliter ring front RG.png",
+      "product": "sr6-6ct-solitaire-ring",
+      "output": "public/images/products/sr6-6ct-solitaire-ring/angle-front-rg.webp"
+    },
+    {
+      "source": "img/6ct RAD soliter ring front WG.png",
+      "product": "sr6-6ct-solitaire-ring",
+      "output": "public/images/products/sr6-6ct-solitaire-ring/angle-front-wg.webp"
+    },
+    {
+      "source": "img/6ct RAD soliter ring front YG.png",
+      "product": "sr6-6ct-solitaire-ring",
+      "output": "public/images/products/sr6-6ct-solitaire-ring/angle-front-yg.webp"
+    },
+    {
+      "source": "img/6ct RAD soliter ring side RG.png",
+      "product": "sr6-6ct-solitaire-ring",
+      "output": "public/images/products/sr6-6ct-solitaire-ring/angle-side-rg.webp"
+    },
+    {
+      "source": "img/6ct RAD soliter ring side WG.png",
+      "product": "sr6-6ct-solitaire-ring",
+      "output": "public/images/products/sr6-6ct-solitaire-ring/angle-side-wg.webp"
+    },
+    {
+      "source": "img/6ct RAD soliter ring side YG.png",
+      "product": "sr6-6ct-solitaire-ring",
+      "output": "public/images/products/sr6-6ct-solitaire-ring/angle-side-yg.webp"
+    },
+    {
+      "source": "img/6ct RAD soliter ring with Model.png",
+      "product": "sr6-6ct-solitaire-ring",
+      "output": "public/images/products/sr6-6ct-solitaire-ring/model.webp"
+    },
+    {
+      "source": "img/6ct stud RG.png",
+      "product": "st6-6ct-diamond-studs",
+      "output": "public/images/products/st6-6ct-diamond-studs/sheet-rg.webp"
+    },
+    {
+      "source": "img/6ct stud WG.png",
+      "product": "st6-6ct-diamond-studs",
+      "output": "public/images/products/st6-6ct-diamond-studs/sheet-wg.webp"
+    },
+    {
+      "source": "img/6ct stud YG.png",
+      "product": "st6-6ct-diamond-studs",
+      "output": "public/images/products/st6-6ct-diamond-studs/sheet-yg.webp"
+    },
+    {
+      "source": "img/6ct tennis bracelate 45 view RG.png",
+      "product": "tb6-6ct-tennis-bracelet",
+      "output": "public/images/products/tb6-6ct-tennis-bracelet/angle-45-rg.webp"
+    },
+    {
+      "source": "img/6ct tennis bracelate 45 view WG.png",
+      "product": "tb6-6ct-tennis-bracelet",
+      "output": "public/images/products/tb6-6ct-tennis-bracelet/angle-45-wg.webp"
+    },
+    {
+      "source": "img/6ct tennis bracelate 45 view YG.png",
+      "product": "tb6-6ct-tennis-bracelet",
+      "output": "public/images/products/tb6-6ct-tennis-bracelet/angle-45-yg.webp"
+    },
+    {
+      "source": "img/6ct tennis bracelate close-up RG.png",
+      "product": "tb6-6ct-tennis-bracelet",
+      "output": "public/images/products/tb6-6ct-tennis-bracelet/angle-close-rg.webp"
+    },
+    {
+      "source": "img/6ct tennis bracelate close-up WG.png",
+      "product": "tb6-6ct-tennis-bracelet",
+      "output": "public/images/products/tb6-6ct-tennis-bracelet/angle-close-wg.webp"
+    },
+    {
+      "source": "img/6ct tennis bracelate close-up YG.png",
+      "product": "tb6-6ct-tennis-bracelet",
+      "output": "public/images/products/tb6-6ct-tennis-bracelet/angle-close-yg.webp"
+    },
+    {
+      "source": "img/6ct tennis bracelate front view RG.png",
+      "product": "tb6-6ct-tennis-bracelet",
+      "output": "public/images/products/tb6-6ct-tennis-bracelet/angle-front-rg.webp"
+    },
+    {
+      "source": "img/6ct tennis bracelate front view WG.png",
+      "product": "tb6-6ct-tennis-bracelet",
+      "output": "public/images/products/tb6-6ct-tennis-bracelet/angle-front-wg.webp"
+    },
+    {
+      "source": "img/6ct tennis bracelate front view YG.png",
+      "product": "tb6-6ct-tennis-bracelet",
+      "output": "public/images/products/tb6-6ct-tennis-bracelet/angle-front-yg.webp"
+    },
+    {
+      "source": "img/6ct tennis bracelate with model photo.png",
+      "product": "tb6-6ct-tennis-bracelet",
+      "output": "public/images/products/tb6-6ct-tennis-bracelet/model.webp"
+    },
+    {
+      "source": "img/8ct CU soliter ring  front YG.png",
+      "product": "sr8-8ct-solitaire-ring",
+      "output": "public/images/products/sr8-8ct-solitaire-ring/angle-front-yg.webp"
+    },
+    {
+      "source": "img/8ct CU soliter ring  side YG.png",
+      "product": "sr8-8ct-solitaire-ring",
+      "output": "public/images/products/sr8-8ct-solitaire-ring/angle-side-yg.webp"
+    },
+    {
+      "source": "img/8ct CU soliter ring close-up RG.png",
+      "product": "sr8-8ct-solitaire-ring",
+      "output": "public/images/products/sr8-8ct-solitaire-ring/angle-close-rg.webp"
+    },
+    {
+      "source": "img/8ct CU soliter ring close-up WG.png",
+      "product": "sr8-8ct-solitaire-ring",
+      "output": "public/images/products/sr8-8ct-solitaire-ring/angle-close-wg.webp"
+    },
+    {
+      "source": "img/8ct CU soliter ring close-up YG.png",
+      "product": "sr8-8ct-solitaire-ring",
+      "output": "public/images/products/sr8-8ct-solitaire-ring/angle-close-yg.webp"
+    },
+    {
+      "source": "img/8ct CU soliter ring front RG.png",
+      "product": "sr8-8ct-solitaire-ring",
+      "output": "public/images/products/sr8-8ct-solitaire-ring/angle-front-rg.webp"
+    },
+    {
+      "source": "img/8ct CU soliter ring front WG.png",
+      "product": "sr8-8ct-solitaire-ring",
+      "output": "public/images/products/sr8-8ct-solitaire-ring/angle-front-wg.webp"
+    },
+    {
+      "source": "img/8ct CU soliter ring side RG.png",
+      "product": "sr8-8ct-solitaire-ring",
+      "output": "public/images/products/sr8-8ct-solitaire-ring/angle-side-rg.webp"
+    },
+    {
+      "source": "img/8ct CU soliter ring side WG.png",
+      "product": "sr8-8ct-solitaire-ring",
+      "output": "public/images/products/sr8-8ct-solitaire-ring/angle-side-wg.webp"
+    },
+    {
+      "source": "img/8ct CU soliter ring with Model.png",
+      "product": "sr8-8ct-solitaire-ring",
+      "output": "public/images/products/sr8-8ct-solitaire-ring/model.webp"
+    },
+    {
+      "source": "img/8ct stud 45 YG.png",
+      "product": "st8-8ct-diamond-studs",
+      "output": "public/images/products/st8-8ct-diamond-studs/angle-45-yg.webp"
+    },
+    {
+      "source": "img/8ct stud 45view WG.png",
+      "product": "st8-8ct-diamond-studs",
+      "output": "public/images/products/st8-8ct-diamond-studs/angle-45-wg.webp"
+    },
+    {
+      "source": "img/8ct stud Front WG.png",
+      "product": "st8-8ct-diamond-studs",
+      "output": "public/images/products/st8-8ct-diamond-studs/angle-front-wg.webp"
+    },
+    {
+      "source": "img/8ct stud close-up YG PM.png",
+      "product": "st8-8ct-diamond-studs",
+      "output": "public/images/products/st8-8ct-diamond-studs/angle-close-yg.webp"
+    },
+    {
+      "source": "img/8ct stud front YG.png",
+      "product": "st8-8ct-diamond-studs",
+      "output": "public/images/products/st8-8ct-diamond-studs/angle-front-yg.webp"
+    },
+    {
+      "source": "img/8ct stud side YG.png",
+      "product": "st8-8ct-diamond-studs",
+      "output": "public/images/products/st8-8ct-diamond-studs/angle-side-yg.webp"
+    },
+    {
+      "source": "img/8ct stud side view Wg.png",
+      "product": "st8-8ct-diamond-studs",
+      "output": "public/images/products/st8-8ct-diamond-studs/angle-side-wg.webp"
+    },
+    {
+      "source": "img/8ct tennis bracelate 45 view RG.png",
+      "product": "tb8-8ct-tennis-bracelet",
+      "output": "public/images/products/tb8-8ct-tennis-bracelet/angle-45-rg.webp"
+    },
+    {
+      "source": "img/8ct tennis bracelate 45 view WG.png",
+      "product": "tb8-8ct-tennis-bracelet",
+      "output": "public/images/products/tb8-8ct-tennis-bracelet/angle-45-wg.webp"
+    },
+    {
+      "source": "img/8ct tennis bracelate 45 view YG.png",
+      "product": "tb8-8ct-tennis-bracelet",
+      "output": "public/images/products/tb8-8ct-tennis-bracelet/angle-45-yg.webp"
+    },
+    {
+      "source": "img/8ct tennis bracelate close-up WG.png",
+      "product": "tb8-8ct-tennis-bracelet",
+      "output": "public/images/products/tb8-8ct-tennis-bracelet/angle-close-wg.webp"
+    },
+    {
+      "source": "img/8ct tennis bracelate close-up YG.png",
+      "product": "tb8-8ct-tennis-bracelet",
+      "output": "public/images/products/tb8-8ct-tennis-bracelet/angle-close-yg.webp"
+    },
+    {
+      "source": "img/8ct tennis bracelate front view RG.png",
+      "product": "tb8-8ct-tennis-bracelet",
+      "output": "public/images/products/tb8-8ct-tennis-bracelet/angle-front-rg.webp"
+    },
+    {
+      "source": "img/8ct tennis bracelate front view WG.png",
+      "product": "tb8-8ct-tennis-bracelet",
+      "output": "public/images/products/tb8-8ct-tennis-bracelet/angle-front-wg.webp"
+    },
+    {
+      "source": "img/8ct tennis bracelate front view YG.png",
+      "product": "tb8-8ct-tennis-bracelet",
+      "output": "public/images/products/tb8-8ct-tennis-bracelet/angle-front-yg.webp"
+    },
+    {
+      "source": "img/8ct tennis bracelate with Model photo.png",
+      "product": "tb8-8ct-tennis-bracelet",
+      "output": "public/images/products/tb8-8ct-tennis-bracelet/model.webp"
+    }
+  ],
+  "unmatched": []
+}

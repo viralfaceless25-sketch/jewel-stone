@@ -38,7 +38,7 @@ export function WishlistView() {
               <Link href={`/products/${p.slug}`} className={styles.name}>{p.name}</Link>
               <p>{p.material} · {p.carats} ct</p>
             </div>
-            <strong>{p.priceLabel}</strong>
+            <strong>View</strong>
           </div>
           <button className={styles.remove} onClick={() => removeItem(p.id)}>Remove</button>
         </div>

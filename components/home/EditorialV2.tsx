@@ -11,7 +11,7 @@ export function EditorialV2() {
     <Reveal className={`${styles.section} ${styles.editorial}`}>
       <div className={styles.editorialImage} data-reveal-item>
         <Image src={piece.gallery?.[2] ?? piece.image} alt={piece.name} fill sizes="(max-width: 800px) 92vw, 58vw" className={styles.productImage} />
-        <span className={styles.verticalLabel}>Piece No. JSD0626001</span>
+        <span className={styles.verticalLabel}>Piece No. JSND062601</span>
       </div>
       <div className={styles.editorialCopy} data-reveal-item>
         <p className={styles.kicker}><span /> The cut study</p>

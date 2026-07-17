@@ -44,9 +44,9 @@
 .close {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   border: none;
   background: transparent;
   color: var(--js-ink);
@@ -69,9 +69,9 @@
 .emptyBtn {
   margin-top: 1rem;
   padding: 0.8rem 1.4rem;
-  border-radius: 999px;
-  background: var(--js-ink);
-  color: var(--js-porcelain);
+  border-radius: var(--js-radius-control);
+  background: var(--js-garnet);
+  color: #fff;
   text-decoration: none;
   font-size: 0.84rem;
 }
@@ -104,6 +104,7 @@
   line-height: 1.2;
 }
 .itemRemove {
+  min-height:32px;
   background: none;
   border: none;
   color: var(--js-platinum);
@@ -120,12 +121,12 @@
   align-items: center;
   gap: 0.5rem;
   border: 1px solid var(--js-line);
-  border-radius: 999px;
+  border-radius: 0;
   padding: 0.15rem 0.3rem;
 }
 .qty button {
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -150,15 +151,16 @@
   display: block;
   text-align: center;
   padding: 0.95rem;
-  border-radius: 999px;
-  background: var(--js-ink);
-  color: var(--js-porcelain);
+  border-radius: 0;
+  background: var(--js-garnet);
+  color: #fff;
   text-decoration: none;
   font-size: 0.88rem;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   transition: background 0.25s ease;
 }
-.checkout:hover { background: var(--js-gold-deep); }
+.checkout:hover { background: #3e111b; }
 .keep {
   display: block;
   text-align: center;

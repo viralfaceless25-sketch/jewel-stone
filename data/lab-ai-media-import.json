@@ -1,0 +1,672 @@
+{
+  "generatedAt": "2026-07-17T03:32:20.872Z",
+  "supplied": 359,
+  "imported": 130,
+  "products": [
+    "fn2-graduated-diamond-necklace",
+    "fr1-hidden-halo-oval-ring",
+    "fr2-radiant-halo-ring",
+    "fr3-double-halo-cushion-ring",
+    "fr4-emerald-hidden-halo-ring",
+    "fr5-three-stone-oval-ring",
+    "fr6-fancy-cluster-ring",
+    "pd1-cross-diamond-pendant",
+    "pd2-butterfly-diamond-pendant",
+    "pd3-cluster-flower-pendant",
+    "pd4-heart-halo-pendant-lab-grown",
+    "pd5-fancy-drop-pendant",
+    "sr12-12ct-solitaire-ring"
+  ],
+  "files": [
+    {
+      "source": "Lab AI jewelry/Lab fancy necklace AI/Graduated Diamond Necklace 15ct close-up RG.png",
+      "product": "fn2-graduated-diamond-necklace",
+      "output": "public/images/products/fn2-graduated-diamond-necklace/angle-close-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab fancy necklace AI/Graduated Diamond Necklace 15ct close-up WG.png",
+      "product": "fn2-graduated-diamond-necklace",
+      "output": "public/images/products/fn2-graduated-diamond-necklace/angle-close-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab fancy necklace AI/Graduated Diamond Necklace 15ct close-up YG .png",
+      "product": "fn2-graduated-diamond-necklace",
+      "output": "public/images/products/fn2-graduated-diamond-necklace/angle-close-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab fancy necklace AI/Graduated Diamond Necklace 15ct front RG.png",
+      "product": "fn2-graduated-diamond-necklace",
+      "output": "public/images/products/fn2-graduated-diamond-necklace/angle-front-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab fancy necklace AI/Graduated Diamond Necklace 15ct front WG .png",
+      "product": "fn2-graduated-diamond-necklace",
+      "output": "public/images/products/fn2-graduated-diamond-necklace/angle-front-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab fancy necklace AI/Graduated Diamond Necklace 15ct front YG.png",
+      "product": "fn2-graduated-diamond-necklace",
+      "output": "public/images/products/fn2-graduated-diamond-necklace/angle-front-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab fancy necklace AI/Graduated Diamond Necklace 15ct side RG.png",
+      "product": "fn2-graduated-diamond-necklace",
+      "output": "public/images/products/fn2-graduated-diamond-necklace/angle-side-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab fancy necklace AI/Graduated Diamond Necklace 15ct side WG.png",
+      "product": "fn2-graduated-diamond-necklace",
+      "output": "public/images/products/fn2-graduated-diamond-necklace/angle-side-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab fancy necklace AI/Graduated Diamond Necklace 15ct side YG.png",
+      "product": "fn2-graduated-diamond-necklace",
+      "output": "public/images/products/fn2-graduated-diamond-necklace/angle-side-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab fancy necklace AI/Graduated Diamond Necklace 15ct with Model.png",
+      "product": "fn2-graduated-diamond-necklace",
+      "output": "public/images/products/fn2-graduated-diamond-necklace/model.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Butterfly Pendant 2ct back side WG.png",
+      "product": "pd2-butterfly-diamond-pendant",
+      "output": "public/images/products/pd2-butterfly-diamond-pendant/angle-back-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Butterfly Pendant 2ct close-up RG.png",
+      "product": "pd2-butterfly-diamond-pendant",
+      "output": "public/images/products/pd2-butterfly-diamond-pendant/angle-close-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Butterfly Pendant 2ct close-up YG.png",
+      "product": "pd2-butterfly-diamond-pendant",
+      "output": "public/images/products/pd2-butterfly-diamond-pendant/angle-close-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Butterfly Pendant 2ct close-up.png",
+      "product": "pd2-butterfly-diamond-pendant",
+      "output": "public/images/products/pd2-butterfly-diamond-pendant/angle-close-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Butterfly Pendant 2ct front RG.png",
+      "product": "pd2-butterfly-diamond-pendant",
+      "output": "public/images/products/pd2-butterfly-diamond-pendant/angle-front-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Butterfly Pendant 2ct front WG.png",
+      "product": "pd2-butterfly-diamond-pendant",
+      "output": "public/images/products/pd2-butterfly-diamond-pendant/angle-front-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Butterfly Pendant 2ct front YG.png",
+      "product": "pd2-butterfly-diamond-pendant",
+      "output": "public/images/products/pd2-butterfly-diamond-pendant/angle-front-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Butterfly Pendant 2ct side RG.png",
+      "product": "pd2-butterfly-diamond-pendant",
+      "output": "public/images/products/pd2-butterfly-diamond-pendant/angle-side-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Butterfly Pendant 2ct side WG.png",
+      "product": "pd2-butterfly-diamond-pendant",
+      "output": "public/images/products/pd2-butterfly-diamond-pendant/angle-side-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Butterfly Pendant 2ct side YG.png",
+      "product": "pd2-butterfly-diamond-pendant",
+      "output": "public/images/products/pd2-butterfly-diamond-pendant/angle-side-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Butterfly Pendant 2ct with Model.png",
+      "product": "pd2-butterfly-diamond-pendant",
+      "output": "public/images/products/pd2-butterfly-diamond-pendant/model.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cluster Flower Pendant 3ct close-up RG.png",
+      "product": "pd3-cluster-flower-pendant",
+      "output": "public/images/products/pd3-cluster-flower-pendant/angle-close-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cluster Flower Pendant 3ct close-up WG.png",
+      "product": "pd3-cluster-flower-pendant",
+      "output": "public/images/products/pd3-cluster-flower-pendant/angle-close-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cluster Flower Pendant 3ct close-up YG.png",
+      "product": "pd3-cluster-flower-pendant",
+      "output": "public/images/products/pd3-cluster-flower-pendant/angle-close-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cluster Flower Pendant 3ct front RG.png",
+      "product": "pd3-cluster-flower-pendant",
+      "output": "public/images/products/pd3-cluster-flower-pendant/angle-front-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cluster Flower Pendant 3ct front WG.png",
+      "product": "pd3-cluster-flower-pendant",
+      "output": "public/images/products/pd3-cluster-flower-pendant/angle-front-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cluster Flower Pendant 3ct front YG.png",
+      "product": "pd3-cluster-flower-pendant",
+      "output": "public/images/products/pd3-cluster-flower-pendant/angle-front-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cluster Flower Pendant 3ct side RG.png",
+      "product": "pd3-cluster-flower-pendant",
+      "output": "public/images/products/pd3-cluster-flower-pendant/angle-side-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cluster Flower Pendant 3ct side WG.png",
+      "product": "pd3-cluster-flower-pendant",
+      "output": "public/images/products/pd3-cluster-flower-pendant/angle-side-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cluster Flower Pendant 3ct side YG.png",
+      "product": "pd3-cluster-flower-pendant",
+      "output": "public/images/products/pd3-cluster-flower-pendant/angle-side-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cluster Flower Pendant 3ct with Model.png",
+      "product": "pd3-cluster-flower-pendant",
+      "output": "public/images/products/pd3-cluster-flower-pendant/model.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cross Diamond Pendant 1.5ct close-up RG.png",
+      "product": "pd1-cross-diamond-pendant",
+      "output": "public/images/products/pd1-cross-diamond-pendant/angle-close-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cross Diamond Pendant 1.5ct close-up WG.png",
+      "product": "pd1-cross-diamond-pendant",
+      "output": "public/images/products/pd1-cross-diamond-pendant/angle-close-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cross Diamond Pendant 1.5ct close-up YG.png",
+      "product": "pd1-cross-diamond-pendant",
+      "output": "public/images/products/pd1-cross-diamond-pendant/angle-close-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cross Diamond Pendant 1.5ct front RG.png",
+      "product": "pd1-cross-diamond-pendant",
+      "output": "public/images/products/pd1-cross-diamond-pendant/angle-front-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cross Diamond Pendant 1.5ct front WG.png",
+      "product": "pd1-cross-diamond-pendant",
+      "output": "public/images/products/pd1-cross-diamond-pendant/angle-front-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cross Diamond Pendant 1.5ct front YG.png",
+      "product": "pd1-cross-diamond-pendant",
+      "output": "public/images/products/pd1-cross-diamond-pendant/angle-front-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cross Diamond Pendant 1.5ct side RG.png",
+      "product": "pd1-cross-diamond-pendant",
+      "output": "public/images/products/pd1-cross-diamond-pendant/angle-side-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cross Diamond Pendant 1.5ct side WG.png",
+      "product": "pd1-cross-diamond-pendant",
+      "output": "public/images/products/pd1-cross-diamond-pendant/angle-side-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cross Diamond Pendant 1.5ct side YG.png",
+      "product": "pd1-cross-diamond-pendant",
+      "output": "public/images/products/pd1-cross-diamond-pendant/angle-side-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Cross Diamond Pendant 1.5ct with Model.png",
+      "product": "pd1-cross-diamond-pendant",
+      "output": "public/images/products/pd1-cross-diamond-pendant/model.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Fancy Drop Pendant 5ct close-up RG.png",
+      "product": "pd5-fancy-drop-pendant",
+      "output": "public/images/products/pd5-fancy-drop-pendant/angle-close-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Fancy Drop Pendant 5ct close-up WG.png",
+      "product": "pd5-fancy-drop-pendant",
+      "output": "public/images/products/pd5-fancy-drop-pendant/angle-close-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Fancy Drop Pendant 5ct close-up YG.png",
+      "product": "pd5-fancy-drop-pendant",
+      "output": "public/images/products/pd5-fancy-drop-pendant/angle-close-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Fancy Drop Pendant 5ct front RG.png",
+      "product": "pd5-fancy-drop-pendant",
+      "output": "public/images/products/pd5-fancy-drop-pendant/angle-front-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Fancy Drop Pendant 5ct front WG.png",
+      "product": "pd5-fancy-drop-pendant",
+      "output": "public/images/products/pd5-fancy-drop-pendant/angle-front-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Fancy Drop Pendant 5ct front YG.png",
+      "product": "pd5-fancy-drop-pendant",
+      "output": "public/images/products/pd5-fancy-drop-pendant/angle-front-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Fancy Drop Pendant 5ct side RG.png",
+      "product": "pd5-fancy-drop-pendant",
+      "output": "public/images/products/pd5-fancy-drop-pendant/angle-side-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Fancy Drop Pendant 5ct side WG.png",
+      "product": "pd5-fancy-drop-pendant",
+      "output": "public/images/products/pd5-fancy-drop-pendant/angle-side-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Fancy Drop Pendant 5ct side YG.png",
+      "product": "pd5-fancy-drop-pendant",
+      "output": "public/images/products/pd5-fancy-drop-pendant/angle-side-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Fancy Drop Pendant 5ct with Model.png",
+      "product": "pd5-fancy-drop-pendant",
+      "output": "public/images/products/pd5-fancy-drop-pendant/model.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Heart Halo Pendant 4ct close-up RG.png",
+      "product": "pd4-heart-halo-pendant-lab-grown",
+      "output": "public/images/products/pd4-heart-halo-pendant-lab-grown/angle-close-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Heart Halo Pendant 4ct close-up YG.png",
+      "product": "pd4-heart-halo-pendant-lab-grown",
+      "output": "public/images/products/pd4-heart-halo-pendant-lab-grown/angle-close-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Heart Halo Pendant 4ct front RG.png",
+      "product": "pd4-heart-halo-pendant-lab-grown",
+      "output": "public/images/products/pd4-heart-halo-pendant-lab-grown/angle-front-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Heart Halo Pendant 4ct front WG.png",
+      "product": "pd4-heart-halo-pendant-lab-grown",
+      "output": "public/images/products/pd4-heart-halo-pendant-lab-grown/angle-front-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Heart Halo Pendant 4ct front YG.png",
+      "product": "pd4-heart-halo-pendant-lab-grown",
+      "output": "public/images/products/pd4-heart-halo-pendant-lab-grown/angle-front-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Heart Halo Pendant 4ct side RG.png",
+      "product": "pd4-heart-halo-pendant-lab-grown",
+      "output": "public/images/products/pd4-heart-halo-pendant-lab-grown/angle-side-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Heart Halo Pendant 4ct side WG.png",
+      "product": "pd4-heart-halo-pendant-lab-grown",
+      "output": "public/images/products/pd4-heart-halo-pendant-lab-grown/angle-side-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Heart Halo Pendant 4ct side YG.png",
+      "product": "pd4-heart-halo-pendant-lab-grown",
+      "output": "public/images/products/pd4-heart-halo-pendant-lab-grown/angle-side-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Heart Halo Pendant 4ct with Model.png",
+      "product": "pd4-heart-halo-pendant-lab-grown",
+      "output": "public/images/products/pd4-heart-halo-pendant-lab-grown/model.webp"
+    },
+    {
+      "source": "Lab AI jewelry/Lab pendants AI/Heart Halo Pendant 4tc close-up WG.png",
+      "product": "pd4-heart-halo-pendant-lab-grown",
+      "output": "public/images/products/pd4-heart-halo-pendant-lab-grown/angle-close-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/12ct PRI soliter ring close-up RG.png",
+      "product": "sr12-12ct-solitaire-ring",
+      "output": "public/images/products/sr12-12ct-solitaire-ring/angle-close-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/12ct PRI soliter ring close-up WG.png",
+      "product": "sr12-12ct-solitaire-ring",
+      "output": "public/images/products/sr12-12ct-solitaire-ring/angle-close-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/12ct PRI soliter ring close-up YG.png",
+      "product": "sr12-12ct-solitaire-ring",
+      "output": "public/images/products/sr12-12ct-solitaire-ring/angle-close-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/12ct PRI soliter ring front RG.png",
+      "product": "sr12-12ct-solitaire-ring",
+      "output": "public/images/products/sr12-12ct-solitaire-ring/angle-front-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/12ct PRI soliter ring front WG.png",
+      "product": "sr12-12ct-solitaire-ring",
+      "output": "public/images/products/sr12-12ct-solitaire-ring/angle-front-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/12ct PRI soliter ring front YG.png",
+      "product": "sr12-12ct-solitaire-ring",
+      "output": "public/images/products/sr12-12ct-solitaire-ring/angle-front-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/12ct PRI soliter ring side RG.png",
+      "product": "sr12-12ct-solitaire-ring",
+      "output": "public/images/products/sr12-12ct-solitaire-ring/angle-side-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/12ct PRI soliter ring side WG.png",
+      "product": "sr12-12ct-solitaire-ring",
+      "output": "public/images/products/sr12-12ct-solitaire-ring/angle-side-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/12ct PRI soliter ring side YG.png",
+      "product": "sr12-12ct-solitaire-ring",
+      "output": "public/images/products/sr12-12ct-solitaire-ring/angle-side-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/12ct PRI soliter ring with Model.png",
+      "product": "sr12-12ct-solitaire-ring",
+      "output": "public/images/products/sr12-12ct-solitaire-ring/model.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Cluster Ring fancy:halo 6ct close-up WG.png",
+      "product": "fr6-fancy-cluster-ring",
+      "output": "public/images/products/fr6-fancy-cluster-ring/angle-close-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Cluster Ring fancy:halo 6ct close-up YG.png",
+      "product": "fr6-fancy-cluster-ring",
+      "output": "public/images/products/fr6-fancy-cluster-ring/angle-close-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Cluster Ring fancy:halo 6ct front RG.png",
+      "product": "fr6-fancy-cluster-ring",
+      "output": "public/images/products/fr6-fancy-cluster-ring/angle-front-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Cluster Ring fancy:halo 6ct front WG.png",
+      "product": "fr6-fancy-cluster-ring",
+      "output": "public/images/products/fr6-fancy-cluster-ring/angle-front-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Cluster Ring fancy:halo 6ct front YG.png",
+      "product": "fr6-fancy-cluster-ring",
+      "output": "public/images/products/fr6-fancy-cluster-ring/angle-front-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Cluster Ring fancy:halo 6ct side RG.png",
+      "product": "fr6-fancy-cluster-ring",
+      "output": "public/images/products/fr6-fancy-cluster-ring/angle-side-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Cluster Ring fancy:halo 6ct side WG.png",
+      "product": "fr6-fancy-cluster-ring",
+      "output": "public/images/products/fr6-fancy-cluster-ring/angle-side-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Cluster Ring fancy:halo 6ct side YG.png",
+      "product": "fr6-fancy-cluster-ring",
+      "output": "public/images/products/fr6-fancy-cluster-ring/angle-side-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Cluster Ring fancy:halo 6ct with Model.png",
+      "product": "fr6-fancy-cluster-ring",
+      "output": "public/images/products/fr6-fancy-cluster-ring/model.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo Oval Ring 2.5ct close-up RG.png",
+      "product": "fr1-hidden-halo-oval-ring",
+      "output": "public/images/products/fr1-hidden-halo-oval-ring/angle-close-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo Oval Ring 2.5ct close-up WG.png",
+      "product": "fr1-hidden-halo-oval-ring",
+      "output": "public/images/products/fr1-hidden-halo-oval-ring/angle-close-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo Oval Ring 2.5ct close-up YG.png",
+      "product": "fr1-hidden-halo-oval-ring",
+      "output": "public/images/products/fr1-hidden-halo-oval-ring/angle-close-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo Oval Ring 2.5ct front RG.png",
+      "product": "fr1-hidden-halo-oval-ring",
+      "output": "public/images/products/fr1-hidden-halo-oval-ring/angle-front-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo Oval Ring 2.5ct front WG.png",
+      "product": "fr1-hidden-halo-oval-ring",
+      "output": "public/images/products/fr1-hidden-halo-oval-ring/angle-front-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo Oval Ring 2.5ct front YG.png",
+      "product": "fr1-hidden-halo-oval-ring",
+      "output": "public/images/products/fr1-hidden-halo-oval-ring/angle-front-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo Oval Ring 2.5ct side RG.png",
+      "product": "fr1-hidden-halo-oval-ring",
+      "output": "public/images/products/fr1-hidden-halo-oval-ring/angle-side-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo Oval Ring 2.5ct side WG.png",
+      "product": "fr1-hidden-halo-oval-ring",
+      "output": "public/images/products/fr1-hidden-halo-oval-ring/angle-side-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo Oval Ring 2.5ct side YG.png",
+      "product": "fr1-hidden-halo-oval-ring",
+      "output": "public/images/products/fr1-hidden-halo-oval-ring/angle-side-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo Oval Ring 2.5ct with Model.png",
+      "product": "fr1-hidden-halo-oval-ring",
+      "output": "public/images/products/fr1-hidden-halo-oval-ring/model.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo RAD ring 3ct close-up RG.png",
+      "product": "fr2-radiant-halo-ring",
+      "output": "public/images/products/fr2-radiant-halo-ring/angle-close-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo RAD ring 3ct close-up WG.png",
+      "product": "fr2-radiant-halo-ring",
+      "output": "public/images/products/fr2-radiant-halo-ring/angle-close-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo RAD ring 3ct close-up YG.png",
+      "product": "fr2-radiant-halo-ring",
+      "output": "public/images/products/fr2-radiant-halo-ring/angle-close-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo RAD ring 3ct front RG.png",
+      "product": "fr2-radiant-halo-ring",
+      "output": "public/images/products/fr2-radiant-halo-ring/angle-front-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo RAD ring 3ct front WG.png",
+      "product": "fr2-radiant-halo-ring",
+      "output": "public/images/products/fr2-radiant-halo-ring/angle-front-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo RAD ring 3ct front YG.png",
+      "product": "fr2-radiant-halo-ring",
+      "output": "public/images/products/fr2-radiant-halo-ring/angle-front-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo RAD ring 3ct side RG.png",
+      "product": "fr2-radiant-halo-ring",
+      "output": "public/images/products/fr2-radiant-halo-ring/angle-side-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo RAD ring 3ct side WG.png",
+      "product": "fr2-radiant-halo-ring",
+      "output": "public/images/products/fr2-radiant-halo-ring/angle-side-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo RAD ring 3ct side YG.png",
+      "product": "fr2-radiant-halo-ring",
+      "output": "public/images/products/fr2-radiant-halo-ring/angle-side-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy Hidden Halo RAD ring 3ct with model.png",
+      "product": "fr2-radiant-halo-ring",
+      "output": "public/images/products/fr2-radiant-halo-ring/model.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Double Halo Cushion Ring close-up RG.png",
+      "product": "fr3-double-halo-cushion-ring",
+      "output": "public/images/products/fr3-double-halo-cushion-ring/angle-close-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Double Halo Cushion Ring close-up WG.png",
+      "product": "fr3-double-halo-cushion-ring",
+      "output": "public/images/products/fr3-double-halo-cushion-ring/angle-close-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Double Halo Cushion Ring close-up YG.png",
+      "product": "fr3-double-halo-cushion-ring",
+      "output": "public/images/products/fr3-double-halo-cushion-ring/angle-close-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Double Halo Cushion Ring front RG.png",
+      "product": "fr3-double-halo-cushion-ring",
+      "output": "public/images/products/fr3-double-halo-cushion-ring/angle-front-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Double Halo Cushion Ring front WG.png",
+      "product": "fr3-double-halo-cushion-ring",
+      "output": "public/images/products/fr3-double-halo-cushion-ring/angle-front-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Double Halo Cushion Ring front YG.png",
+      "product": "fr3-double-halo-cushion-ring",
+      "output": "public/images/products/fr3-double-halo-cushion-ring/angle-front-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Double Halo Cushion Ring side RG.png",
+      "product": "fr3-double-halo-cushion-ring",
+      "output": "public/images/products/fr3-double-halo-cushion-ring/angle-side-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Double Halo Cushion Ring side WG.png",
+      "product": "fr3-double-halo-cushion-ring",
+      "output": "public/images/products/fr3-double-halo-cushion-ring/angle-side-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Double Halo Cushion Ring side YG.png",
+      "product": "fr3-double-halo-cushion-ring",
+      "output": "public/images/products/fr3-double-halo-cushion-ring/angle-side-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Double Halo Cushion Ring with Model.png",
+      "product": "fr3-double-halo-cushion-ring",
+      "output": "public/images/products/fr3-double-halo-cushion-ring/model.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Emerald Hidden Halo Ring close-up RG.png",
+      "product": "fr4-emerald-hidden-halo-ring",
+      "output": "public/images/products/fr4-emerald-hidden-halo-ring/angle-close-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Emerald Hidden Halo Ring close-up WG.png",
+      "product": "fr4-emerald-hidden-halo-ring",
+      "output": "public/images/products/fr4-emerald-hidden-halo-ring/angle-close-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Emerald Hidden Halo Ring close-up YG.png",
+      "product": "fr4-emerald-hidden-halo-ring",
+      "output": "public/images/products/fr4-emerald-hidden-halo-ring/angle-close-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Emerald Hidden Halo Ring front RG.png",
+      "product": "fr4-emerald-hidden-halo-ring",
+      "output": "public/images/products/fr4-emerald-hidden-halo-ring/angle-front-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Emerald Hidden Halo Ring front WG.png",
+      "product": "fr4-emerald-hidden-halo-ring",
+      "output": "public/images/products/fr4-emerald-hidden-halo-ring/angle-front-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Emerald Hidden Halo Ring front YG.png",
+      "product": "fr4-emerald-hidden-halo-ring",
+      "output": "public/images/products/fr4-emerald-hidden-halo-ring/angle-front-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Emerald Hidden Halo Ring side RG.png",
+      "product": "fr4-emerald-hidden-halo-ring",
+      "output": "public/images/products/fr4-emerald-hidden-halo-ring/angle-side-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Emerald Hidden Halo Ring side WG.png",
+      "product": "fr4-emerald-hidden-halo-ring",
+      "output": "public/images/products/fr4-emerald-hidden-halo-ring/angle-side-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Emerald Hidden Halo Ring side YG.png",
+      "product": "fr4-emerald-hidden-halo-ring",
+      "output": "public/images/products/fr4-emerald-hidden-halo-ring/angle-side-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Fancy ring Emerald Hidden Halo Ring with Model.png",
+      "product": "fr4-emerald-hidden-halo-ring",
+      "output": "public/images/products/fr4-emerald-hidden-halo-ring/model.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Three Stone Oval Ring halo:fancy 3.5ct close-up RG.png",
+      "product": "fr5-three-stone-oval-ring",
+      "output": "public/images/products/fr5-three-stone-oval-ring/angle-close-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Three Stone Oval Ring halo:fancy 3.5ct close-up WG.png",
+      "product": "fr5-three-stone-oval-ring",
+      "output": "public/images/products/fr5-three-stone-oval-ring/angle-close-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Three Stone Oval Ring halo:fancy 3.5ct close-up YG.png",
+      "product": "fr5-three-stone-oval-ring",
+      "output": "public/images/products/fr5-three-stone-oval-ring/angle-close-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Three Stone Oval Ring halo:fancy 3.5ct front RG.png",
+      "product": "fr5-three-stone-oval-ring",
+      "output": "public/images/products/fr5-three-stone-oval-ring/angle-front-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Three Stone Oval Ring halo:fancy 3.5ct front WG.png",
+      "product": "fr5-three-stone-oval-ring",
+      "output": "public/images/products/fr5-three-stone-oval-ring/angle-front-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Three Stone Oval Ring halo:fancy 3.5ct front YG.png",
+      "product": "fr5-three-stone-oval-ring",
+      "output": "public/images/products/fr5-three-stone-oval-ring/angle-front-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Three Stone Oval Ring halo:fancy 3.5ct side RG.png",
+      "product": "fr5-three-stone-oval-ring",
+      "output": "public/images/products/fr5-three-stone-oval-ring/angle-side-rg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Three Stone Oval Ring halo:fancy 3.5ct side WG.png",
+      "product": "fr5-three-stone-oval-ring",
+      "output": "public/images/products/fr5-three-stone-oval-ring/angle-side-wg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Three Stone Oval Ring halo:fancy 3.5ct side YG.png",
+      "product": "fr5-three-stone-oval-ring",
+      "output": "public/images/products/fr5-three-stone-oval-ring/angle-side-yg.webp"
+    },
+    {
+      "source": "Lab AI jewelry/lab rings AI/Three Stone Oval Ring halo:fancy with Model.png",
+      "product": "fr5-three-stone-oval-ring",
+      "output": "public/images/products/fr5-three-stone-oval-ring/model.webp"
+    }
+  ]
+}

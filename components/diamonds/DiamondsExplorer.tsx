@@ -55,7 +55,7 @@ export function DiamondsExplorer({ pieces }: { pieces: Product[] }) {
           <div className={styles.results}>
             {matches.length ? (
               <>
-                <p className={styles.resultsHead}>{matches.length} {shape} {matches.length === 1 ? "piece" : "pieces"} in hand</p>
+                <p className={styles.resultsHead}>{matches.length} signature {shape} {matches.length === 1 ? "piece" : "pieces"}</p>
                 <div className={styles.tiles}>
                   {matches.map((p) => (
                     <Link key={p.id} href={`/products/${p.slug}`} className={styles.tile}>
@@ -63,7 +63,7 @@ export function DiamondsExplorer({ pieces }: { pieces: Product[] }) {
                         <Image src={p.image} alt={p.name} fill sizes="240px" className={styles.tileImg} />
                         {hasModel(p.slug) ? <span className={styles.badge}>3D · AR</span> : null}
                       </div>
-                      <div className={styles.tileMeta}><span>{p.name}</span><strong>{p.priceLabel}</strong></div>
+                      <div className={styles.tileMeta}><span>{p.name}</span><strong>View</strong></div>
                     </Link>
                   ))}
                 </div>

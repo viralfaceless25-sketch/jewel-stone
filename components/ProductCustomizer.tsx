@@ -14,6 +14,8 @@ const METAL_OPTIONS: { key: MetalVariant; label: string; swatch: string }[] = [
   { key: "white",  label: "White Gold",  swatch: "#C7C2B8" },
   { key: "yellow", label: "Yellow Gold", swatch: "#8B877E" },
   { key: "rose",   label: "Rose Gold",   swatch: "#8B877E" },
+  { key: "platinum", label: "Platinum", swatch: "#D9D9D6" },
+  { key: "silver", label: "Sterling Silver", swatch: "#BFC3C5" },
 ];
 
 const STUD_SIZES: { ct: number; price: number }[] = [

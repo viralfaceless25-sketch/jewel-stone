@@ -1,11 +1,46 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, Eye, Heart, Plus } from "lucide-react";
 import { motion } from "framer-motion";
-import type { Product } from "@/data/products";
+import { COLOR_CLARITY_LABEL, type Product } from "@/data/products";
 import { useInquiryStore } from "@/store/inquiry";
 import { useWishlistStore } from "@/store/wishlist";
+
+const SLIDE_MS = 2600;
+
+/**
+ * Cycles the card's hero image through the product's gallery. Only runs while
+ * the card is on screen, and never for users who asked for reduced motion.
+ */
+function useSlideshow(count: number, hostRef: React.RefObject<HTMLElement>) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host || count < 2) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let timer: ReturnType<typeof setInterval> | null = null;
+    const start = () => {
+      timer ??= setInterval(() => setIndex((i) => (i + 1) % count), SLIDE_MS);
+    };
+    const stop = () => {
+      if (timer) clearInterval(timer);
+      timer = null;
+    };
+
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? start() : stop()), { threshold: 0.25 });
+    io.observe(host);
+    return () => {
+      io.disconnect();
+      stop();
+    };
+  }, [count, hostRef]);
+
+  return index;
+}
 
 export function ProductCard({ product, onQuickView }: { product: Product; onQuickView?: (product: Product) => void }) {
   const addItem = useInquiryStore((state) => state.addItem);
@@ -16,6 +51,20 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
   const isEarring = product.category === "Earrings";
   const isSignature = product.source === "signature";
 
+  // Studio shots only: the on-body `model.jpg` sits on ivory silk, and mixing it
+  // into the reel would break the uniform black background across the grid.
+  // It still appears in the gallery on the product page.
+  const slides = useMemo(
+    () =>
+      [product.image, ...(product.gallery ?? [])]
+        .filter(Boolean)
+        .filter((s) => !s.endsWith("/model.jpg"))
+        .slice(0, 5),
+    [product],
+  );
+  const frameRef = useRef<HTMLDivElement>(null);
+  const slide = useSlideshow(slides.length, frameRef);
+
   return (
     <motion.article
       initial={{ opacity: 0.25, y: 20 }}
@@ -25,18 +74,40 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
     >
       {/* Image area */}
       <Link href={`/products/${product.slug}`} className="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose">
-        <div className={`relative overflow-hidden bg-[radial-gradient(75%_65%_at_50%_42%,rgba(168,124,54,0.10),transparent_70%),linear-gradient(160deg,#141416,#141416)] ${isEarring ? "aspect-square" : "aspect-[3/4]"}`}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={product.image}
-            alt={product.name}
-            loading="lazy"
-            className="h-full w-full object-contain p-6 transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.05]"
-            style={{ objectPosition: "center" }}
-          />
+        <div
+          ref={frameRef}
+          className={`relative overflow-hidden bg-black ${isEarring ? "aspect-square" : "aspect-[3/4]"}`}
+        >
+          {slides.map((src, i) => (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              key={src}
+              src={src}
+              alt={i === 0 ? product.name : ""}
+              aria-hidden={i === 0 ? undefined : true}
+              loading={i === 0 ? "lazy" : "lazy"}
+              className={`absolute inset-0 h-full w-full object-contain p-6 transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.05] ${
+                i === slide ? "opacity-100" : "opacity-0"
+              }`}
+              style={{ objectPosition: "center" }}
+            />
+          ))}
 
           {/* Gradient overlay */}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0A0A0B]/40 via-transparent to-transparent" />
+
+          {slides.length > 1 && (
+            <div className="pointer-events-none absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+              {slides.map((src, i) => (
+                <span
+                  key={src}
+                  className={`h-1 rounded-full transition-all duration-500 ${
+                    i === slide ? "w-4 bg-champagne/90" : "w-1 bg-pearl/35"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
 
           {/* Badges */}
           <div className="absolute left-3 top-3 flex gap-2">
@@ -67,21 +138,14 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="text-[0.58rem] font-medium uppercase tracking-[0.16em] text-champagne/50">
-              {product.colorClarity} · {product.centerStone}
+              {product.carats} ct · {product.centerStone}
             </p>
             <Link href={`/products/${product.slug}`} className="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
               <h3 className="chrome-text mt-1.5 font-display text-xl leading-tight">
                 {product.name}
               </h3>
             </Link>
-            <p className="mt-1.5 text-sm font-semibold text-champagne">
-              {product.priceLabel}
-            </p>
-            {product.price >= 100 && (
-              <p className="mt-0.5 text-[0.68rem] text-ink/60">
-                From ${Math.ceil(product.price / 12)}/mo with Affirm
-              </p>
-            )}
+            <p className="mt-1.5 text-[0.68rem] text-ink/60">{COLOR_CLARITY_LABEL}</p>
           </div>
 
           <div className="flex shrink-0 items-center gap-2">

@@ -4,6 +4,7 @@ import { SITE_URL } from "@/lib/seo/schema";
 
 const CATEGORY_SLUGS = [
   "engagement-rings",
+  "rings",
   "wedding-bands",
   "earrings",
   "pendants",
@@ -35,7 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: route === "" ? 1 : 0.8,
     })),
     ...products
-      .filter((p) => p.source === "signature")
+      .filter((p) => !p.comingSoon && p.category !== "Custom Jewelry")
       .map((product) => ({
         url: `${SITE_URL}/products/${product.slug}`,
         changeFrequency: "weekly" as const,

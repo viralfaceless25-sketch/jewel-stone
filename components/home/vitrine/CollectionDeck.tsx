@@ -94,7 +94,7 @@ export function CollectionDeck({ items }: { items: Product[] }) {
                 <h3>{p.name}</h3>
                 <p>{p.material} · {p.carats} ct</p>
               </div>
-              <strong>{p.priceLabel}</strong>
+              <strong>View</strong>
             </div>
           </Link>
         ))}

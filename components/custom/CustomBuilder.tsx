@@ -1,20 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./custom.module.css";
 
 const STEPS = [
   { key: "type", label: "Piece", options: ["Engagement ring", "Wedding band", "Pendant", "Earrings", "Bracelet", "Necklace"] },
-  { key: "metal", label: "Metal", options: ["Rose gold", "Yellow gold", "White gold", "Platinum"] },
+  { key: "metal", label: "Metal", options: ["Rose gold", "Yellow gold", "White gold", "Platinum", "Sterling silver"] },
   { key: "shape", label: "Stone", options: ["Round", "Oval", "Cushion", "Emerald", "Pear", "Heart", "Princess", "Radiant"] },
   { key: "origin", label: "Origin", options: ["Natural", "Lab-grown", "Either — advise me"] },
   { key: "budget", label: "Budget", options: ["Under $2k", "$2k–$5k", "$5k–$15k", "$15k+"] },
 ];
 
 export function CustomBuilder() {
+  const router = useRouter();
   const [step, setStep] = useState(0);
   const [choices, setChoices] = useState<Record<string, string>>({});
-  const [sent, setSent] = useState(false);
 
   const current = STEPS[step];
   const isLast = step === STEPS.length - 1;
@@ -22,19 +23,6 @@ export function CustomBuilder() {
     setChoices((c) => ({ ...c, [current.key]: opt }));
     if (!isLast) setTimeout(() => setStep((s) => s + 1), 180);
   };
-
-  if (sent) {
-    return (
-      <div className={styles.done}>
-        <div className={styles.check}>✓</div>
-        <h2>Your brief is on its way.</h2>
-        <p>
-          We&apos;ll review your {choices.type?.toLowerCase() ?? "piece"} in {choices.metal?.toLowerCase() ?? "your metal"} and
-          reach out within one business day with stone options and a sketch. Thank you.
-        </p>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.builder}>
@@ -78,7 +66,10 @@ export function CustomBuilder() {
             <button className={styles.back} onClick={() => setStep((s) => s - 1)}>← Back</button>
           ) : <span />}
           {isLast && Object.keys(choices).length >= STEPS.length ? (
-            <button className={styles.submit} onClick={() => setSent(true)}>Send my brief →</button>
+            <button className={styles.submit} onClick={() => {
+              const brief = Object.entries(choices).map(([key, value]) => `${key}: ${value}`).join("\n");
+              router.push(`/contact?brief=${encodeURIComponent(`Custom design brief\n${brief}`)}`);
+            }}>Continue with this brief →</button>
           ) : null}
         </div>
       </div>

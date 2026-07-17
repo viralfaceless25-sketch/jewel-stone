@@ -36,7 +36,6 @@ export function InquiryCart() {
                 <div>
                   <Link href={`/products/${item.slug}`} className="font-display text-2xl hover:text-velvet">{item.name}</Link>
                   <p className="mt-1 text-xs uppercase tracking-[0.18em] text-rose">{item.category}</p>
-                  <p className="mt-2 text-sm text-ink/62">{item.priceLabel}</p>
                 </div>
                 <button type="button" onClick={() => removeItem(item.id)} className="grid size-10 place-items-center rounded-full border border-rose/25" aria-label={`Remove ${item.name}`}>
                   <Trash2 size={16} aria-hidden="true" />

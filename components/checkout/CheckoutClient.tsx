@@ -9,6 +9,8 @@ import styles from "./checkout.module.css";
 export function CheckoutClient() {
   const { items, clear } = useCartStore();
   const [done, setDone] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const total = cartTotal(items);
 
   if (done) {
@@ -17,7 +19,7 @@ export function CheckoutClient() {
         <div className={styles.check}>✓</div>
         <h1>Request received.</h1>
         <p>
-          Thank you. Because every Jewel Stone piece is one of one, we personally
+          Thank you. We personally
           confirm availability and send a secure payment link within 24 hours —
           often the same day. Watch your inbox.
         </p>
@@ -32,7 +34,7 @@ export function CheckoutClient() {
     return (
       <div className={styles.empty}>
         <h1>Your bag is empty.</h1>
-        <p>Add a one-of-a-kind piece to begin your reservation.</p>
+        <p>Add a signature piece or made-to-order design to begin your reservation.</p>
         <Link href="/collections" className={styles.primary}>Browse the collection</Link>
       </div>
     );
@@ -45,7 +47,10 @@ export function CheckoutClient() {
         onSubmit={async (e) => {
           e.preventDefault();
           const form = e.currentTarget;
-          const email = (form.elements.namedItem("email") as HTMLInputElement)?.value;
+          const formData = new FormData(form);
+          const email = String(formData.get("email") ?? "");
+          setSending(true);
+          setError("");
           try {
             const res = await fetch("/api/checkout", {
               method: "POST",
@@ -57,10 +62,42 @@ export function CheckoutClient() {
               window.location.href = data.url; // → Stripe Checkout
               return;
             }
-          } catch {
-            /* fall through to reservation flow */
+            if (!res.ok) throw new Error("Checkout could not validate this bag.");
+
+            const order = items.map((item) => [
+              `${item.qty} × ${item.name}`,
+              item.metal,
+              item.size,
+              item.grade,
+              `$${(item.price * item.qty).toLocaleString("en-US")}`,
+            ].filter(Boolean).join(" · ")).join("\n");
+            const reservation = await fetch("/api/inquiry", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                name: `${formData.get("firstName") ?? ""} ${formData.get("lastName") ?? ""}`.trim(),
+                email,
+                phone: String(formData.get("phone") ?? ""),
+                context: "Bag reservation",
+                message: [
+                  "Reservation request",
+                  order,
+                  `Total: $${total.toLocaleString("en-US")}`,
+                  "",
+                  `Ship to: ${formData.get("address")}, ${formData.get("city")}, ${formData.get("state")} ${formData.get("postalCode")}`,
+                  `Notes: ${formData.get("notes") || "—"}`,
+                ].join("\n"),
+              }),
+            });
+            const reservationData = await reservation.json();
+            if (!reservation.ok) throw new Error(reservationData?.error || "Reservation could not be delivered.");
+          } catch (err) {
+            setError(err instanceof Error ? err.message : "Checkout is temporarily unavailable.");
+            setSending(false);
+            return;
           }
           setDone(true);
+          setSending(false);
           window.scrollTo({ top: 0, behavior: "smooth" });
         }}
       >
@@ -73,30 +110,31 @@ export function CheckoutClient() {
         <fieldset className={styles.field}>
           <legend>Contact</legend>
           <div className={styles.row}>
-            <label>First name<input required autoComplete="given-name" /></label>
-            <label>Last name<input required autoComplete="family-name" /></label>
+            <label>First name<input required name="firstName" autoComplete="given-name" /></label>
+            <label>Last name<input required name="lastName" autoComplete="family-name" /></label>
           </div>
           <label>Email<input required name="email" type="email" autoComplete="email" /></label>
-          <label>Phone<input required type="tel" autoComplete="tel" /></label>
+          <label>Phone<input required name="phone" type="tel" autoComplete="tel" /></label>
         </fieldset>
 
         <fieldset className={styles.field}>
           <legend>Shipping (insured FedEx)</legend>
-          <label>Address<input required autoComplete="address-line1" /></label>
+          <label>Address<input required name="address" autoComplete="address-line1" /></label>
           <div className={styles.row}>
-            <label>City<input required autoComplete="address-level2" /></label>
-            <label>State<input required autoComplete="address-level1" /></label>
-            <label>ZIP<input required autoComplete="postal-code" /></label>
+            <label>City<input required name="city" autoComplete="address-level2" /></label>
+            <label>State<input required name="state" autoComplete="address-level1" /></label>
+            <label>ZIP<input required name="postalCode" autoComplete="postal-code" /></label>
           </div>
         </fieldset>
 
         <fieldset className={styles.field}>
           <legend>Notes (optional)</legend>
-          <label>Sizing, engraving, or timing requests<textarea rows={3} /></label>
+          <label>Sizing, engraving, or timing requests<textarea name="notes" rows={3} /></label>
         </fieldset>
 
-        <button type="submit" className={styles.submit}>
-          Reserve &amp; request payment link · ${total.toLocaleString("en-US")}
+        {error ? <p className={styles.error} role="alert">{error}</p> : null}
+        <button type="submit" className={styles.submit} disabled={sending}>
+          {sending ? "Sending securely…" : `Reserve & request payment link · $${total.toLocaleString("en-US")}`}
         </button>
         <p className={styles.secure}>◆ SSL secured · GIA/IGI certified · fully insured shipping</p>
       </form>

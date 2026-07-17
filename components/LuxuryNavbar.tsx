@@ -301,7 +301,7 @@ export function LuxuryNavbar() {
                 ) : inquiryItems.map((item) => (
                   <article key={item.id} className="grid grid-cols-[76px_1fr_auto] gap-4 border-b border-hair py-4">
                     <Image src={item.image} alt={item.name} width={76} height={92} className="h-[92px] w-[76px] rounded-xl bg-marble object-contain p-2 grayscale" />
-                    <div><Link href={`/products/${item.slug}`} onClick={() => setCartOpen(false)} className="font-display text-lg font-semibold leading-tight">{item.name}</Link><p className="mt-2 text-xs text-champagne">{item.priceLabel}</p></div>
+                    <div><Link href={`/products/${item.slug}`} onClick={() => setCartOpen(false)} className="font-display text-lg font-semibold leading-tight">{item.name}</Link></div>
                     <button type="button" onClick={() => removeInquiryItem(item.id)} className="grid size-8 place-items-center rounded-full border border-hair text-ink/50 hover:text-ink" aria-label={`Remove ${item.name}`}><X size={13} /></button>
                   </article>
                 ))}
