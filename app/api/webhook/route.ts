@@ -25,6 +25,19 @@ export async function POST(req: Request) {
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object;
+      if (session.payment_status !== "paid" || session.metadata?.source !== "jewelstone-web") {
+        break;
+      }
+
+      console.info("paid Jewel Stone checkout", {
+        eventId: event.id,
+        sessionId: session.id,
+        orderReference: session.metadata.order_reference,
+        amountTotal: session.amount_total,
+        currency: session.currency,
+        items: session.metadata.items,
+      });
+
       const apiKey = process.env.RESEND_API_KEY;
       const to = process.env.ORDER_TO_EMAIL ?? process.env.INQUIRY_TO_EMAIL;
       const from = process.env.INQUIRY_FROM_EMAIL ?? "Jewel Stone <orders@jewelstonenyc.com>";
@@ -34,13 +47,18 @@ export async function POST(req: Request) {
       }
       const response = await fetch("https://api.resend.com/emails", {
         method: "POST",
-        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+          "Idempotency-Key": `jewelstone-paid-order/${event.id}`,
+        },
         body: JSON.stringify({
           from,
           to: [to],
           subject: `Paid Jewel Stone order · ${session.id}`,
           text: [
             `Stripe session: ${session.id}`,
+            `Order reference: ${session.metadata.order_reference ?? "—"}`,
             `Customer: ${session.customer_details?.name ?? "—"}`,
             `Email: ${session.customer_details?.email ?? session.customer_email ?? "—"}`,
             `Amount: ${session.amount_total ? `$${(session.amount_total / 100).toFixed(2)}` : "—"}`,

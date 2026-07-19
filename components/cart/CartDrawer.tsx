@@ -111,7 +111,11 @@ export function CartDrawer() {
                       <div className={styles.qty}>
                         <button onClick={() => setQty(i, i.qty - 1)} aria-label="Decrease quantity">−</button>
                         <span>{i.qty}</span>
-                        <button onClick={() => setQty(i, i.qty + 1)} aria-label="Increase quantity">+</button>
+                        <button
+                          onClick={() => setQty(i, i.qty + 1)}
+                          aria-label="Increase quantity"
+                          disabled={i.source === "signature" && i.qty >= 1}
+                        >+</button>
                       </div>
                     </div>
                   </div>

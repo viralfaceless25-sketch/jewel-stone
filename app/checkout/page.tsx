@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { CheckoutClient } from "@/components/checkout/CheckoutClient";
+import { isStripeEnabled } from "@/lib/stripe";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Secure Checkout",
@@ -10,7 +13,7 @@ export const metadata: Metadata = {
 export default function CheckoutPage() {
   return (
     <main>
-      <CheckoutClient />
+      <CheckoutClient paymentsEnabled={isStripeEnabled} />
     </main>
   );
 }

@@ -9,6 +9,12 @@
 }
 .title { margin: 0 0 0.5rem; font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4vw, 2.8rem); color: var(--js-ink); }
 .lede { margin: 0 0 2rem; color: var(--js-ink-soft); font-size: 0.95rem; max-width: 46ch; }
+.paymentNote {
+  display: flex; flex-direction: column; gap: .35rem; padding: 1.2rem;
+  border: 1px solid var(--js-line); border-radius: var(--js-radius-card); background: rgba(252,250,247,.68);
+}
+.paymentNote strong { color: var(--js-ink); font-family: var(--font-display); font-size: 1.08rem; font-weight: 500; }
+.paymentNote span { color: var(--js-ink-soft); font-size: .82rem; line-height: 1.5; }
 
 .form { display: flex; flex-direction: column; gap: 1.6rem; }
 .field { border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.8rem; }
@@ -52,11 +58,22 @@
 
 .confirm, .empty { width: min(100% - 2.5rem, 640px); margin: 0 auto; padding: clamp(4rem, 10vw, 8rem) 0; text-align: center; }
 .check { width: 64px; height: 64px; margin: 0 auto 1.5rem; border-radius: 999px; background: var(--js-ink); color: var(--js-porcelain); display: grid; place-items: center; font-size: 1.6rem; }
+.pending { background: var(--js-gold-deep); }
 .confirm h1, .empty h1 { margin: 0 0 1rem; font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 5vw, 3rem); color: var(--js-ink); }
 .confirm p, .empty p { margin: 0 auto 2rem; max-width: 46ch; color: var(--js-ink-soft); line-height: 1.6; }
 .primary { display: inline-block; padding: 0.9rem 1.6rem; border-radius: var(--js-radius-control); background: var(--js-garnet); color: #fff; text-decoration: none; font-size: .76rem; letter-spacing:.1em; text-transform:uppercase; }
 .primary:hover { background: var(--js-gold-deep); }
+.secondary { display: inline-block; color: var(--js-garnet); font-size: .82rem; text-underline-offset: 3px; }
+.confirmActions { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1.2rem; }
+.confirmationDetails { margin: 0 auto 1.5rem; width: min(100%, 520px); border-top: 1px solid var(--js-line); }
+.confirmationDetails > div { display: grid; grid-template-columns: 1fr 1.5fr; gap: 1rem; padding: .8rem 0; border-bottom: 1px solid var(--js-line); text-align: left; }
+.confirmationDetails dt { color: var(--js-ink-soft); font-size: .78rem; }
+.confirmationDetails dd { margin: 0; color: var(--js-ink); font-size: .8rem; overflow-wrap: anywhere; }
+.confirmedItems { width: min(100%, 520px); margin: 0 auto 2rem; padding: 0; list-style: none; }
+.confirmedItems li { display: flex; justify-content: space-between; gap: 1rem; padding: .65rem 0; color: var(--js-ink-soft); font-size: .84rem; text-align: left; }
+.confirmedItems strong { color: var(--js-ink); font-weight: 500; white-space: nowrap; }
 
 @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .summary { position: relative; top: 0; order: -1; } }
 .error { margin:0; padding:.85rem 1rem; border:1px solid #9b4d5b; color:#7f2f3e; background:#fff7f7; font-size:.86rem; }
+.notice { margin:0; padding:.85rem 1rem; border:1px solid var(--js-gold); color:var(--js-ink-soft); background:#fffaf0; font-size:.86rem; line-height:1.5; }
 .submit:disabled { cursor:wait; opacity:.62; }

@@ -106,6 +106,7 @@ export function ProductView({ product, related }: { product: Product; related: P
       price: product.price,
       priceLabel: product.priceLabel,
       image: gallery[0],
+      source: product.source,
       metal: metalLabel,
       size: size || undefined,
       grade: product.source === "signature" ? product.colorClarity : `${color}/${clarity}`,

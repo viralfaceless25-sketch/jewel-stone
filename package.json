@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "lint": "next lint",
-    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test"
+    "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "@google/model-viewer": "^4.3.1",
@@ -38,6 +38,7 @@
     "eslint-config-next": "^14.2.23",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.23.1",
     "typescript": "^5.7.2"
   }
 }

@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { ProductSource } from "@/data/products";
 
 export type CartItem = {
   slug: string;
@@ -9,6 +10,7 @@ export type CartItem = {
   price: number;
   priceLabel: string;
   image: string;
+  source?: ProductSource;
   metal: string;
   size?: string;
   /** Chosen colour/clarity, e.g. "F/VS1" — part of the variant identity. */
@@ -42,8 +44,12 @@ export const useCartStore = create<CartState>()(
           const k = keyOf(item);
           const existing = state.items.find((i) => keyOf(i) === k);
           const items = existing
-            ? state.items.map((i) => (keyOf(i) === k ? { ...i, qty: i.qty + qty } : i))
-            : [...state.items, { ...item, qty }];
+            ? state.items.map((i) => (
+              keyOf(i) === k
+                ? { ...i, qty: i.source === "signature" ? 1 : Math.min(10, i.qty + qty) }
+                : i
+            ))
+            : [...state.items, { ...item, qty: item.source === "signature" ? 1 : Math.min(10, qty) }];
           return { items, open: true };
         }),
       remove: (item) =>
@@ -51,7 +57,11 @@ export const useCartStore = create<CartState>()(
       setQty: (item, qty) =>
         set((state) => ({
           items: state.items
-            .map((i) => (keyOf(i) === keyOf(item) ? { ...i, qty: Math.max(0, qty) } : i))
+            .map((i) => (
+              keyOf(i) === keyOf(item)
+                ? { ...i, qty: Math.min(i.source === "signature" ? 1 : 10, Math.max(0, qty)) }
+                : i
+            ))
             .filter((i) => i.qty > 0),
         })),
       clear: () => set({ items: [] }),
