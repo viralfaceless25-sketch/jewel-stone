@@ -57,7 +57,7 @@ export function SiteFooter() {
         <div className={styles.footerCols}>
           {columns.map((col) => (
             <div key={col.title} className={styles.footerCol}>
-              <h4>{col.title}</h4>
+              <h2>{col.title}</h2>
               {col.links.map((l) => (
                 <Link key={l.href} href={l.href}>
                   {l.label}

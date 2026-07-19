@@ -26,7 +26,7 @@ export default function InquiryPage() {
         <div className={pages.narrow}>
           <EnquiryForm context="Private inquiry" />
           <p style={{ textAlign: "center", marginTop: "1.5rem", color: "var(--js-platinum)", fontSize: "0.85rem" }}>
-            Ready to reserve instead? <Link href="/collections" style={{ color: "var(--js-gold-deep)" }}>Browse the vitrine →</Link>
+            Ready to reserve instead? <Link href="/collections" style={{ color: "var(--js-gold-deep)", textDecoration: "underline", textUnderlineOffset: "3px" }}>Browse the vitrine →</Link>
           </p>
         </div>
       </section>

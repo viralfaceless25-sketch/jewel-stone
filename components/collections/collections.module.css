@@ -37,13 +37,14 @@
 .chip span { font-size: 0.7rem; color: var(--js-platinum); }
 .chip:hover { border-color: var(--js-ink); }
 .chipActive { background: transparent; color: var(--js-garnet); border-color: var(--js-garnet); }
-.chipActive span { color: currentColor; opacity: .72; }
+.chipActive span { color: var(--js-ink); opacity: 1; }
 .count { margin: 0; font-size: 0.8rem; color: var(--js-platinum); letter-spacing: 0.02em; }
 .catalogMode { display:flex; margin-left:auto; padding:3px; border:1px solid var(--js-line); border-radius:var(--js-radius-control); background:var(--js-card); }
 .catalogMode button { min-height:38px; padding:.55rem .85rem; border:0; border-radius:var(--js-radius-control); background:transparent; color:var(--js-ink-soft); font:inherit; font-size:.69rem; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; }
 .catalogMode button:last-child { border-right:0; }
-.catalogMode button span { margin-left:.35rem; opacity:.7; }
+.catalogMode button span { margin-left:.35rem; opacity:1; }
 .catalogMode .modeActive { background:var(--js-ink); color:var(--js-porcelain); }
+.catalogMode .modeActive span { color:#fff; opacity:1; }
 
 .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.5rem, 3vw, 3rem) clamp(1rem, 2vw, 1.75rem); }
 .editorialTile { position:relative; grid-column:span 2; min-height:clamp(520px,60vw,860px); overflow:hidden; border-radius:var(--js-radius-card); color:#fff; text-decoration:none; background:#171313; }

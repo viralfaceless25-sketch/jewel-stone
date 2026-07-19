@@ -34,6 +34,7 @@ export default function ShowroomPage() {
 
       <section className={pages.section}>
         <div className={pages.wrap}>
+          <h2 className="sr-only">What to expect at your private appointment</h2>
           <div className={pages.cards}>
             {expect.map((e) => (
               <div key={e.num} className={pages.card}>

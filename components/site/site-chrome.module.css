@@ -366,7 +366,7 @@
   gap: 1.5rem;
 }
 .footerCol { display: flex; flex-direction: column; gap: 0.7rem; }
-.footerCol h4 {
+.footerCol h2 {
   margin: 0 0 0.3rem;
   font-family: var(--font-body);
   font-size: 0.72rem;

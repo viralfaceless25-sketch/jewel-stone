@@ -84,7 +84,10 @@ export default function CollectionCategoryPage({ params }: { params: { category:
       </section>
 
       {items.length ? (
-        <CollectionGallery items={items} />
+        <section aria-labelledby="category-pieces-title">
+          <h2 id="category-pieces-title" className="sr-only">{copy.eyebrow} pieces</h2>
+          <CollectionGallery items={items} />
+        </section>
       ) : (
         <section className={pages.cta}>
           <h2 className={pages.h2}>Made to order.</h2>

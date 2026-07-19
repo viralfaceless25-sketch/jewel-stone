@@ -36,15 +36,15 @@ export function EnquiryForm({ context = "General enquiry", initialMessage = "" }
       }}
     >
       <input type="hidden" name="context" value={context} readOnly />
-      <label className={styles.honeypot} aria-hidden="true">Company<input name="company" tabIndex={-1} autoComplete="off" /></label>
+      <label className={styles.honeypot} htmlFor="enquiry-company" aria-hidden="true">Company<input id="enquiry-company" name="company" tabIndex={-1} autoComplete="off" /></label>
       <div className={styles.row}>
-        <label>Name<input required name="name" autoComplete="name" /></label>
-        <label>Email<input required name="email" type="email" autoComplete="email" /></label>
+        <label htmlFor="enquiry-name">Name<input id="enquiry-name" required name="name" autoComplete="name" /></label>
+        <label htmlFor="enquiry-email">Email<input id="enquiry-email" required name="email" type="email" autoComplete="email" /></label>
       </div>
-      <label>Phone <span>(optional)</span><input name="phone" type="tel" autoComplete="tel" /></label>
-      <label>How can we help?<textarea required name="message" rows={6} defaultValue={initialMessage} placeholder="Tell us about the piece, stone, occasion, or timeline…" /></label>
+      <label htmlFor="enquiry-phone">Phone <span>(optional)</span><input id="enquiry-phone" name="phone" type="tel" autoComplete="tel" /></label>
+      <label htmlFor="enquiry-message">How can we help?<textarea id="enquiry-message" required name="message" rows={6} defaultValue={initialMessage} placeholder="Tell us about the piece, stone, occasion, or timeline…" /></label>
       <button type="submit" className={styles.submit} disabled={status === "sending"}>{status === "sending" ? "Sending…" : "Send message"}</button>
-      {status === "error" ? <p className={styles.error} role="alert">{error}</p> : null}
+      {status === "error" ? <p className={styles.error} role="alert" aria-live="assertive">{error}</p> : null}
       <p className={styles.note}>◆ We never share your details · reply within 1 business day</p>
     </form>
   );

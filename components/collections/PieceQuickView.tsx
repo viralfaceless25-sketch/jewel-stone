@@ -67,8 +67,8 @@ export function PieceQuickView({ product, onClose }: { product: Product | null; 
   if (!product) return null;
 
   return (
-    <div className={styles.qvBackdrop} role="dialog" aria-modal="true" aria-labelledby={`quick-view-${product.slug}`} onClick={onClose}>
-      <div ref={panelRef} className={styles.qvPanel} onClick={(e) => e.stopPropagation()}>
+    <div className={styles.qvBackdrop} onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+      <div ref={panelRef} className={styles.qvPanel} role="dialog" aria-modal="true" aria-labelledby={`quick-view-${product.slug}`}>
         <button ref={closeRef} type="button" className={styles.qvClose} onClick={onClose} aria-label="Close">×</button>
 
         <div className={styles.qvStage}>

@@ -48,6 +48,7 @@
 .dark .h2 { color: #f7f5f0; }
 .dark .p { color: rgba(242,240,235,.7); }
 .dark .eyebrow { color: #c7c2b8; }
+.dark .num { color: var(--js-gold-light); }
 
 /* CTA band */
 .cta { text-align: center; padding: clamp(4rem, 8vw, 7rem) 1.25rem; }

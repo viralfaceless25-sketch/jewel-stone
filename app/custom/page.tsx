@@ -26,7 +26,7 @@ export default function CustomPage() {
       <section className={pages.section}>
         <div className={`${pages.wrap} ${pages.split}`}>
           <div className={pages.mediaFrame}>
-            <Image src="/images/atelier/bench-setting.jpg" alt="Jeweler setting diamonds by hand at the bench" fill sizes="(max-width:860px) 92vw, 46vw" className={pages.mediaCover} />
+            <Image src="/images/new/custom-design-editorial.jpg" alt="Custom jewelry concepts arranged for an atelier design review" fill sizes="(max-width:860px) 92vw, 46vw" className={pages.mediaCover} />
           </div>
           <div>
             <p className={pages.eyebrow}><span /> The in-house process</p>
