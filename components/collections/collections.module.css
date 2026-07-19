@@ -82,6 +82,22 @@
 .meta p { margin: 0; font-size: 0.78rem; color: var(--js-platinum); }
 .meta strong { font-family: var(--font-display); font-weight: 600; font-size: 0.98rem; white-space: nowrap; }
 
+/* Newly supplied Piecut photography without published inventory specifications. */
+.arrivals { width:min(100% - 2.5rem,1360px); margin:0 auto; padding:clamp(2rem,5vw,4.5rem) 0 clamp(4rem,7vw,7rem); border-top:1px solid var(--js-line); }
+.arrivalsHead { display:grid; grid-template-columns:minmax(0,1fr) minmax(260px,38ch); gap:1rem 3rem; align-items:end; margin-bottom:clamp(1.8rem,4vw,3rem); }
+.arrivalsHead p { grid-column:1/-1; margin:0; color:var(--js-gold-deep); font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; }
+.arrivalsHead h2 { margin:0; max-width:12ch; font-family:var(--font-display); font-size:clamp(2rem,4vw,3.5rem); line-height:1; font-weight:500; }
+.arrivalsHead > span { color:var(--js-ink-soft); line-height:1.65; }
+.arrivalsGrid { display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(1rem,2vw,1.75rem); }
+.arrivalCard { color:var(--js-ink); text-decoration:none; }
+.arrivalImage { position:relative; aspect-ratio:4/5; overflow:hidden; border-radius:var(--js-radius-card); background:#000; }
+.arrivalImage img { object-fit:contain; padding:7%; transition:transform .65s var(--js-ease,ease); }
+.arrivalCard:hover .arrivalImage img { transform:scale(1.04); }
+.arrivalCard > div:last-child { padding:.95rem .15rem 0; }
+.arrivalCard span { font-size:.65rem; letter-spacing:.12em; text-transform:uppercase; color:var(--js-platinum); }
+.arrivalCard h3 { margin:.35rem 0 .8rem; font-family:var(--font-display); font-size:1.2rem; font-weight:500; }
+.arrivalCard em { font-style:normal; font-size:.75rem; border-bottom:1px solid var(--js-line); padding-bottom:.2rem; }
+
 /* Made to order band */
 .mto {
   background: var(--js-garnet); color: #f2f0eb;
@@ -114,6 +130,7 @@
 .btnGhost:hover { border-color: var(--js-ink); }
 
 @media (max-width: 1024px) { .grid { grid-template-columns: repeat(2, 1fr); } .mtoGrid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px) { .arrivalsHead { grid-template-columns:1fr; } .arrivalsHead p { grid-column:auto; } .arrivalsGrid { grid-template-columns:1fr; } }
 @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } .editorialTile { grid-column:1; min-height:72svh; } .mtoGrid { grid-template-columns: 1fr; } }
 
 

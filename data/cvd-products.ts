@@ -8,6 +8,7 @@
 //            margin data. `price` below is the sheet's own USD figure and is
 //            used only as the internal checkout amount; nothing renders it.
 import type { Product } from "./products";
+import rarMediaImport from "./rar-media-import.json";
 
 type CvdRow = {
   code: string;
@@ -23,6 +24,17 @@ type CvdRow = {
   sizeInfo: string;
   usd: number;
 };
+
+type CvdMedia = {
+  code: string;
+  cover: string;
+  gallery: string[];
+  videoUrl: string;
+};
+
+const MEDIA_BY_CODE = new Map(
+  (rarMediaImport.products as CvdMedia[]).map((media) => [media.code, media]),
+);
 
 const ROWS: CvdRow[] = [
   { code: "JSLD072614", name: "Tennis Bracelet 1.84CT", slug: "jsld072614-tennis-bracelet-1-84ct", category: "Bracelets", style: "Tennis", centerStone: "Round Brilliant", stoneSize: "1.75mm", stones: 87, carats: 1.841, sizeInfo: '7" — 87 stones', usd: 4215.03 },
@@ -55,7 +67,10 @@ function describe(r: CvdRow) {
 export function cvdProducts(imageryReady: Set<string>): Product[] {
   return ROWS.map((r) => {
     const dir = `/images/products/${r.slug}`;
-    const ready = imageryReady.has(r.slug);
+    const suppliedMedia = MEDIA_BY_CODE.get(r.code);
+    const ready = Boolean(suppliedMedia) || imageryReady.has(r.slug);
+    const cover = suppliedMedia?.cover ?? `${dir}/cover.jpg`;
+    const gallery = suppliedMedia?.gallery ?? [`${dir}/angle-1.jpg`, `${dir}/angle-2.jpg`, `${dir}/model.jpg`];
     return {
       id: r.code,
       sku: r.code,
@@ -75,8 +90,12 @@ export function cvdProducts(imageryReady: Set<string>): Product[] {
       priceLabel: "Price on request",
       sizeInfo: r.sizeInfo,
       description: describe(r),
-      image: ready ? `${dir}/cover.jpg` : "/images/placeholder-coming-soon-portrait.jpg",
-      gallery: ready ? [`${dir}/angle-1.jpg`, `${dir}/angle-2.jpg`, `${dir}/model.jpg`] : undefined,
+      image: ready ? cover : "/images/placeholder-coming-soon-portrait.jpg",
+      gallery: ready ? gallery : undefined,
+      videoUrl: suppliedMedia?.videoUrl,
+      mediaByMetal: suppliedMedia ? {
+        white: { cover, gallery, videoUrl: suppliedMedia.videoUrl },
+      } : undefined,
       featured: false,
     };
   });

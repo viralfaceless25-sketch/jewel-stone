@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { CollectionGallery } from "@/components/collections/CollectionGallery";
 import { products } from "@/data/products";
 import styles from "@/components/collections/collections.module.css";
+import rarMediaImport from "@/data/rar-media-import.json";
 
 export const metadata: Metadata = {
   title: "Collections — Jewel Stone",
@@ -24,6 +26,8 @@ const madeToOrder = [
   { title: "Bespoke", note: "Your stone, your setting, your story", href: "/custom" },
 ];
 
+const studioArrivals = rarMediaImport.piecutArrivals;
+
 export default function CollectionsPage() {
   return (
     <main className={styles.page}>
@@ -38,6 +42,32 @@ export default function CollectionsPage() {
           signature pieces available as photographed alongside made-to-order designs,
           with studio views, film, 3D, and AR wherever media is complete.
         </p>
+      </section>
+
+      <section className={styles.arrivals} aria-labelledby="studio-arrivals-title">
+        <div className={styles.arrivalsHead}>
+          <p>New studio arrivals</p>
+          <h2 id="studio-arrivals-title">Fresh from the Piecut studio.</h2>
+          <span>Newly supplied photography. Specifications and availability confirmed privately before purchase.</span>
+        </div>
+        <div className={styles.arrivalsGrid}>
+          {studioArrivals.map((arrival) => (
+            <Link
+              key={arrival.slug}
+              href={`/contact?piece=${encodeURIComponent(arrival.title)}`}
+              className={styles.arrivalCard}
+            >
+              <div className={styles.arrivalImage}>
+                <Image src={arrival.cover} alt={arrival.title} fill sizes="(max-width: 700px) 90vw, 30vw" />
+              </div>
+              <div>
+                <span>Piecut · {arrival.category}</span>
+                <h3>{arrival.title}</h3>
+                <em>Request private details →</em>
+              </div>
+            </Link>
+          ))}
+        </div>
       </section>
 
       <CollectionGallery items={signature} />

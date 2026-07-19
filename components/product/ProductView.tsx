@@ -28,6 +28,7 @@ const METALS: { key: MetalVariant; label: string; swatch: string }[] = [
 
 function nativeMetal(material: string): MetalVariant {
   const m = material.toLowerCase();
+  if (m.includes("white, yellow, or rose")) return "white";
   if (m.includes("rose")) return "rose";
   if (m.includes("yellow")) return "yellow";
   return "white";

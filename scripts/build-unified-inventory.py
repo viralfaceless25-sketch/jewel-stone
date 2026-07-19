@@ -77,6 +77,57 @@ def load_cad_map() -> dict[str, str]:
     return dict(re.findall(r'"([a-z0-9-]+)":\s*"(/models/[^"]+)"', text))
 
 
+def load_cvd_media() -> dict[str, dict[str, Any]]:
+    path = ROOT / "data" / "rar-media-import.json"
+    if not path.exists():
+        return {}
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    return {
+        str(item["code"]).upper(): item
+        for item in manifest.get("products", [])
+        if item.get("code") and item.get("cover")
+    }
+
+
+def apply_cvd_media(base: dict[str, Any], code: str, supplied: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    media = supplied.get(code.upper())
+    if not media:
+        return base
+
+    def public_file(url: str) -> Path:
+        return ROOT / "public" / str(url).lstrip("/")
+
+    cover = public_file(media["cover"])
+    gallery = [public_file(url) for url in media.get("gallery", [])]
+    video = public_file(media.get("videoUrl", "")) if media.get("videoUrl") else None
+    images_complete = cover.exists() and len(gallery) >= 2 and all(path.exists() for path in gallery)
+    video_complete = bool(video and video.exists())
+
+    notes = ["CVD studio set shared across inventory sizes"]
+    if base["Model Image"] == "NO":
+        notes.append("model image missing")
+    if base["Model Video"] == "NO":
+        notes.append("model video missing")
+    if base["CAD / 3D"] == "NO":
+        notes.append("CAD/3D missing")
+
+    base.update({
+        "Product Images — All Angles": "YES" if images_complete else "NO",
+        "Angle Images Found": len(gallery),
+        "Angle Images Expected": 2,
+        "Cover Image": "YES" if cover.exists() else "NO",
+        "Product Video": "YES" if video_complete else "NO",
+        "White / Platinum / Silver Images": "YES" if images_complete else "NO",
+        "Yellow Gold Images": "NO",
+        "Rose Gold Images": "NO",
+        "All Metal Image Sets": "NO",
+        "Image Folder": str(cover.parent.relative_to(ROOT)) if cover.exists() else "",
+        "Product Video Path": str(video.relative_to(ROOT)) if video_complete and video else "",
+        "Media Notes": "; ".join(notes),
+    })
+    return base
+
+
 def product_media(slug: str, cad_map: dict[str, str], expected_angles: int) -> dict[str, Any]:
     media_dir = ROOT / "public" / "images" / "products" / slug
     angle_files = sorted(
@@ -243,7 +294,12 @@ def rows_from_final_piecut(path: Path, slug_map: dict[str, dict[str, str]], cad_
     return rows
 
 
-def rows_from_final_cvd(path: Path, slug_map: dict[str, dict[str, str]], cad_map: dict[str, str]) -> list[dict[str, Any]]:
+def rows_from_final_cvd(
+    path: Path,
+    slug_map: dict[str, dict[str, str]],
+    cad_map: dict[str, str],
+    cvd_media: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
     wb = load_workbook(path, read_only=True, data_only=True)
     ws = wb["Sheet1"]
     headers = [str(cell.value or "").strip() for cell in ws[1]]
@@ -262,6 +318,7 @@ def rows_from_final_cvd(path: Path, slug_map: dict[str, dict[str, str]], cad_map
         registry = slug_map.get(sku.upper(), {})
         slug = registry.get("slug", "")
         media = product_media(slug, cad_map, 2) if slug else empty_media("website slug missing")
+        media = apply_cvd_media(media, sku, cvd_media)
         category = str(raw.get("Category") or "").strip()
         rows.append({
             "Inventory Line": "Lab-Grown CVD Stock",
@@ -366,12 +423,13 @@ def copy_raw_sheets(target: Workbook, used: set[str]) -> None:
 def build() -> None:
     slug_map = load_slug_map()
     cad_map = load_cad_map()
+    cvd_media = load_cvd_media()
 
     canonical_lab = ROOT / "JEWELSTONE_Inventory_AI Sizes (2).xlsx"
     final_inventory = ROOT / "Final jewelstone inventory file.xlsx"
     inventory = rows_from_lab(canonical_lab, slug_map, cad_map)
     inventory.extend(rows_from_final_piecut(final_inventory, slug_map, cad_map))
-    inventory.extend(rows_from_final_cvd(final_inventory, slug_map, cad_map))
+    inventory.extend(rows_from_final_cvd(final_inventory, slug_map, cad_map, cvd_media))
 
     wb = Workbook()
     ws = wb.active

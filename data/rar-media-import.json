@@ -1,0 +1,507 @@
+{
+  "generatedAt": "2026-07-19T17:49:56.247Z",
+  "sourceArchives": [
+    "CVD jewelry photography 1.rar",
+    "CVD jewelry photography 2.rar",
+    "CVD jewelry photography 3.rar",
+    "Piecut Jewelry Photography 1.rar",
+    "Piecut Jewelry Photography 2.rar",
+    "Piecut Jewelry Photography 3.rar"
+  ],
+  "suppliedFiles": 254,
+  "importedRawFiles": 133,
+  "existingPiecutFilesVerifiedIdentical": 120,
+  "excludedFiles": [
+    {
+      "source": "CVD jewelry photography/CVD emerald ring 3 stone/viral slip.pdf",
+      "reason": "Unrelated utility document; excluded from public source repository."
+    }
+  ],
+  "cvdGroups": [
+    {
+      "sourceFolder": "CVD jewelry photography/CVD Tennis Bracelet 1.75 to 2.2 mm",
+      "publicFolder": "public/images/products/cvd-tennis-bracelet-1-75-2-2mm",
+      "productCodes": [
+        "JSLD072614",
+        "JSLD072615"
+      ],
+      "media": {
+        "cover": "/images/products/cvd-tennis-bracelet-1-75-2-2mm/cover.webp",
+        "gallery": [
+          "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-1.webp",
+          "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-2.webp",
+          "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-3.webp",
+          "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-4.webp",
+          "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-5.webp",
+          "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-6.webp",
+          "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-7.webp"
+        ],
+        "videoUrl": "/images/products/cvd-tennis-bracelet-1-75-2-2mm/video-web.mp4"
+      }
+    },
+    {
+      "sourceFolder": "CVD jewelry photography/CVD Tennis Bracelet 2.7 to 3.2 mm",
+      "publicFolder": "public/images/products/cvd-tennis-bracelet-2-7-3-2mm",
+      "productCodes": [
+        "JSLD072616",
+        "JSLD072617"
+      ],
+      "media": {
+        "cover": "/images/products/cvd-tennis-bracelet-2-7-3-2mm/cover.webp",
+        "gallery": [
+          "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-1.webp",
+          "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-2.webp",
+          "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-3.webp",
+          "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-4.webp",
+          "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-5.webp",
+          "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-6.webp",
+          "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-7.webp"
+        ],
+        "videoUrl": "/images/products/cvd-tennis-bracelet-2-7-3-2mm/video-web.mp4"
+      }
+    },
+    {
+      "sourceFolder": "CVD jewelry photography/CVD Tennis Bracelet 4 mm",
+      "publicFolder": "public/images/products/cvd-tennis-bracelet-4mm",
+      "productCodes": [
+        "JSLD072618"
+      ],
+      "media": {
+        "cover": "/images/products/cvd-tennis-bracelet-4mm/cover.webp",
+        "gallery": [
+          "/images/products/cvd-tennis-bracelet-4mm/angle-1.webp",
+          "/images/products/cvd-tennis-bracelet-4mm/angle-2.webp",
+          "/images/products/cvd-tennis-bracelet-4mm/angle-3.webp",
+          "/images/products/cvd-tennis-bracelet-4mm/angle-4.webp",
+          "/images/products/cvd-tennis-bracelet-4mm/angle-5.webp",
+          "/images/products/cvd-tennis-bracelet-4mm/angle-6.webp",
+          "/images/products/cvd-tennis-bracelet-4mm/angle-7.webp"
+        ],
+        "videoUrl": "/images/products/cvd-tennis-bracelet-4mm/video-web.mp4"
+      }
+    },
+    {
+      "sourceFolder": "CVD jewelry photography/CVD Tennis necklace",
+      "publicFolder": "public/images/products/cvd-tennis-necklace",
+      "productCodes": [
+        "JSLD072619",
+        "JSLD072620",
+        "JSLD072621",
+        "JSLD072622"
+      ],
+      "media": {
+        "cover": "/images/products/cvd-tennis-necklace/cover.webp",
+        "gallery": [
+          "/images/products/cvd-tennis-necklace/angle-1.webp",
+          "/images/products/cvd-tennis-necklace/angle-2.webp",
+          "/images/products/cvd-tennis-necklace/angle-3.webp",
+          "/images/products/cvd-tennis-necklace/angle-4.webp",
+          "/images/products/cvd-tennis-necklace/angle-5.webp",
+          "/images/products/cvd-tennis-necklace/angle-6.webp",
+          "/images/products/cvd-tennis-necklace/angle-7.webp"
+        ],
+        "videoUrl": "/images/products/cvd-tennis-necklace/video-web.mp4"
+      }
+    },
+    {
+      "sourceFolder": "CVD jewelry photography/CVD Round Solitaire halo ring",
+      "publicFolder": "public/images/products/cvd-round-solitaire-halo-ring",
+      "productCodes": [
+        "JSLD072623"
+      ],
+      "media": {
+        "cover": "/images/products/cvd-round-solitaire-halo-ring/cover.webp",
+        "gallery": [
+          "/images/products/cvd-round-solitaire-halo-ring/angle-1.webp",
+          "/images/products/cvd-round-solitaire-halo-ring/angle-2.webp",
+          "/images/products/cvd-round-solitaire-halo-ring/angle-3.webp",
+          "/images/products/cvd-round-solitaire-halo-ring/angle-4.webp",
+          "/images/products/cvd-round-solitaire-halo-ring/angle-5.webp",
+          "/images/products/cvd-round-solitaire-halo-ring/angle-6.webp",
+          "/images/products/cvd-round-solitaire-halo-ring/angle-7.webp"
+        ],
+        "videoUrl": "/images/products/cvd-round-solitaire-halo-ring/video-web.mp4"
+      }
+    },
+    {
+      "sourceFolder": "CVD jewelry photography/CVD emerald ring 3 stone",
+      "publicFolder": "public/images/products/cvd-emerald-three-stone-ring",
+      "productCodes": [
+        "JSLD072624"
+      ],
+      "media": {
+        "cover": "/images/products/cvd-emerald-three-stone-ring/cover.webp",
+        "gallery": [
+          "/images/products/cvd-emerald-three-stone-ring/angle-1.webp",
+          "/images/products/cvd-emerald-three-stone-ring/angle-2.webp",
+          "/images/products/cvd-emerald-three-stone-ring/angle-3.webp",
+          "/images/products/cvd-emerald-three-stone-ring/angle-4.webp",
+          "/images/products/cvd-emerald-three-stone-ring/angle-5.webp",
+          "/images/products/cvd-emerald-three-stone-ring/angle-6.webp",
+          "/images/products/cvd-emerald-three-stone-ring/angle-7.webp"
+        ],
+        "videoUrl": "/images/products/cvd-emerald-three-stone-ring/video-web.mp4"
+      }
+    },
+    {
+      "sourceFolder": "CVD jewelry photography/CVD Eternity band",
+      "publicFolder": "public/images/products/cvd-eternity-band",
+      "productCodes": [
+        "JSLD072625"
+      ],
+      "media": {
+        "cover": "/images/products/cvd-eternity-band/cover.webp",
+        "gallery": [
+          "/images/products/cvd-eternity-band/angle-1.webp",
+          "/images/products/cvd-eternity-band/angle-2.webp",
+          "/images/products/cvd-eternity-band/angle-3.webp",
+          "/images/products/cvd-eternity-band/angle-4.webp",
+          "/images/products/cvd-eternity-band/angle-5.webp",
+          "/images/products/cvd-eternity-band/angle-6.webp",
+          "/images/products/cvd-eternity-band/angle-7.webp"
+        ],
+        "videoUrl": "/images/products/cvd-eternity-band/video-web.mp4"
+      }
+    },
+    {
+      "sourceFolder": "CVD jewelry photography/CVD Round Diamond Earring 5 to 5.70 mm",
+      "publicFolder": "public/images/products/cvd-round-studs-5-5-7mm",
+      "productCodes": [
+        "JSLD072626",
+        "JSLD072627"
+      ],
+      "media": {
+        "cover": "/images/products/cvd-round-studs-5-5-7mm/cover.webp",
+        "gallery": [
+          "/images/products/cvd-round-studs-5-5-7mm/angle-1.webp",
+          "/images/products/cvd-round-studs-5-5-7mm/angle-2.webp",
+          "/images/products/cvd-round-studs-5-5-7mm/angle-3.webp",
+          "/images/products/cvd-round-studs-5-5-7mm/angle-4.webp",
+          "/images/products/cvd-round-studs-5-5-7mm/angle-5.webp",
+          "/images/products/cvd-round-studs-5-5-7mm/angle-6.webp",
+          "/images/products/cvd-round-studs-5-5-7mm/angle-7.webp"
+        ],
+        "videoUrl": "/images/products/cvd-round-studs-5-5-7mm/video-web.mp4"
+      }
+    },
+    {
+      "sourceFolder": "CVD jewelry photography/CVD Round Diamond Earring 7.40 & 8.20 mm",
+      "publicFolder": "public/images/products/cvd-round-studs-7-4-8-2mm",
+      "productCodes": [
+        "JSLD072628",
+        "JSLD072629"
+      ],
+      "media": {
+        "cover": "/images/products/cvd-round-studs-7-4-8-2mm/cover.webp",
+        "gallery": [
+          "/images/products/cvd-round-studs-7-4-8-2mm/angle-1.webp",
+          "/images/products/cvd-round-studs-7-4-8-2mm/angle-2.webp",
+          "/images/products/cvd-round-studs-7-4-8-2mm/angle-3.webp",
+          "/images/products/cvd-round-studs-7-4-8-2mm/angle-4.webp",
+          "/images/products/cvd-round-studs-7-4-8-2mm/angle-5.webp",
+          "/images/products/cvd-round-studs-7-4-8-2mm/angle-6.webp",
+          "/images/products/cvd-round-studs-7-4-8-2mm/angle-7.webp"
+        ],
+        "videoUrl": "/images/products/cvd-round-studs-7-4-8-2mm/video-web.mp4"
+      }
+    },
+    {
+      "sourceFolder": "CVD jewelry photography/CVD Round Diamond Earring 9.2 mm",
+      "publicFolder": "public/images/products/cvd-round-studs-9-2mm",
+      "productCodes": [
+        "JSLD072630"
+      ],
+      "media": {
+        "cover": "/images/products/cvd-round-studs-9-2mm/cover.webp",
+        "gallery": [
+          "/images/products/cvd-round-studs-9-2mm/angle-1.webp",
+          "/images/products/cvd-round-studs-9-2mm/angle-2.webp",
+          "/images/products/cvd-round-studs-9-2mm/angle-3.webp",
+          "/images/products/cvd-round-studs-9-2mm/angle-4.webp",
+          "/images/products/cvd-round-studs-9-2mm/angle-5.webp",
+          "/images/products/cvd-round-studs-9-2mm/angle-6.webp",
+          "/images/products/cvd-round-studs-9-2mm/angle-7.webp"
+        ],
+        "videoUrl": "/images/products/cvd-round-studs-9-2mm/video-web.mp4"
+      }
+    }
+  ],
+  "products": [
+    {
+      "code": "JSLD072614",
+      "cover": "/images/products/cvd-tennis-bracelet-1-75-2-2mm/cover.webp",
+      "gallery": [
+        "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-1.webp",
+        "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-2.webp",
+        "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-3.webp",
+        "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-4.webp",
+        "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-5.webp",
+        "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-6.webp",
+        "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-tennis-bracelet-1-75-2-2mm/video-web.mp4"
+    },
+    {
+      "code": "JSLD072615",
+      "cover": "/images/products/cvd-tennis-bracelet-1-75-2-2mm/cover.webp",
+      "gallery": [
+        "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-1.webp",
+        "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-2.webp",
+        "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-3.webp",
+        "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-4.webp",
+        "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-5.webp",
+        "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-6.webp",
+        "/images/products/cvd-tennis-bracelet-1-75-2-2mm/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-tennis-bracelet-1-75-2-2mm/video-web.mp4"
+    },
+    {
+      "code": "JSLD072616",
+      "cover": "/images/products/cvd-tennis-bracelet-2-7-3-2mm/cover.webp",
+      "gallery": [
+        "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-1.webp",
+        "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-2.webp",
+        "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-3.webp",
+        "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-4.webp",
+        "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-5.webp",
+        "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-6.webp",
+        "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-tennis-bracelet-2-7-3-2mm/video-web.mp4"
+    },
+    {
+      "code": "JSLD072617",
+      "cover": "/images/products/cvd-tennis-bracelet-2-7-3-2mm/cover.webp",
+      "gallery": [
+        "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-1.webp",
+        "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-2.webp",
+        "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-3.webp",
+        "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-4.webp",
+        "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-5.webp",
+        "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-6.webp",
+        "/images/products/cvd-tennis-bracelet-2-7-3-2mm/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-tennis-bracelet-2-7-3-2mm/video-web.mp4"
+    },
+    {
+      "code": "JSLD072618",
+      "cover": "/images/products/cvd-tennis-bracelet-4mm/cover.webp",
+      "gallery": [
+        "/images/products/cvd-tennis-bracelet-4mm/angle-1.webp",
+        "/images/products/cvd-tennis-bracelet-4mm/angle-2.webp",
+        "/images/products/cvd-tennis-bracelet-4mm/angle-3.webp",
+        "/images/products/cvd-tennis-bracelet-4mm/angle-4.webp",
+        "/images/products/cvd-tennis-bracelet-4mm/angle-5.webp",
+        "/images/products/cvd-tennis-bracelet-4mm/angle-6.webp",
+        "/images/products/cvd-tennis-bracelet-4mm/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-tennis-bracelet-4mm/video-web.mp4"
+    },
+    {
+      "code": "JSLD072619",
+      "cover": "/images/products/cvd-tennis-necklace/cover.webp",
+      "gallery": [
+        "/images/products/cvd-tennis-necklace/angle-1.webp",
+        "/images/products/cvd-tennis-necklace/angle-2.webp",
+        "/images/products/cvd-tennis-necklace/angle-3.webp",
+        "/images/products/cvd-tennis-necklace/angle-4.webp",
+        "/images/products/cvd-tennis-necklace/angle-5.webp",
+        "/images/products/cvd-tennis-necklace/angle-6.webp",
+        "/images/products/cvd-tennis-necklace/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-tennis-necklace/video-web.mp4"
+    },
+    {
+      "code": "JSLD072620",
+      "cover": "/images/products/cvd-tennis-necklace/cover.webp",
+      "gallery": [
+        "/images/products/cvd-tennis-necklace/angle-1.webp",
+        "/images/products/cvd-tennis-necklace/angle-2.webp",
+        "/images/products/cvd-tennis-necklace/angle-3.webp",
+        "/images/products/cvd-tennis-necklace/angle-4.webp",
+        "/images/products/cvd-tennis-necklace/angle-5.webp",
+        "/images/products/cvd-tennis-necklace/angle-6.webp",
+        "/images/products/cvd-tennis-necklace/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-tennis-necklace/video-web.mp4"
+    },
+    {
+      "code": "JSLD072621",
+      "cover": "/images/products/cvd-tennis-necklace/cover.webp",
+      "gallery": [
+        "/images/products/cvd-tennis-necklace/angle-1.webp",
+        "/images/products/cvd-tennis-necklace/angle-2.webp",
+        "/images/products/cvd-tennis-necklace/angle-3.webp",
+        "/images/products/cvd-tennis-necklace/angle-4.webp",
+        "/images/products/cvd-tennis-necklace/angle-5.webp",
+        "/images/products/cvd-tennis-necklace/angle-6.webp",
+        "/images/products/cvd-tennis-necklace/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-tennis-necklace/video-web.mp4"
+    },
+    {
+      "code": "JSLD072622",
+      "cover": "/images/products/cvd-tennis-necklace/cover.webp",
+      "gallery": [
+        "/images/products/cvd-tennis-necklace/angle-1.webp",
+        "/images/products/cvd-tennis-necklace/angle-2.webp",
+        "/images/products/cvd-tennis-necklace/angle-3.webp",
+        "/images/products/cvd-tennis-necklace/angle-4.webp",
+        "/images/products/cvd-tennis-necklace/angle-5.webp",
+        "/images/products/cvd-tennis-necklace/angle-6.webp",
+        "/images/products/cvd-tennis-necklace/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-tennis-necklace/video-web.mp4"
+    },
+    {
+      "code": "JSLD072623",
+      "cover": "/images/products/cvd-round-solitaire-halo-ring/cover.webp",
+      "gallery": [
+        "/images/products/cvd-round-solitaire-halo-ring/angle-1.webp",
+        "/images/products/cvd-round-solitaire-halo-ring/angle-2.webp",
+        "/images/products/cvd-round-solitaire-halo-ring/angle-3.webp",
+        "/images/products/cvd-round-solitaire-halo-ring/angle-4.webp",
+        "/images/products/cvd-round-solitaire-halo-ring/angle-5.webp",
+        "/images/products/cvd-round-solitaire-halo-ring/angle-6.webp",
+        "/images/products/cvd-round-solitaire-halo-ring/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-round-solitaire-halo-ring/video-web.mp4"
+    },
+    {
+      "code": "JSLD072624",
+      "cover": "/images/products/cvd-emerald-three-stone-ring/cover.webp",
+      "gallery": [
+        "/images/products/cvd-emerald-three-stone-ring/angle-1.webp",
+        "/images/products/cvd-emerald-three-stone-ring/angle-2.webp",
+        "/images/products/cvd-emerald-three-stone-ring/angle-3.webp",
+        "/images/products/cvd-emerald-three-stone-ring/angle-4.webp",
+        "/images/products/cvd-emerald-three-stone-ring/angle-5.webp",
+        "/images/products/cvd-emerald-three-stone-ring/angle-6.webp",
+        "/images/products/cvd-emerald-three-stone-ring/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-emerald-three-stone-ring/video-web.mp4"
+    },
+    {
+      "code": "JSLD072625",
+      "cover": "/images/products/cvd-eternity-band/cover.webp",
+      "gallery": [
+        "/images/products/cvd-eternity-band/angle-1.webp",
+        "/images/products/cvd-eternity-band/angle-2.webp",
+        "/images/products/cvd-eternity-band/angle-3.webp",
+        "/images/products/cvd-eternity-band/angle-4.webp",
+        "/images/products/cvd-eternity-band/angle-5.webp",
+        "/images/products/cvd-eternity-band/angle-6.webp",
+        "/images/products/cvd-eternity-band/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-eternity-band/video-web.mp4"
+    },
+    {
+      "code": "JSLD072626",
+      "cover": "/images/products/cvd-round-studs-5-5-7mm/cover.webp",
+      "gallery": [
+        "/images/products/cvd-round-studs-5-5-7mm/angle-1.webp",
+        "/images/products/cvd-round-studs-5-5-7mm/angle-2.webp",
+        "/images/products/cvd-round-studs-5-5-7mm/angle-3.webp",
+        "/images/products/cvd-round-studs-5-5-7mm/angle-4.webp",
+        "/images/products/cvd-round-studs-5-5-7mm/angle-5.webp",
+        "/images/products/cvd-round-studs-5-5-7mm/angle-6.webp",
+        "/images/products/cvd-round-studs-5-5-7mm/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-round-studs-5-5-7mm/video-web.mp4"
+    },
+    {
+      "code": "JSLD072627",
+      "cover": "/images/products/cvd-round-studs-5-5-7mm/cover.webp",
+      "gallery": [
+        "/images/products/cvd-round-studs-5-5-7mm/angle-1.webp",
+        "/images/products/cvd-round-studs-5-5-7mm/angle-2.webp",
+        "/images/products/cvd-round-studs-5-5-7mm/angle-3.webp",
+        "/images/products/cvd-round-studs-5-5-7mm/angle-4.webp",
+        "/images/products/cvd-round-studs-5-5-7mm/angle-5.webp",
+        "/images/products/cvd-round-studs-5-5-7mm/angle-6.webp",
+        "/images/products/cvd-round-studs-5-5-7mm/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-round-studs-5-5-7mm/video-web.mp4"
+    },
+    {
+      "code": "JSLD072628",
+      "cover": "/images/products/cvd-round-studs-7-4-8-2mm/cover.webp",
+      "gallery": [
+        "/images/products/cvd-round-studs-7-4-8-2mm/angle-1.webp",
+        "/images/products/cvd-round-studs-7-4-8-2mm/angle-2.webp",
+        "/images/products/cvd-round-studs-7-4-8-2mm/angle-3.webp",
+        "/images/products/cvd-round-studs-7-4-8-2mm/angle-4.webp",
+        "/images/products/cvd-round-studs-7-4-8-2mm/angle-5.webp",
+        "/images/products/cvd-round-studs-7-4-8-2mm/angle-6.webp",
+        "/images/products/cvd-round-studs-7-4-8-2mm/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-round-studs-7-4-8-2mm/video-web.mp4"
+    },
+    {
+      "code": "JSLD072629",
+      "cover": "/images/products/cvd-round-studs-7-4-8-2mm/cover.webp",
+      "gallery": [
+        "/images/products/cvd-round-studs-7-4-8-2mm/angle-1.webp",
+        "/images/products/cvd-round-studs-7-4-8-2mm/angle-2.webp",
+        "/images/products/cvd-round-studs-7-4-8-2mm/angle-3.webp",
+        "/images/products/cvd-round-studs-7-4-8-2mm/angle-4.webp",
+        "/images/products/cvd-round-studs-7-4-8-2mm/angle-5.webp",
+        "/images/products/cvd-round-studs-7-4-8-2mm/angle-6.webp",
+        "/images/products/cvd-round-studs-7-4-8-2mm/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-round-studs-7-4-8-2mm/video-web.mp4"
+    },
+    {
+      "code": "JSLD072630",
+      "cover": "/images/products/cvd-round-studs-9-2mm/cover.webp",
+      "gallery": [
+        "/images/products/cvd-round-studs-9-2mm/angle-1.webp",
+        "/images/products/cvd-round-studs-9-2mm/angle-2.webp",
+        "/images/products/cvd-round-studs-9-2mm/angle-3.webp",
+        "/images/products/cvd-round-studs-9-2mm/angle-4.webp",
+        "/images/products/cvd-round-studs-9-2mm/angle-5.webp",
+        "/images/products/cvd-round-studs-9-2mm/angle-6.webp",
+        "/images/products/cvd-round-studs-9-2mm/angle-7.webp"
+      ],
+      "videoUrl": "/images/products/cvd-round-studs-9-2mm/video-web.mp4"
+    }
+  ],
+  "piecutArrivals": [
+    {
+      "sourceFolder": "Pie-cut jewelry photo video/Double Heart Ring Piecut",
+      "slug": "double-heart-piecut-ring",
+      "title": "Double Heart Piecut Ring",
+      "category": "Ring",
+      "cover": "/images/studio-arrivals/double-heart-piecut-ring/cover.webp",
+      "gallery": [
+        "/images/studio-arrivals/double-heart-piecut-ring/angle-1.webp",
+        "/images/studio-arrivals/double-heart-piecut-ring/angle-2.webp",
+        "/images/studio-arrivals/double-heart-piecut-ring/angle-3.webp"
+      ]
+    },
+    {
+      "sourceFolder": "Pie-cut jewelry photo video/Marquise Piecut Ring",
+      "slug": "marquise-piecut-ring",
+      "title": "Marquise Piecut Ring",
+      "category": "Ring",
+      "cover": "/images/studio-arrivals/marquise-piecut-ring/cover.webp",
+      "gallery": [
+        "/images/studio-arrivals/marquise-piecut-ring/angle-1.webp",
+        "/images/studio-arrivals/marquise-piecut-ring/angle-2.webp",
+        "/images/studio-arrivals/marquise-piecut-ring/angle-3.webp"
+      ]
+    },
+    {
+      "sourceFolder": "Pie-cut jewelry photo video/Oval Pendant Piecut",
+      "slug": "oval-piecut-pendant",
+      "title": "Oval Piecut Pendant",
+      "category": "Pendant",
+      "cover": "/images/studio-arrivals/oval-piecut-pendant/cover.webp",
+      "gallery": [
+        "/images/studio-arrivals/oval-piecut-pendant/angle-1.webp",
+        "/images/studio-arrivals/oval-piecut-pendant/angle-2.webp",
+        "/images/studio-arrivals/oval-piecut-pendant/angle-3.webp"
+      ]
+    }
+  ]
+}
