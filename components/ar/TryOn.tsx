@@ -340,22 +340,28 @@ function placeOnFace(
   target: TryOnTarget,
 ): boolean {
   if (!t.piece) return false;
-  const leftEar = L[234], rightEar = L[454], chin = L[152], forehead = L[10];
+  // Ear landmarks (tragus) 234/454; jaw corners 172/397 point toward the lobe.
+  const leftEar = L[234], rightEar = L[454], leftJaw = L[172], rightJaw = L[397], chin = L[152], forehead = L[10];
   if (!leftEar || !rightEar || !chin) return false;
   const faceWidth = dist(px(leftEar.x), py(leftEar.y), px(rightEar.x), py(rightEar.y));
+  const faceH = dist(px(forehead.x), py(forehead.y), px(chin.x), py(chin.y)) || faceWidth;
 
   if (target.placement === "ears") {
-    // Earlobes sit just below the ear landmarks.
-    const drop = faceWidth * 0.16;
-    const size = faceWidth * 0.42;
-    placeTwo(t, px(leftEar.x), py(leftEar.y) + drop, px(rightEar.x), py(rightEar.y) + drop, size);
+    // Earlobe ≈ a little down from the tragus toward the jaw corner.
+    const lobe = (ear: { x: number; y: number }, jaw?: { x: number; y: number }) => ({
+      x: jaw ? ear.x * 0.7 + jaw.x * 0.3 : ear.x,
+      y: (jaw ? ear.y * 0.7 + jaw.y * 0.3 : ear.y),
+    });
+    const l = lobe(leftEar, leftJaw), r = lobe(rightEar, rightJaw);
+    const drop = faceH * 0.05;
+    const size = faceWidth * 0.3;
+    placeTwo(t, px(l.x), py(l.y) + drop, px(r.x), py(r.y) + drop, size);
     return true;
   }
-  // necklace / pendant: centre below the chin on the neckline
+  // necklace / pendant: sit lower, on the neckline below the chin
   hideClone(t);
-  const faceH = dist(px(forehead.x), py(forehead.y), px(chin.x), py(chin.y)) || faceWidth;
-  const cx = px(chin.x), cy = py(chin.y) + faceH * 0.45;
-  applyTransform(t, cx, cy, faceWidth * 1.15, 0);
+  const cx = px(chin.x), cy = py(chin.y) + faceH * 0.7;
+  applyTransform(t, cx, cy, faceWidth * 1.0, 0);
   return true;
 }
 
