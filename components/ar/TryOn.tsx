@@ -13,7 +13,8 @@ type ThreeCtx = {
   scene: THREE.Scene & { __clone?: THREE.Group };
   camera: THREE.OrthographicCamera;
   piece: THREE.Group | null;
-  baseSize: number;
+  baseSize: number; // outer diameter of the piece in model units
+  occluder: THREE.Mesh; // invisible depth-writer that hides the part behind the finger
 };
 
 const WASM = "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.35/wasm";
@@ -84,7 +85,18 @@ export function TryOn({ initialSlug }: { initialSlug?: string }) {
     const fill = new THREE.DirectionalLight(0xfff2e0, 1.1);
     fill.position.set(-0.6, -0.2, 0.8);
     scene.add(fill);
-    threeRef.current = { renderer, scene, camera, piece: null, baseSize: 1 };
+
+    // Depth-only occluder: an invisible cylinder along the finger. It writes
+    // depth but no colour, so the ring's back arc (behind the finger) is hidden
+    // and the piece reads as worn rather than pasted on top.
+    const occluder = new THREE.Mesh(
+      new THREE.CylinderGeometry(1, 1, 1, 24),
+      new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: true }),
+    );
+    occluder.renderOrder = -1;
+    occluder.visible = false;
+    scene.add(occluder);
+    threeRef.current = { renderer, scene, camera, piece: null, baseSize: 1, occluder };
   }, []);
 
   // ── load the selected GLB, normalised to a unit size ──
@@ -109,8 +121,19 @@ export function TryOn({ initialSlug }: { initialSlug?: string }) {
         const center = new THREE.Vector3();
         box.getCenter(center);
         group.position.sub(center); // centre at origin
+
+        // For a ring, the finger passes through the thinnest axis (the band width).
+        // Rotate so that hole axis points along local X — then placeOnHand only has
+        // to spin the wrap in-plane to line the hole up with the finger.
+        const dims: [number, "x" | "y" | "z"][] = [[size.x, "x"], [size.y, "y"], [size.z, "z"]];
+        dims.sort((a, b) => a[0] - b[0]);
+        const holeAxis = dims[0][1];
+        if (holeAxis === "y") group.rotation.z = Math.PI / 2; // y→x
+        else if (holeAxis === "z") group.rotation.y = Math.PI / 2; // z→x
+
         const wrap = new THREE.Group();
         wrap.add(group);
+        // Diameter = the largest of the two remaining (in-plane) axes.
         const maxDim = Math.max(size.x, size.y, size.z) || 1;
         threeRef.current!.baseSize = maxDim;
         threeRef.current!.piece = wrap;
@@ -314,20 +337,37 @@ function placeOnHand(
   if (!t.piece) return false;
   hideClone(t);
   if (target.placement === "wrist") {
-    // wrist = landmark 0; width ≈ across the knuckles (5↔17)
+    t.occluder.visible = false;
     const cx = px(L[0].x), cy = py(L[0].y);
     const width = dist(px(L[5].x), py(L[5].y), px(L[17].x), py(L[17].y)) * 2.1;
     applyTransform(t, cx, cy, width, Math.atan2(py(L[9].y) - cy, px(L[9].x) - cx) + Math.PI / 2);
     return true;
   }
-  // ring finger base: between MCP(13) and PIP(14)
+  // Ring: sit at the base of the ring finger (between MCP 13 and PIP 14).
   const ax = px(L[13].x), ay = py(L[13].y);
   const bx = px(L[14].x), by = py(L[14].y);
   const cx = (ax + bx) / 2, cy = (ay + by) / 2;
-  // Outer ring diameter ≈ the ring finger's own width — bump generously to fit.
-  const fingerWidth = dist(px(L[13].x), py(L[13].y), px(L[9].x), py(L[9].y)) * 2.9;
-  const angle = Math.atan2(by - ay, bx - ax) - Math.PI / 2;
-  applyTransform(t, cx, cy, fingerWidth, angle);
+  const fingerAngle = Math.atan2(by - ay, bx - ax); // along the finger
+  const fingerWidth = dist(px(L[13].x), py(L[13].y), px(L[9].x), py(L[9].y)); // ≈ finger width
+  const diameter = fingerWidth * 1.35;
+
+  const piece = t.piece;
+  piece.position.set(cx, cy, 0);
+  piece.scale.setScalar(diameter / t.baseSize);
+  // Orient: hole (local X) along the finger, then tilt forward so we see into the
+  // ring (worn profile) instead of edge-on.
+  const zAlign = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), fingerAngle);
+  const perp = new THREE.Vector3(Math.cos(fingerAngle + Math.PI / 2), Math.sin(fingerAngle + Math.PI / 2), 0);
+  const tilt = new THREE.Quaternion().setFromAxisAngle(perp, -0.75);
+  piece.quaternion.copy(tilt.multiply(zAlign));
+
+  // Occluder cylinder runs along the finger, radius ≈ finger radius, so the ring's
+  // back arc is hidden behind it.
+  const occ = t.occluder;
+  occ.visible = true;
+  occ.position.set(cx, cy, 0);
+  occ.scale.set(fingerWidth * 0.46, fingerWidth * 5, fingerWidth * 0.46);
+  occ.quaternion.setFromAxisAngle(new THREE.Vector3(0, 0, 1), fingerAngle - Math.PI / 2);
   return true;
 }
 
@@ -340,6 +380,7 @@ function placeOnFace(
   target: TryOnTarget,
 ): boolean {
   if (!t.piece) return false;
+  t.occluder.visible = false;
   // Ear landmarks (tragus) 234/454; jaw corners 172/397 point toward the lobe.
   const leftEar = L[234], rightEar = L[454], leftJaw = L[172], rightJaw = L[397], chin = L[152], forehead = L[10];
   if (!leftEar || !rightEar || !chin) return false;

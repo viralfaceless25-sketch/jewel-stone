@@ -36,7 +36,7 @@ const CURATED: Array<
     href: "/contact",
     note: "Studio arrival · Enquire",
   },
-  { kind: "product", slug: "emerald-halo-engagement-ring" },
+  { kind: "product", slug: "jsnd062601-emerald-piecut-ring" },
 ];
 
 function toArrival(entry: (typeof CURATED)[number]): Arrival | null {
