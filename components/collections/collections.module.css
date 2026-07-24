@@ -150,7 +150,21 @@
 
 @media (max-width: 1024px) { .grid { grid-template-columns: repeat(2, 1fr); } .mtoGrid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 700px) { .arrivalsHead { grid-template-columns:1fr; } .arrivalsHead p { grid-column:auto; } .arrivalsGrid { grid-template-columns:1fr; } }
-@media (max-width: 560px) { .grid { grid-template-columns: 1fr; } .editorialTile { grid-column:1; min-height:72svh; } .mtoGrid { grid-template-columns: 1fr; } }
+@media (max-width: 560px) {
+  /* Phone: 3-up product grid, tighter chrome, editorial tile spans full width. */
+  .grid { grid-template-columns: repeat(3, 1fr); gap: 1.4rem .5rem; }
+  .editorialTile { grid-column: 1 / -1; min-height: 58svh; }
+  .mtoGrid { grid-template-columns: 1fr; }
+  .tileImg { padding: 6%; }
+  .badge { top: .4rem; left: .4rem; padding: .22rem .4rem; font-size: .48rem; letter-spacing: .08em; }
+  .view { display: none; }
+  .meta { flex-direction: column; gap: .15rem; padding: .5rem .1rem 0; }
+  .meta h3 { font-size: .74rem; line-height: 1.2; margin: 0; }
+  .meta p { font-size: .6rem; }
+  .meta strong { font-size: .72rem; }
+  .expandBtn { display: none; }
+  .arrivalsGrid { grid-template-columns: repeat(3, 1fr); gap: 1.4rem .5rem; }
+}
 
 
 /* ── Slideshow + expanded card ─────────────────────────────────────────────── */

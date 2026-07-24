@@ -6,18 +6,20 @@
 // Run `node scripts/optimize-models.mjs --check` to verify.
 //
 // Pieces without a scan fall back to studio photography.
+// Keyed by the current PIECUT slugs. The GLB filenames keep their original
+// (halo) names — they are the same physical pieces, just renamed in the catalog.
 export const productModels: Record<string, string> = {
-  "emerald-halo-engagement-ring": "/models/emerald-halo-engagement-ring-opt.glb",
-  "emerald-halo-stud-earrings": "/models/emerald-halo-stud-earrings-opt.glb",
-  "emerald-halo-pendant": "/models/emerald-halo-pendant-opt.glb",
-  "oval-halo-drop-earrings": "/models/oval-halo-drop-earrings-opt.glb",
-  "heart-halo-ring": "/models/heart-halo-ring-opt.glb",
-  "asscher-halo-drop-earrings": "/models/asscher-halo-drop-earrings-opt.glb",
-  "star-cluster-stud-earrings": "/models/star-cluster-stud-earrings-opt.glb",
-  "heart-halo-pendant": "/models/heart-halo-pendant-opt.glb",
-  "heart-halo-drop-earrings": "/models/heart-halo-drop-earrings-opt.glb",
-  "pear-halo-drop-earrings": "/models/pear-halo-drop-earrings-opt.glb",
-  "pear-halo-pendant": "/models/pear-halo-pendant-opt.glb",
+  "jsnd062601-emerald-piecut-ring": "/models/emerald-halo-engagement-ring-opt.glb",
+  "jsnd062602-emerald-piecut-earrings": "/models/emerald-halo-stud-earrings-opt.glb",
+  "jsnd062603-emerald-piecut-pendant": "/models/emerald-halo-pendant-opt.glb",
+  "jsnd062604-oval-piecut-earrings": "/models/oval-halo-drop-earrings-opt.glb",
+  "jsnd062605-heart-piecut-ring": "/models/heart-halo-ring-opt.glb",
+  "jsnd062606-asscher-piecut-earrings": "/models/asscher-halo-drop-earrings-opt.glb",
+  "jsnd062607-star-piecut-earrings": "/models/star-cluster-stud-earrings-opt.glb",
+  "jsnd062608-heart-piecut-pendant": "/models/heart-halo-pendant-opt.glb",
+  "jsnd062609-heart-piecut-earrings": "/models/heart-halo-drop-earrings-opt.glb",
+  "jsnd062610-pear-piecut-earrings": "/models/pear-halo-drop-earrings-opt.glb",
+  "jsnd062611-pear-piecut-pendant": "/models/pear-halo-pendant-opt.glb",
 };
 
 export function modelFor(slug: string): string | undefined {

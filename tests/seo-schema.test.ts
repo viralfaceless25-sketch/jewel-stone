@@ -25,7 +25,7 @@ test("website schema does not advertise a missing site-search route", () => {
 });
 
 test("product schema exposes visible price, seller, and available 3D media", () => {
-  const product = getProductBySlug("emerald-halo-engagement-ring");
+  const product = getProductBySlug("jsnd062601-emerald-piecut-ring");
   assert.ok(product);
 
   const schema = productSchema(product);

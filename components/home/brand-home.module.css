@@ -685,6 +685,25 @@
 }
 
 @media (max-width: 860px) {
+  /* Stacked hero: image block on top, copy below on porcelain — no overlap. */
+  .hero { height: auto; min-height: 0; display: flex; flex-direction: column; background: var(--js-porcelain); }
+  .heroSlideshow { position: relative; inset: auto; height: 52vh; min-height: 340px; flex: none; }
+  .heroSlide img, .heroSlide video { object-position: center 28%; }
+  .heroShade { background: linear-gradient(180deg, rgba(19,18,22,0) 60%, rgba(19,18,22,.28)); }
+  .heroStage { position: static; inset: auto; color: var(--js-ink); padding: 1.8rem clamp(1.3rem, 5vw, 2rem) 2rem; }
+  .heroKicker { color: var(--js-gold-deep); }
+  .hero h1 { font-size: clamp(2rem, 8.4vw, 2.7rem); max-width: 18ch; }
+  .heroRule { background: var(--js-gold-deep); margin: .9rem 0 1rem; }
+  .heroBody { color: var(--js-ink-soft); max-width: 100%; }
+  .heroCta { background: var(--js-ink); color: var(--js-porcelain); }
+  .heroCta:hover { background: var(--js-ink); }
+  .heroCtaGhost { color: var(--js-ink); border-bottom-color: var(--js-gold-deep); }
+  .heroActions { gap: 1rem; margin-top: 1.4rem; }
+  .heroFoot { border-top-color: var(--js-line); margin-top: 1.4rem; }
+  .heroSignature { display: none; }
+  .slideControls button span { background: rgba(23,22,26,.28); }
+  .slideControls button[aria-current="true"] span { background: var(--js-gold-deep); }
+
   .world, .worldSignatureInner, .filmsHead, .arrivalsHead, .appointment {
     grid-template-columns: 1fr;
   }

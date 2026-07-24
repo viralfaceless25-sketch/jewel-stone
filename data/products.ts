@@ -7,6 +7,7 @@
 // Piecut pricing/specs follow "Final jewelstone inventory file.xlsx".
 
 import imageryManifest from "./imagery-manifest.json";
+import priceBook from "./price-book.json";
 import { cvdProducts } from "./cvd-products";
 
 export type ProductCategory =
@@ -176,173 +177,9 @@ function signatureGallery(slug: string, count: number, ext: "jpg" | "webp" = "jp
 
 // ── SIGNATURE COLLECTION — real, one-of-a-kind Piecut pieces ─────────────────
 
-const signatureProducts: Product[] = [
-  {
-    id: "JSND062601", sku: "JSND062601",
-    name: "Emerald Halo Split-Shank Ring",
-    slug: "emerald-halo-engagement-ring",
-    category: "Rings", source: "signature",
-    style: "Split shank with halo", material: "18K White Gold",
-    centerStone: "Emerald-cut Piecut cluster", carats: 0.54, diamondPieces: 9,
-    colorClarity: "EF/VVS–VS", certificateNumber: "46J838672606", visualCarat: 0.46, goldWeight: 2.067,
-    price: 3032, priceLabel: usd(3032), sizeInfo: "One-of-a-kind — professional resizing available",
-    description: "A 0.23ct emerald-cut Piecut center built from 9 diamonds, visually presenting near 0.46ct, inside a diamond-pavé halo on a split shank. 0.54ct total diamond weight in 18K white gold. This exact photographed piece — one available.",
-    image: "/images/products/emerald-halo-engagement-ring/cover.jpg",
-    gallery: signatureGallery("emerald-halo-engagement-ring", 8),
-    videoUrl: "/images/products/emerald-halo-engagement-ring/video-web.mp4",
-    featured: true,
-  },
-  {
-    id: "JSND062602", sku: "JSND062602",
-    name: "Emerald Halo Stud Earrings",
-    slug: "emerald-halo-stud-earrings",
-    category: "Earrings", source: "signature",
-    style: "Screw back", material: "18K White Gold",
-    centerStone: "Emerald-cut Piecut cluster", carats: 0.29, diamondPieces: 9,
-    colorClarity: "EF/VVS–VS", certificateNumber: "46J838682606", visualCarat: 1.25, goldWeight: 2.71,
-    price: 4462, priceLabel: usd(4462), sizeInfo: "Pierced ears, screw-back closure",
-    description: "Emerald-cut Piecut centers built from 9 diamonds, visually presenting near 1.25ct, inside octagonal pavé halos with screw-back closures. 0.29ct listed total diamond weight in 18K white gold. One pair available.",
-    image: "/images/products/emerald-halo-stud-earrings/cover.jpg",
-    gallery: signatureGallery("emerald-halo-stud-earrings", 8),
-    videoUrl: "/images/products/emerald-halo-stud-earrings/video-web.mp4",
-    featured: true,
-  },
-  {
-    id: "JSND062603", sku: "JSND062603",
-    name: "Emerald Halo Pendant",
-    slug: "emerald-halo-pendant",
-    category: "Pendants", source: "signature",
-    style: "Framed halo", material: "18K White Gold",
-    centerStone: "Emerald-cut Piecut cluster", carats: 0.678, diamondPieces: 9,
-    colorClarity: "FG/VVS–VS", certificateNumber: "46J838692606", visualCarat: 1.75, goldWeight: 1.111,
-    price: 2845, priceLabel: usd(2845), sizeInfo: "Bail fits chains up to 3mm — chain sold separately",
-    description: "A 0.43ct emerald-cut Piecut center built from 9 diamonds, visually presenting near 1.75ct, inside a rectangular pavé frame. 0.678ct total diamond weight in 18K white gold. One-of-a-kind piece.",
-    image: "/images/products/emerald-halo-pendant/cover.jpg",
-    gallery: signatureGallery("emerald-halo-pendant", 8),
-    videoUrl: "/images/products/emerald-halo-pendant/video-web.mp4",
-    featured: false,
-  },
-  {
-    id: "JSND062604", sku: "JSND062604",
-    name: "Oval Halo Drop Earrings",
-    slug: "oval-halo-drop-earrings",
-    category: "Earrings", source: "signature",
-    style: "Screw back", material: "18K White Gold",
-    centerStone: "Oval Piecut cluster", carats: 0.698, diamondPieces: 8,
-    colorClarity: "EFG/VVS–VS", certificateNumber: "46J838702606", visualCarat: 0.75, goldWeight: 2.668,
-    price: 4021, priceLabel: usd(4021), sizeInfo: "Pierced ears, screw-back closure",
-    description: "Oval Piecut centers built from 8 diamonds, visually presenting near 0.75ct, inside round pavé halos. 0.698ct total diamond weight in 18K white gold. One pair available.",
-    image: "/images/products/oval-halo-drop-earrings/cover.jpg",
-    gallery: signatureGallery("oval-halo-drop-earrings", 8),
-    videoUrl: "/images/products/oval-halo-drop-earrings/video-web.mp4",
-    featured: false,
-  },
-  {
-    id: "JSND062605", sku: "JSND062605",
-    name: "Heart Halo Ring",
-    slug: "heart-halo-ring",
-    category: "Rings", source: "signature",
-    style: "Halo", material: "18K Rose Gold",
-    centerStone: "Heart-shaped Piecut cluster", carats: 0.482, diamondPieces: 9,
-    colorClarity: "EF/VVS–VS", certificateNumber: "46J838712606", visualCarat: 0.75, goldWeight: 1.778,
-    price: 2811, priceLabel: usd(2811), sizeInfo: "One-of-a-kind — professional resizing available",
-    description: "A 0.24ct heart-shaped Piecut center built from 9 diamonds, visually presenting near 0.75ct, inside a pavé heart halo on a diamond shank. 0.482ct total diamond weight in 18K rose gold. This exact photographed piece — one available.",
-    image: "/images/products/heart-halo-ring/cover.jpg",
-    gallery: signatureGallery("heart-halo-ring", 16),
-    videoUrl: "/images/products/heart-halo-ring/video-web.mp4",
-    featured: true,
-  },
-  {
-    id: "JSND062606", sku: "JSND062606",
-    name: "Asscher Halo Drop Earrings",
-    slug: "asscher-halo-drop-earrings",
-    category: "Earrings", source: "signature",
-    style: "Screw back", material: "18K Yellow Gold",
-    centerStone: "Asscher-cut Piecut cluster", carats: 0.29, diamondPieces: 9,
-    colorClarity: "EF/VVS–VS", certificateNumber: "46J838722606", visualCarat: 1.25, goldWeight: 4.74,
-    price: 7113, priceLabel: usd(7113), sizeInfo: "Pierced ears, screw-back closure",
-    description: "Asscher-cut Piecut centers built from 9 diamonds, visually presenting near 1.25ct, inside octagonal halos suspended from diamond-pavé hoops. 0.29ct listed total diamond weight in 18K yellow gold. One pair available.",
-    image: "/images/products/asscher-halo-drop-earrings/cover.jpg",
-    gallery: signatureGallery("asscher-halo-drop-earrings", 8),
-    videoUrl: "/images/products/asscher-halo-drop-earrings/video-web.mp4",
-    featured: true,
-  },
-  {
-    id: "JSND062607", sku: "JSND062607",
-    name: "Star Cluster Stud Earrings",
-    slug: "star-cluster-stud-earrings",
-    category: "Earrings", source: "signature",
-    style: "Screw back, no halo", material: "18K White Gold",
-    centerStone: "Star-cut Piecut cluster", carats: 0.72, diamondPieces: 8,
-    colorClarity: "EF/VVS–VS", certificateNumber: "46J838732607", visualCarat: 2, goldWeight: 1.741,
-    price: 3350, priceLabel: usd(3350), sizeInfo: "Pierced ears, screw-back closure",
-    description: "Star-cut Piecut centers built from 8 diamonds, visually presenting near 2ct, with a clean halo-free silhouette and screw-back closures. 0.72ct total diamond weight in 18K white gold. One pair available.",
-    image: "/images/products/star-cluster-stud-earrings/cover.jpg",
-    gallery: signatureGallery("star-cluster-stud-earrings", 8),
-    videoUrl: "/images/products/star-cluster-stud-earrings/video-web.mp4",
-    featured: false,
-  },
-  {
-    id: "JSND062608", sku: "JSND062608",
-    name: "Heart Halo Pendant",
-    slug: "heart-halo-pendant",
-    category: "Pendants", source: "signature",
-    style: "Framed halo", material: "18K Rose Gold",
-    centerStone: "Heart-shaped Piecut cluster", carats: 1.044, diamondPieces: 3,
-    colorClarity: "EF/VVS–VS", certificateNumber: "46J838742607", visualCarat: 3, goldWeight: 1.466,
-    price: 4482, priceLabel: usd(4482), sizeInfo: "Bail fits chains up to 3mm — chain sold separately",
-    description: "A 0.82ct heart-shaped Piecut center built from 3 diamonds, visually presenting near 3ct, inside a pavé heart frame. 1.044ct total diamond weight in 18K rose gold. One-of-a-kind piece.",
-    image: "/images/products/heart-halo-pendant/cover.jpg",
-    gallery: signatureGallery("heart-halo-pendant", 8),
-    videoUrl: "/images/products/heart-halo-pendant/video-web.mp4",
-    featured: false,
-  },
-  {
-    id: "JSND062609", sku: "JSND062609",
-    name: "Heart Halo Drop Earrings",
-    slug: "heart-halo-drop-earrings",
-    category: "Earrings", source: "signature",
-    style: "Screw back", material: "18K Rose Gold",
-    centerStone: "Heart-shaped Piecut cluster", carats: 0.952, diamondPieces: 6,
-    colorClarity: "FGH/VVS–VS", certificateNumber: "46J838752606", visualCarat: 1.25, goldWeight: 2.397,
-    price: 4499, priceLabel: usd(4499), sizeInfo: "Pierced ears, screw-back closure",
-    description: "Heart-shaped Piecut centers built from 6 diamonds, visually presenting near 1.25ct, inside pavé heart halos. 0.952ct total diamond weight in 18K rose gold. One pair available.",
-    image: "/images/products/heart-halo-drop-earrings/cover.jpg",
-    gallery: signatureGallery("heart-halo-drop-earrings", 8),
-    videoUrl: "/images/products/heart-halo-drop-earrings/video-web.mp4",
-    featured: false,
-  },
-  {
-    id: "JSND062610", sku: "JSND062610",
-    name: "Pear Halo Drop Earrings",
-    slug: "pear-halo-drop-earrings",
-    category: "Earrings", source: "signature",
-    style: "Screw back", material: "18K Yellow Gold",
-    centerStone: "Pear-shaped Piecut cluster", carats: 0.17, diamondPieces: 4,
-    colorClarity: "EF/VVS–VS", certificateNumber: "46J838762606", visualCarat: 0.5, goldWeight: 1.932,
-    price: 3108, priceLabel: usd(3108), sizeInfo: "Pierced ears, screw-back closure",
-    description: "Pear-shaped Piecut centers built from 4 diamonds, visually presenting near 0.5ct, inside teardrop pavé halos. 0.17ct listed total diamond weight in 18K yellow gold. One pair available.",
-    image: "/images/products/pear-halo-drop-earrings/cover.jpg",
-    gallery: signatureGallery("pear-halo-drop-earrings", 8),
-    videoUrl: "/images/products/pear-halo-drop-earrings/video-web.mp4",
-    featured: false,
-  },
-  {
-    id: "JSND062611", sku: "JSND062611",
-    name: "Pear Halo Pendant",
-    slug: "pear-halo-pendant",
-    category: "Pendants", source: "signature",
-    style: "Framed halo", material: "18K Yellow Gold",
-    centerStone: "Pear-shaped Piecut cluster", carats: 0.686, diamondPieces: 4,
-    colorClarity: "EF/VVS–VS", certificateNumber: "46J838772607", visualCarat: 1.25, goldWeight: 1.444,
-    price: 3459, priceLabel: usd(3459), sizeInfo: "Bail fits chains up to 3mm — chain sold separately",
-    description: "A 0.46ct pear-shaped Piecut center built from 4 diamonds, visually presenting near 1.25ct, inside a teardrop pavé frame with a diamond bail accent. 0.686ct total diamond weight in 18K yellow gold. One-of-a-kind piece.",
-    image: "/images/products/pear-halo-pendant/cover.jpg",
-    gallery: signatureGallery("pear-halo-pendant", 8),
-    videoUrl: "/images/products/pear-halo-pendant/video-web.mp4",
-    featured: false,
-  },
-];
+// Signature halo pieces removed — they duplicated the Natural PIECUT set
+// (JSND0626xx). The authoritative piecut line is piecutHouseProducts below.
+const signatureProducts: Product[] = [];
 
 // ── LAB-GROWN — made-to-order price list (Jewel_Stone_Lab_Inventory_20pct.xlsx) ─
 // Supplied imagery is imported per SKU into public/images/products/<slug>/.
@@ -423,7 +260,6 @@ const LAB_MEDIA: Record<string, LabMedia> = {
   "tb5-5ct-tennis-bracelet": importedMedia("tb5-5ct-tennis-bracelet", { wg: BRACELET_VIEWS, yg: BRACELET_VIEWS, rg: BRACELET_VIEWS }, "white"),
   "tb6-6ct-tennis-bracelet": importedMedia("tb6-6ct-tennis-bracelet", { wg: BRACELET_VIEWS, yg: BRACELET_VIEWS, rg: BRACELET_VIEWS }, "white"),
   "tb8-8ct-tennis-bracelet": importedMedia("tb8-8ct-tennis-bracelet", { wg: BRACELET_VIEWS, yg: BRACELET_VIEWS, rg: ["front", "45"] }, "white"),
-  "sr1-1ct-solitaire-ring": importedMedia("sr1-1ct-solitaire-ring", { wg: RING_VIEWS, yg: RING_VIEWS, rg: RING_VIEWS }, "white"),
   "sr1-round-1ct-solitaire-ring": importedMedia("sr1-round-1ct-solitaire-ring", { wg: RING_VIEWS, yg: RING_VIEWS, rg: RING_VIEWS }, "white"),
   "sr2-2ct-solitaire-ring": importedMedia("sr2-2ct-solitaire-ring", { wg: RING_VIEWS, yg: RING_VIEWS, rg: RING_VIEWS }, "white"),
   "sr3-3ct-solitaire-ring": importedMedia("sr3-3ct-solitaire-ring", { wg: RING_VIEWS, yg: RING_VIEWS, rg: RING_VIEWS }, "white"),
@@ -459,7 +295,6 @@ const LAB_MEDIA: Record<string, LabMedia> = {
   "sr1-5ct-solitaire-ring": importedMedia("sr1-5ct-solitaire-ring", { wg: ["front", "close", "side"], yg: ["front", "close", "side"], rg: ["front", "close", "side"] }, "white"),
   "sr4-4ct-solitaire-ring": importedMedia("sr4-4ct-solitaire-ring", { wg: ["front", "close", "side"], yg: ["front", "close", "side"], rg: ["front", "close", "side"] }, "white"),
   "sr10-10ct-solitaire-ring": importedMedia("sr10-10ct-solitaire-ring", { wg: ["front", "close", "side"], yg: ["front", "close", "side"], rg: ["front", "close", "side"] }, "white"),
-  "sr15-15ct-solitaire-ring": importedMedia("sr15-15ct-solitaire-ring", { wg: ["front", "close", "side"], yg: ["front", "close", "side"], rg: ["front", "close", "side"] }, "white"),
   // v2 generated necklaces (front/45/close ×3 metals + model).
   "tn5-5ct-tennis-necklace": importedMedia("tn5-5ct-tennis-necklace", { wg: ["front", "45", "close"], yg: ["front", "45", "close"], rg: ["front", "45", "close"] }, "white"),
   "tn8-8ct-tennis-necklace": importedMedia("tn8-8ct-tennis-necklace", { wg: ["front", "45", "close"], yg: ["front", "45", "close"], rg: ["front", "45", "close"] }, "white"),
@@ -533,9 +368,8 @@ const labGrownProducts: Product[] = [
   labGrown({ id: "FN4", sku: "FN4", name: "Luxury Cluster Necklace", slug: "fn4-luxury-cluster-necklace", category: "Necklaces", style: "Cluster Necklace", material: "14K White Gold", centerStone: "Mixed", carats: 25, diamondPieces: 180, colorClarity: "F/VS1", price: 18000, priceLabel: fmt(18000), sizeInfo: '18" — made to order', description: '25.00 CTW cluster necklace. Overlapping diamond groupings create an extraordinarily rich surface. Made to order.', featured: false }),
 
   // ── SOLITAIRE RINGS ──
-  labGrown({ id: "SR1-OVAL", sku: "SR1-OVAL", name: "1CT Oval Solitaire Ring", slug: "sr1-1ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Oval", diamondShape: "Oval", carats: 1, diamondPieces: 1, colorClarity: "E/VS1", price: 600, priceLabel: fmt(600), sizeInfo: "US Size 4–10, resizable — made to order", description: "1.00 CT E/VS1 oval lab-grown diamond solitaire. Clean, classic, and made to order in 14K white gold.", featured: false }),
   labGrown({ id: "SR1", sku: "SR1", name: "1CT Round Solitaire Ring", slug: "sr1-round-1ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Round Brilliant", diamondShape: "Round", carats: 1, diamondPieces: 1, colorClarity: "E/VS1", price: 600, priceLabel: fmt(600), sizeInfo: "US Size 4–10, resizable — made to order", description: "1.00 CT E/VS1 round brilliant lab-grown solitaire in a classic four-prong setting. Made to order.", featured: false }),
-  labGrown({ id: "SR1PT5", sku: "SR1.5", name: "1.5CT Solitaire Ring", slug: "sr1-5ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Oval", carats: 1.5, diamondPieces: 1, colorClarity: "E/VS1", price: 900, priceLabel: fmt(900), sizeInfo: "US Size 4–10, resizable — made to order", description: "1.50 CT E/VS1 oval lab-grown solitaire. The ideal size for an engagement ring, made to order.", featured: true }),
+  labGrown({ id: "SR15", sku: "SR15", name: "1.5CT Solitaire Ring", slug: "sr1-5ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Oval", carats: 1.5, diamondPieces: 1, colorClarity: "E/VS1", price: 900, priceLabel: fmt(900), sizeInfo: "US Size 4–10, resizable — made to order", description: "1.50 CT E/VS1 oval lab-grown solitaire. The ideal size for an engagement ring, made to order.", featured: true }),
   labGrown({ id: "SR2", sku: "SR2", name: "2CT Emerald Solitaire Ring", slug: "sr2-2ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Emerald", diamondShape: "Emerald", carats: 2, diamondPieces: 1, colorClarity: "E/VS1", price: 1200, priceLabel: fmt(1200), sizeInfo: "US Size 4–10, resizable — made to order", description: "2.00 CT E/VS1 emerald-cut diamond in a precise four-prong solitaire setting. Made to order.", featured: true }),
   labGrown({ id: "SR3", sku: "SR3", name: "3CT Pear Solitaire Ring", slug: "sr3-3ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Pear", diamondShape: "Pear", carats: 3, diamondPieces: 1, colorClarity: "E/VS1", price: 1800, priceLabel: fmt(1800), sizeInfo: "US Size 4–10, resizable — made to order", description: "3.00 CT pear-cut solitaire with a refined pointed silhouette. Made to order.", featured: true }),
   labGrown({ id: "SR4", sku: "SR4", name: "4CT Solitaire Ring", slug: "sr4-4ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Oval", carats: 4, diamondPieces: 1, colorClarity: "E/VS1", price: 2400, priceLabel: fmt(2400), sizeInfo: "US Size 4–10, resizable — made to order", description: "4.00 CT oval solitaire in an unadorned setting that lets the diamond command attention. Made to order.", featured: false }),
@@ -544,7 +378,6 @@ const labGrownProducts: Product[] = [
   labGrown({ id: "SR8", sku: "SR8", name: "8CT Cushion Solitaire Ring", slug: "sr8-8ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Cushion Brilliant", diamondShape: "Cushion Brilliant", carats: 8, diamondPieces: 1, colorClarity: "E/VS1", price: 4800, priceLabel: fmt(4800), sizeInfo: "US Size 4–10, resizable — made to order", description: "8.00 CT cushion-brilliant solitaire with softened corners and collector-scale presence. Made to order.", featured: false }),
   labGrown({ id: "SR10", sku: "SR10", name: "10CT Solitaire Ring", slug: "sr10-10ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Oval", carats: 10, diamondPieces: 1, colorClarity: "E/VS1", price: 6000, priceLabel: fmt(6000), sizeInfo: "US Size 4–10, resizable — made to order", description: "10.00 CT oval solitaire. A 10-carat center stone is a milestone few ever achieve at this price. Made to order.", featured: false }),
   labGrown({ id: "SR12", sku: "SR12", name: "12CT Princess Solitaire Ring", slug: "sr12-12ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Princess", diamondShape: "Princess", carats: 12, diamondPieces: 1, colorClarity: "E/VS1", price: 7200, priceLabel: fmt(7200), sizeInfo: "US Size 4–10, resizable — made to order", description: "12.00 CT princess-cut solitaire. A specimen-scale square center with crisp geometry, made to order.", featured: false }),
-  labGrown({ id: "SR15", sku: "SR15", name: "15CT Oval Solitaire Ring", slug: "sr15-15ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Oval", diamondShape: "Oval", carats: 15, diamondPieces: 1, colorClarity: "E/VS1", price: 9000, priceLabel: fmt(9000), sizeInfo: "US Size 4–10, resizable — made to order", description: "15.00 CT oval solitaire. A museum-scale center stone that spans the finger — an auction-house diamond, made to order.", featured: false }),
 
   // ── FANCY RINGS ──
   labGrown({ id: "FR1", sku: "FR1", name: "Hidden Halo Oval Ring", slug: "fr1-hidden-halo-oval-ring", category: "Rings", style: "Hidden Halo", material: "14K White Gold", centerStone: "Mixed", carats: 2.5, diamondPieces: 45, colorClarity: "F/VS1", price: 1800, priceLabel: fmt(1800), sizeInfo: "US Size 4–10, resizable — made to order", description: "2.50 CT oval lab-grown diamond in a hidden halo setting, visible only at certain angles. Made to order.", featured: true }),
@@ -583,25 +416,18 @@ const customProduct: Product = {
  * and receive the same July 2026 retail adjustment. Source constants remain
  * unchanged so inventory reconciliation can always recover original figures.
  */
-export const EIGHTEEN_K_PRICE_MULTIPLIER = 1.15;
-
-function asEighteenKRetail(product: Product): Product {
-  if (product.price <= 0) return product;
-
-  const price = Math.round(product.price * EIGHTEEN_K_PRICE_MULTIPLIER);
+// Prices come straight from JEWELSTONE_final_Inventory_price.xlsx (data/price-book.json),
+// matched by SKU. No markup — the sheet value is the shelf price. Products without a
+// SKU in the book (e.g. the custom CTA) keep their own price.
+function withBookPrice(product: Product): Product {
+  const exact = (priceBook as Record<string, number>)[product.sku];
+  if (exact == null || exact <= 0) return product;
   const priceLabel = product.priceLabel === "Price on request"
     ? product.priceLabel
     : product.priceLabel.startsWith("From ")
-      ? fmt(price)
-      : usd(price);
-
-  return {
-    ...product,
-    material: product.material.replaceAll("14K", "18K"),
-    description: product.description.replaceAll("14K", "18K"),
-    price,
-    priceLabel,
-  };
+      ? fmt(exact)
+      : usd(exact);
+  return { ...product, price: exact, priceLabel };
 }
 
 // ── NATURAL PIECUT — in-house studio line ──────────────────────────────────────
@@ -844,15 +670,12 @@ const piecutHouseProducts: Product[] = [
 
 // CVD line comes from the supplier stock sheet (see data/cvd-products.ts).
 export const products: Product[] = [
-  ...[
-    ...signatureProducts,
-    ...labGrownProducts,
-    ...cvdProducts(IMAGERY_READY),
-    customProduct,
-  ].map(asEighteenKRetail),
-  // PIECUT prices come from the sheet as final retail — no 18K multiplier.
+  ...signatureProducts,
+  ...labGrownProducts,
+  ...cvdProducts(IMAGERY_READY),
+  customProduct,
   ...piecutHouseProducts,
-];
+].map(withBookPrice);
 
 const DIAMOND_SHAPES: DiamondShape[] = [
   "Cushion Brilliant",

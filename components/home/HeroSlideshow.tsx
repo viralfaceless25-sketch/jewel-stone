@@ -86,45 +86,46 @@ export function HeroSlideshow() {
   const slide = slides[active];
 
   return (
-    <div
-      className={styles.heroSlideshow}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocusCapture={() => setPaused(true)}
-      onBlurCapture={() => setPaused(false)}
-    >
-      {slides.map((item, index) => (
-        <div
-          key={item.id}
-          className={`${styles.heroSlide} ${active === index ? styles.heroSlideActive : ""}`}
-          aria-hidden={active !== index}
-        >
-          {item.kind === "image" ? (
-            <Image
-              src={item.src}
-              alt={item.alt}
-              fill
-              priority={index === 0}
-              sizes="100vw"
-            />
-          ) : (
-            <video
-              ref={(node) => {
-                videoRefs.current[index] = node;
-              }}
-              src={item.src}
-              poster={item.poster}
-              aria-label={item.alt}
-              muted
-              loop
-              playsInline
-              preload="metadata"
-            />
-          )}
-        </div>
-      ))}
-
-      <div className={styles.heroShade} />
+    <>
+      <div
+        className={styles.heroSlideshow}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onFocusCapture={() => setPaused(true)}
+        onBlurCapture={() => setPaused(false)}
+      >
+        {slides.map((item, index) => (
+          <div
+            key={item.id}
+            className={`${styles.heroSlide} ${active === index ? styles.heroSlideActive : ""}`}
+            aria-hidden={active !== index}
+          >
+            {item.kind === "image" ? (
+              <Image
+                src={item.src}
+                alt={item.alt}
+                fill
+                priority={index === 0}
+                sizes="100vw"
+              />
+            ) : (
+              <video
+                ref={(node) => {
+                  videoRefs.current[index] = node;
+                }}
+                src={item.src}
+                poster={item.poster}
+                aria-label={item.alt}
+                muted
+                loop
+                playsInline
+                preload="metadata"
+              />
+            )}
+          </div>
+        ))}
+        <div className={styles.heroShade} />
+      </div>
 
       <div className={styles.heroStage}>
         <div className={styles.heroCopy} key={slide.id}>
@@ -159,6 +160,6 @@ export function HeroSlideshow() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
