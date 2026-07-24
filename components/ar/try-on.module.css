@@ -1,0 +1,45 @@
+.wrap { width: min(100% - 2rem, 760px); margin: 0 auto; }
+.stage {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  max-height: 78vh;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #0c0b0e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.video, .canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.video { z-index: 1; }
+.canvas { z-index: 2; pointer-events: none; }
+.mirror { transform: scaleX(-1); }
+
+.overlay {
+  position: absolute; inset: 0; z-index: 3;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.1rem;
+  padding: 2rem; text-align: center;
+  background: rgba(12,11,14,.72); color: #F6F3ED;
+}
+.hint, .msg { margin: 0; max-width: 34ch; font-size: .92rem; font-weight: 300; line-height: 1.6; color: #E4DFD5; }
+.btn {
+  min-height: 48px; padding: .85rem 2rem; border: 0; border-radius: 999px;
+  background: #F6F3ED; color: #17161a; font-size: .68rem; font-weight: 600;
+  letter-spacing: .2em; text-transform: uppercase; cursor: pointer;
+}
+.stopBtn { position: absolute; z-index: 4; left: 50%; bottom: 1rem; transform: translateX(-50%); background: rgba(12,11,14,.8); color: #F6F3ED; }
+.beta { position: absolute; z-index: 4; top: .8rem; left: .8rem; padding: .35rem .7rem; border-radius: 999px; background: rgba(12,11,14,.7); color: var(--js-gold-light, #E8D4B6); font-size: .55rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
+.tracking { position: absolute; z-index: 4; top: 50%; left: 50%; transform: translate(-50%,-50%); margin: 0; padding: .7rem 1.1rem; border-radius: 999px; background: rgba(12,11,14,.72); color: #F6F3ED; font-size: .82rem; }
+
+.picker { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.4rem; }
+.chip {
+  display: flex; flex-direction: column; align-items: flex-start; gap: .1rem;
+  padding: .6rem 1rem; border: 1px solid var(--js-line, #ddd6cb); border-radius: 12px;
+  background: transparent; color: var(--js-ink, #17161a); cursor: pointer;
+  font-family: var(--font-display, serif); font-size: .92rem; text-align: left;
+}
+.chip span { font-family: var(--font-body, sans-serif); font-size: .58rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--js-platinum, #6e6963); }
+.chip:hover { border-color: var(--js-ink, #17161a); }
+.chipOn { background: var(--js-ink, #17161a); border-color: var(--js-ink, #17161a); color: var(--js-porcelain, #f7f3ee); }
+.chipOn span { color: var(--js-gold-light, #E8D4B6); }

@@ -62,19 +62,19 @@ export default function CustomPage() {
       <section className={pages.section} aria-labelledby="custom-ar-title">
         <div className={`${pages.wrap} ${pages.split}`}>
           <div>
-            <p className={pages.eyebrow}><span /> 3D + native AR</p>
-            <h2 id="custom-ar-title" className={pages.h2}>Inspect every angle. Place it in your space.</h2>
+            <p className={pages.eyebrow}><span /> Virtual try-on · 3D &amp; AR</p>
+            <h2 id="custom-ar-title" className={pages.h2}>See it on you, before it&apos;s made.</h2>
             <p className={pages.p}>
-              Rotate and zoom any AR-ready piece on any device. On supported iPhone and
-              Android devices, open native AR to place a true-scale piece in your
-              environment before a single stone is cut.
+              Open the virtual try-on and place a PIECUT piece live on your own hand, ears, or
+              neckline with your camera — or rotate and zoom it in 3D. A real preview of scale
+              and proportion before a single stone is set.
             </p>
             <p className={pages.p}>
-              No fake hand-tracking promise: fit and on-body scale remain guided by model
-              photography and a fitting at the studio.
+              Camera try-on is a beta and stays on your device — nothing is recorded. Final fit
+              is always confirmed at a studio fitting.
             </p>
             <div className={pages.actions}>
-              <Link href="/products/heart-halo-ring" className={pages.btnGhost}>Open an AR-ready piece</Link>
+              <Link href="/try-on" className={pages.btnPrimary}>Open virtual try-on</Link>
             </div>
           </div>
           <div className={pages.mediaFrame}>

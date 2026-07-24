@@ -84,8 +84,8 @@ export function CollectionGallery({ items }: { items: Product[] }) {
     if (category === "Rings") return { image: "/images/products/fr4-emerald-hidden-halo-ring/model.webp", title: "Scale, seen on the hand", href: "/products/fr4-emerald-hidden-halo-ring" };
     if (category === "Necklaces") return { image: "/images/products/fn2-graduated-diamond-necklace/model.webp", title: "Fifteen carats in crescendo", href: "/products/fn2-graduated-diamond-necklace" };
     if (category === "Bracelets") return { image: "/images/products/tb12-12ct-tennis-bracelet/model.webp", title: "A line of light around the wrist", href: "/products/tb12-12ct-tennis-bracelet" };
-    if (category === "Earrings") return { image: "/images/lifestyle/model-asscher-editorial.jpg", title: "Movement changes the piece", href: "/products/asscher-halo-drop-earrings" };
-    if (category === "Pendants") return { image: "/images/lifestyle/model-heart-halo-pendant.jpg", title: "Proportion at the collarbone", href: "/products/heart-halo-pendant" };
+    if (category === "Earrings") return { image: "/images/lifestyle/model-asscher-editorial.jpg", title: "Movement changes the piece", href: "/products/jsnd062606-asscher-piecut-earrings" };
+    if (category === "Pendants") return { image: "/images/lifestyle/model-heart-halo-pendant.jpg", title: "Proportion at the collarbone", href: "/products/jsnd062608-heart-piecut-pendant" };
     return { image: "/images/hero/campaign-02.webp", title: "Jewelry made to meet the person", href: "/collections" };
   }, [activeCategory, filtered]);
 

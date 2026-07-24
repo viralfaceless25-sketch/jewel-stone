@@ -354,6 +354,9 @@ export function ProductView({ product, related }: { product: Product; related: P
               </svg>
             </button>
           </div>
+          {model ? (
+            <Link href={`/try-on?piece=${product.slug}`} className={styles.viewingLink}>Try it on with your camera →</Link>
+          ) : null}
           <Link href="/contact" className={styles.viewingLink}>Prefer to see it first? Book a private viewing →</Link>
 
           <ul className={styles.assurance}>
