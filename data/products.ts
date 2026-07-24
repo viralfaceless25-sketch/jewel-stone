@@ -422,11 +422,9 @@ const customProduct: Product = {
 function withBookPrice(product: Product): Product {
   const exact = (priceBook as Record<string, number>)[product.sku];
   if (exact == null || exact <= 0) return product;
-  const priceLabel = product.priceLabel === "Price on request"
-    ? product.priceLabel
-    : product.priceLabel.startsWith("From ")
-      ? fmt(exact)
-      : usd(exact);
+  // Every product in the price file shows its exact sheet price. Keep the
+  // "From " prefix only for made-to-order lines that already use it.
+  const priceLabel = product.priceLabel.startsWith("From ") ? fmt(exact) : usd(exact);
   return { ...product, price: exact, priceLabel };
 }
 
