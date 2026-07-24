@@ -29,6 +29,10 @@ export function TryOn({ initialSlug }: { initialSlug?: string }) {
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState<string>("");
   const [detected, setDetected] = useState(false);
+  const [debug, setDebug] = useState("");
+  const lastTsRef = useRef(0);
+  const frameRef = useRef(0);
+  const debugRef = useRef("");
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -97,19 +101,25 @@ export function TryOn({ initialSlug }: { initialSlug?: string }) {
       const { FilesetResolver, HandLandmarker, FaceLandmarker } = await import("@mediapipe/tasks-vision");
       const fileset = await FilesetResolver.forVisionTasks(WASM);
 
+      // GPU delegate is faster but fails on some mobile browsers (iOS Safari);
+      // fall back to CPU so tracking still works everywhere.
       if (target.mode === "hand") {
-        const hl = await HandLandmarker.createFromOptions(fileset, {
-          baseOptions: { modelAssetPath: HAND_MODEL, delegate: "GPU" },
-          runningMode: "VIDEO",
-          numHands: 1,
-        });
+        const make = (delegate: "GPU" | "CPU") =>
+          HandLandmarker.createFromOptions(fileset, {
+            baseOptions: { modelAssetPath: HAND_MODEL, delegate },
+            runningMode: "VIDEO",
+            numHands: 1,
+          });
+        const hl = await make("GPU").catch(() => make("CPU"));
         landmarkerRef.current = { type: "hand", detect: (v, ts) => hl.detectForVideo(v, ts) };
       } else {
-        const fl = await FaceLandmarker.createFromOptions(fileset, {
-          baseOptions: { modelAssetPath: FACE_MODEL, delegate: "GPU" },
-          runningMode: "VIDEO",
-          numFaces: 1,
-        });
+        const make = (delegate: "GPU" | "CPU") =>
+          FaceLandmarker.createFromOptions(fileset, {
+            baseOptions: { modelAssetPath: FACE_MODEL, delegate },
+            runningMode: "VIDEO",
+            numFaces: 1,
+          });
+        const fl = await make("GPU").catch(() => make("CPU"));
         landmarkerRef.current = { type: "face", detect: (v, ts) => fl.detectForVideo(v, ts) };
       }
 
@@ -149,28 +159,42 @@ export function TryOn({ initialSlug }: { initialSlug?: string }) {
 
     const loop = () => {
       rafRef.current = requestAnimationFrame(loop);
-      if (video.readyState < 2 || !t.piece) return;
+      if (video.readyState < 2 || video.videoWidth === 0) return;
       const w = t.camera.right;
       const h = t.camera.bottom;
       const mirror = target.facingMode === "user";
 
-      const result = lm.detect(video, performance.now()) as {
+      // detectForVideo needs a strictly-increasing timestamp or it throws.
+      const ts = Math.max(lastTsRef.current + 1, Math.round(performance.now()));
+      lastTsRef.current = ts;
+
+      let result: {
         landmarks?: { x: number; y: number; z: number }[][];
         faceLandmarks?: { x: number; y: number; z: number }[][];
-      };
+      } = {};
+      try {
+        result = lm.detect(video, ts) as typeof result;
+      } catch (err) {
+        debugRef.current = "detect error: " + (err as Error).message.slice(0, 60);
+      }
       const px = (nx: number) => (mirror ? (1 - nx) : nx) * w;
       const py = (ny: number) => ny * h;
 
+      const landmarks = lm.type === "hand" ? result.landmarks?.[0] : result.faceLandmarks?.[0];
+      const bodySeen = Boolean(landmarks);
       let placed = false;
-      if (lm.type === "hand" && result.landmarks?.[0]) {
-        const L = result.landmarks[0];
-        placed = placeOnHand(t, L, px, py, target);
-      } else if (lm.type === "face" && result.faceLandmarks?.[0]) {
-        const L = result.faceLandmarks[0];
-        placed = placeOnFace(t, L, px, py, target);
+      if (landmarks && t.piece) {
+        placed = lm.type === "hand"
+          ? placeOnHand(t, landmarks, px, py, target)
+          : placeOnFace(t, landmarks, px, py, target);
       }
-      setDetected(placed);
-      t.piece.visible = placed;
+      if (t.piece) t.piece.visible = placed;
+      setDetected(bodySeen && placed);
+
+      frameRef.current++;
+      if (frameRef.current % 15 === 0) {
+        setDebug(`${lm.type === "hand" ? "hand" : "face"}: ${bodySeen ? "detected" : "not found"}${t.piece ? "" : " · loading piece…"}${debugRef.current ? " · " + debugRef.current : ""}`);
+      }
       t.renderer.render(t.scene, t.camera);
     };
     loop();
@@ -215,9 +239,10 @@ export function TryOn({ initialSlug }: { initialSlug?: string }) {
             <span className={styles.beta}>Virtual try-on · beta</span>
             {!detected ? (
               <p className={styles.tracking}>
-                {target?.mode === "hand" ? "Show your hand to the camera…" : "Looking for your face…"}
+                {target?.mode === "hand" ? "Show your hand, fingers spread…" : "Looking for your face…"}
               </p>
             ) : null}
+            {debug ? <span className={styles.debug}>{debug}</span> : null}
             <button className={`${styles.btn} ${styles.stopBtn}`} onClick={stop}>Stop</button>
           </>
         )}

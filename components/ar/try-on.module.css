@@ -31,6 +31,7 @@
 .stopBtn { position: absolute; z-index: 4; left: 50%; bottom: 1rem; transform: translateX(-50%); background: rgba(12,11,14,.8); color: #F6F3ED; }
 .beta { position: absolute; z-index: 4; top: .8rem; left: .8rem; padding: .35rem .7rem; border-radius: 999px; background: rgba(12,11,14,.7); color: var(--js-gold-light, #E8D4B6); font-size: .55rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
 .tracking { position: absolute; z-index: 4; top: 50%; left: 50%; transform: translate(-50%,-50%); margin: 0; padding: .7rem 1.1rem; border-radius: 999px; background: rgba(12,11,14,.72); color: #F6F3ED; font-size: .82rem; }
+.debug { position: absolute; z-index: 4; left: .8rem; bottom: 3.6rem; padding: .3rem .6rem; border-radius: 6px; background: rgba(12,11,14,.7); color: #E8D4B6; font-size: .58rem; letter-spacing: .04em; }
 
 .picker { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.4rem; }
 .chip {
