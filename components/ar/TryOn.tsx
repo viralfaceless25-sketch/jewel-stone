@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
+import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { tryOnTargets, type TryOnTarget } from "@/lib/ar/tryon-targets";
 import styles from "./try-on.module.css";
 
@@ -60,14 +61,29 @@ export function TryOn({ initialSlug }: { initialSlug?: string }) {
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(w, h, false);
+    // Correct colour + film tone so metal reads bright, not muddy grey.
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+
     const scene = new THREE.Scene();
     // Screen-space ortho camera: (0,0) top-left, +y down.
     const camera = new THREE.OrthographicCamera(0, w, 0, h, -2000, 2000);
     camera.position.z = 1000;
-    scene.add(new THREE.AmbientLight(0xffffff, 1.4));
-    const key = new THREE.DirectionalLight(0xffffff, 1.6);
-    key.position.set(0.3, -0.6, 1);
+
+    // Metal/diamond are reflective — without an environment map they render
+    // near-black. A neutral studio env makes gold/platinum bright and gems sparkle.
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    const envScene = new RoomEnvironment();
+    scene.environment = pmrem.fromScene(envScene, 0.02).texture;
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+    const key = new THREE.DirectionalLight(0xffffff, 2.2);
+    key.position.set(0.4, -0.7, 1.2);
     scene.add(key);
+    const fill = new THREE.DirectionalLight(0xfff2e0, 1.1);
+    fill.position.set(-0.6, -0.2, 0.8);
+    scene.add(fill);
     threeRef.current = { renderer, scene, camera, piece: null, baseSize: 1 };
   }, []);
 
@@ -298,9 +314,9 @@ function placeOnHand(
   if (!t.piece) return false;
   hideClone(t);
   if (target.placement === "wrist") {
-    // wrist = landmark 0; width ≈ distance(0, 5)
+    // wrist = landmark 0; width ≈ across the knuckles (5↔17)
     const cx = px(L[0].x), cy = py(L[0].y);
-    const width = dist(px(L[5].x), py(L[5].y), px(L[17].x), py(L[17].y)) * 1.5;
+    const width = dist(px(L[5].x), py(L[5].y), px(L[17].x), py(L[17].y)) * 2.1;
     applyTransform(t, cx, cy, width, Math.atan2(py(L[9].y) - cy, px(L[9].x) - cx) + Math.PI / 2);
     return true;
   }
@@ -308,7 +324,8 @@ function placeOnHand(
   const ax = px(L[13].x), ay = py(L[13].y);
   const bx = px(L[14].x), by = py(L[14].y);
   const cx = (ax + bx) / 2, cy = (ay + by) / 2;
-  const fingerWidth = dist(px(L[13].x), py(L[13].y), px(L[9].x), py(L[9].y)) * 0.85;
+  // Outer ring diameter ≈ the ring finger's own width — bump generously to fit.
+  const fingerWidth = dist(px(L[13].x), py(L[13].y), px(L[9].x), py(L[9].y)) * 2.9;
   const angle = Math.atan2(by - ay, bx - ax) - Math.PI / 2;
   applyTransform(t, cx, cy, fingerWidth, angle);
   return true;
@@ -328,18 +345,17 @@ function placeOnFace(
   const faceWidth = dist(px(leftEar.x), py(leftEar.y), px(rightEar.x), py(rightEar.y));
 
   if (target.placement === "ears") {
-    // Show a copy at each earlobe (slightly below the ear landmark).
-    const drop = faceWidth * 0.12;
-    const size = faceWidth * 0.22;
-    // primary piece at right ear, mirror clone handled by second render pass
+    // Earlobes sit just below the ear landmarks.
+    const drop = faceWidth * 0.16;
+    const size = faceWidth * 0.42;
     placeTwo(t, px(leftEar.x), py(leftEar.y) + drop, px(rightEar.x), py(rightEar.y) + drop, size);
     return true;
   }
-  // necklace / pendant: centre below the chin
+  // necklace / pendant: centre below the chin on the neckline
   hideClone(t);
   const faceH = dist(px(forehead.x), py(forehead.y), px(chin.x), py(chin.y)) || faceWidth;
-  const cx = px(chin.x), cy = py(chin.y) + faceH * 0.35;
-  applyTransform(t, cx, cy, faceWidth * 0.6, 0);
+  const cx = px(chin.x), cy = py(chin.y) + faceH * 0.45;
+  applyTransform(t, cx, cy, faceWidth * 1.15, 0);
   return true;
 }
 
