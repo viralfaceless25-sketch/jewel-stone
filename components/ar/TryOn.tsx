@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { tryOnTargets, type TryOnTarget } from "@/lib/ar/tryon-targets";
 import styles from "./try-on.module.css";
 
@@ -76,21 +77,32 @@ export function TryOn({ initialSlug }: { initialSlug?: string }) {
     if (!t) return;
     if (t.piece) { t.scene.remove(t.piece); t.piece = null; }
     if (t.scene.__clone) { t.scene.remove(t.scene.__clone); t.scene.__clone = undefined; }
-    new GLTFLoader().load(model, (gltf) => {
-      const group = gltf.scene;
-      const box = new THREE.Box3().setFromObject(group);
-      const size = new THREE.Vector3();
-      box.getSize(size);
-      const center = new THREE.Vector3();
-      box.getCenter(center);
-      group.position.sub(center); // centre at origin
-      const wrap = new THREE.Group();
-      wrap.add(group);
-      const maxDim = Math.max(size.x, size.y, size.z) || 1;
-      threeRef.current!.baseSize = maxDim;
-      threeRef.current!.piece = wrap;
-      t.scene.add(wrap);
-    });
+    // The GLBs are Draco-compressed (KHR_draco_mesh_compression) — GLTFLoader
+    // needs a DRACOLoader with the hosted decoder or the load never completes.
+    const loader = new GLTFLoader();
+    const draco = new DRACOLoader();
+    draco.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.5.7/");
+    loader.setDRACOLoader(draco);
+    loader.load(
+      model,
+      (gltf) => {
+        const group = gltf.scene;
+        const box = new THREE.Box3().setFromObject(group);
+        const size = new THREE.Vector3();
+        box.getSize(size);
+        const center = new THREE.Vector3();
+        box.getCenter(center);
+        group.position.sub(center); // centre at origin
+        const wrap = new THREE.Group();
+        wrap.add(group);
+        const maxDim = Math.max(size.x, size.y, size.z) || 1;
+        threeRef.current!.baseSize = maxDim;
+        threeRef.current!.piece = wrap;
+        t.scene.add(wrap);
+      },
+      undefined,
+      (err) => { debugRef.current = "model load failed: " + String((err as Error).message || err).slice(0, 50); },
+    );
   }, []);
 
   const start = useCallback(async () => {
