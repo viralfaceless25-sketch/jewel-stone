@@ -22,6 +22,9 @@ export type MetalVariant = "white" | "yellow" | "rose" | "platinum" | "silver";
 export type ProductMediaSet = { cover: string; gallery: string[]; videoUrl?: string };
 export type ProductSource = "signature" | "lab-grown";
 export type DiamondOrigin = "Lab-Grown" | "Natural";
+// The three Jewel Stone worlds. Explicit per-product assignment wins;
+// deriveDiamondWorld() supplies the default until the owner tags each piece.
+export type DiamondWorld = "natural" | "natural-piecut" | "lab-grown";
 export type DiamondClarity = "FL" | "IF" | "VVS1" | "VVS2" | "VS1" | "VS2" | "SI1" | "SI2";
 
 // Every piece is cut to order, so colour and clarity are the shopper's choice on
@@ -71,6 +74,7 @@ export type Product = {
   diamondOrigin?: DiamondOrigin;
   antique?: boolean;
   piecut?: boolean;
+  diamondWorld?: DiamondWorld;
   price: number;
   priceLabel: string;
   sizeInfo: string;
@@ -166,8 +170,8 @@ const PLACEHOLDER = {
   portrait: "/images/placeholder-coming-soon-portrait.jpg",
 };
 
-function signatureGallery(slug: string, count: number) {
-  return Array.from({ length: count }, (_, i) => `/images/products/${slug}/angle-${i + 1}.jpg`);
+function signatureGallery(slug: string, count: number, ext: "jpg" | "webp" = "jpg") {
+  return Array.from({ length: count }, (_, i) => `/images/products/${slug}/angle-${i + 1}.${ext}`);
 }
 
 // ── SIGNATURE COLLECTION — real, one-of-a-kind Piecut pieces ─────────────────
@@ -338,32 +342,6 @@ const signatureProducts: Product[] = [
     videoUrl: "/images/products/pear-halo-pendant/video-web.mp4",
     featured: false,
   },
-  {
-    id: "JSND062612", sku: "JSND062612",
-    name: "Emerald Piecut Statement Ring",
-    slug: "jsnd062612-emerald-piecut-statement-ring",
-    category: "Rings", source: "signature", comingSoon: true,
-    style: "Piecut statement ring", material: "18K Gold",
-    centerStone: "Emerald-cut Piecut cluster", carats: 0.93, diamondPieces: 9,
-    colorClarity: "EF/VVS–VS", piecut: true, certificateNumber: "46J838782607", visualCarat: 3, goldWeight: 2.069,
-    price: 5969, priceLabel: usd(5969), sizeInfo: "One-of-a-kind — professional resizing available",
-    description: "A 0.93ct emerald-cut Piecut center built from 9 diamonds and visually presenting near 3ct. 0.93ct total diamond weight with 2.069g of 18K gold. Studio imagery in production; request a private preview.",
-    image: PLACEHOLDER.portrait,
-    featured: false,
-  },
-  {
-    id: "JSND062613", sku: "JSND062613",
-    name: "Round Piecut Statement Ring",
-    slug: "jsnd062613-round-piecut-statement-ring",
-    category: "Rings", source: "signature", comingSoon: true,
-    style: "Piecut statement ring", material: "18K Gold",
-    centerStone: "Round Piecut cluster", carats: 1.04, diamondPieces: 9,
-    colorClarity: "FG/VS", piecut: true, certificateNumber: "24J135722403", visualCarat: 3, goldWeight: 4.662,
-    price: 8030, priceLabel: usd(8030), sizeInfo: "One-of-a-kind — professional resizing available",
-    description: "A 0.93ct round Piecut center built from 9 diamonds and visually presenting near 3ct. 1.04ct total diamond weight with 4.662g of 18K gold. Studio imagery in production; request a private preview.",
-    image: PLACEHOLDER.portrait,
-    featured: false,
-  },
 ];
 
 // ── LAB-GROWN — made-to-order price list (Jewel_Stone_Lab_Inventory_20pct.xlsx) ─
@@ -476,6 +454,19 @@ const LAB_MEDIA: Record<string, LabMedia> = {
   "pd3-cluster-flower-pendant": importedMedia("pd3-cluster-flower-pendant", { wg: RING_VIEWS, yg: RING_VIEWS, rg: RING_VIEWS }, "white"),
   "pd4-heart-halo-pendant-lab-grown": importedMedia("pd4-heart-halo-pendant-lab-grown", { wg: RING_VIEWS, yg: RING_VIEWS, rg: RING_VIEWS }, "white"),
   "pd5-fancy-drop-pendant": importedMedia("pd5-fancy-drop-pendant", { wg: RING_VIEWS, yg: RING_VIEWS, rg: RING_VIEWS }, "white"),
+  // v2 generated set (front/close/side ×3 metals + model). Studs & solitaires.
+  "st20-20ct-diamond-studs": importedMedia("st20-20ct-diamond-studs", { wg: ["front", "close", "side"], yg: ["front", "close", "side"], rg: ["front", "close", "side"] }, "white"),
+  "sr1-5ct-solitaire-ring": importedMedia("sr1-5ct-solitaire-ring", { wg: ["front", "close", "side"], yg: ["front", "close", "side"], rg: ["front", "close", "side"] }, "white"),
+  "sr4-4ct-solitaire-ring": importedMedia("sr4-4ct-solitaire-ring", { wg: ["front", "close", "side"], yg: ["front", "close", "side"], rg: ["front", "close", "side"] }, "white"),
+  "sr10-10ct-solitaire-ring": importedMedia("sr10-10ct-solitaire-ring", { wg: ["front", "close", "side"], yg: ["front", "close", "side"], rg: ["front", "close", "side"] }, "white"),
+  "sr15-15ct-solitaire-ring": importedMedia("sr15-15ct-solitaire-ring", { wg: ["front", "close", "side"], yg: ["front", "close", "side"], rg: ["front", "close", "side"] }, "white"),
+  // v2 generated necklaces (front/45/close ×3 metals + model).
+  "tn5-5ct-tennis-necklace": importedMedia("tn5-5ct-tennis-necklace", { wg: ["front", "45", "close"], yg: ["front", "45", "close"], rg: ["front", "45", "close"] }, "white"),
+  "tn8-8ct-tennis-necklace": importedMedia("tn8-8ct-tennis-necklace", { wg: ["front", "45", "close"], yg: ["front", "45", "close"], rg: ["front", "45", "close"] }, "white"),
+  "tn30-30ct-tennis-necklace": importedMedia("tn30-30ct-tennis-necklace", { wg: ["front", "45", "close"], yg: ["front", "45", "close"], rg: ["front", "45", "close"] }, "white"),
+  "fn1-diamond-riviera-necklace": importedMedia("fn1-diamond-riviera-necklace", { wg: ["front", "close", "side"], yg: ["front", "close", "side"], rg: ["front", "close", "side"] }, "white"),
+  "fn3-statement-diamond-necklace": importedMedia("fn3-statement-diamond-necklace", { wg: ["front", "close", "side"], yg: ["front", "close", "side"], rg: ["front", "close", "side"] }, "white"),
+  "fn4-luxury-cluster-necklace": importedMedia("fn4-luxury-cluster-necklace", { wg: ["front", "close", "side"], yg: ["front", "close", "side"], rg: ["front", "close", "side"] }, "white"),
 };
 
 function labGrown(p: Omit<Product, "source" | "comingSoon" | "image" | "sku"> & { sku: string }): Product {
@@ -553,6 +544,7 @@ const labGrownProducts: Product[] = [
   labGrown({ id: "SR8", sku: "SR8", name: "8CT Cushion Solitaire Ring", slug: "sr8-8ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Cushion Brilliant", diamondShape: "Cushion Brilliant", carats: 8, diamondPieces: 1, colorClarity: "E/VS1", price: 4800, priceLabel: fmt(4800), sizeInfo: "US Size 4–10, resizable — made to order", description: "8.00 CT cushion-brilliant solitaire with softened corners and collector-scale presence. Made to order.", featured: false }),
   labGrown({ id: "SR10", sku: "SR10", name: "10CT Solitaire Ring", slug: "sr10-10ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Oval", carats: 10, diamondPieces: 1, colorClarity: "E/VS1", price: 6000, priceLabel: fmt(6000), sizeInfo: "US Size 4–10, resizable — made to order", description: "10.00 CT oval solitaire. A 10-carat center stone is a milestone few ever achieve at this price. Made to order.", featured: false }),
   labGrown({ id: "SR12", sku: "SR12", name: "12CT Princess Solitaire Ring", slug: "sr12-12ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Princess", diamondShape: "Princess", carats: 12, diamondPieces: 1, colorClarity: "E/VS1", price: 7200, priceLabel: fmt(7200), sizeInfo: "US Size 4–10, resizable — made to order", description: "12.00 CT princess-cut solitaire. A specimen-scale square center with crisp geometry, made to order.", featured: false }),
+  labGrown({ id: "SR15", sku: "SR15", name: "15CT Oval Solitaire Ring", slug: "sr15-15ct-solitaire-ring", category: "Rings", style: "Solitaire", material: "14K White Gold", centerStone: "Oval", diamondShape: "Oval", carats: 15, diamondPieces: 1, colorClarity: "E/VS1", price: 9000, priceLabel: fmt(9000), sizeInfo: "US Size 4–10, resizable — made to order", description: "15.00 CT oval solitaire. A museum-scale center stone that spans the finger — an auction-house diamond, made to order.", featured: false }),
 
   // ── FANCY RINGS ──
   labGrown({ id: "FR1", sku: "FR1", name: "Hidden Halo Oval Ring", slug: "fr1-hidden-halo-oval-ring", category: "Rings", style: "Hidden Halo", material: "14K White Gold", centerStone: "Mixed", carats: 2.5, diamondPieces: 45, colorClarity: "F/VS1", price: 1800, priceLabel: fmt(1800), sizeInfo: "US Size 4–10, resizable — made to order", description: "2.50 CT oval lab-grown diamond in a hidden halo setting, visible only at certain angles. Made to order.", featured: true }),
@@ -612,13 +604,255 @@ function asEighteenKRetail(product: Product): Product {
   };
 }
 
+// ── NATURAL PIECUT — in-house studio line ──────────────────────────────────────
+// Source of truth: "Natural Pie-cut in House" sheet of
+// JEWELSTONE_final_Inventory_price.xlsx. The sheet's "Selling price USD" is the
+// final retail price for PIECUT, so this line is deliberately excluded from
+// asEighteenKRetail() — gold is already 18K and no multiplier applies.
+const piecutHouseProducts: Product[] = [
+  {
+    id: "JSND062601", sku: "JSND062601",
+    name: "Emerald Piecut Ring",
+    slug: "jsnd062601-emerald-piecut-ring",
+    category: "Rings", source: "signature", 
+    style: "Piecut split-shank halo ring", material: "18K Gold",
+    centerStone: "Emerald PIECUT cluster", carats: 0.54, diamondPieces: 9,
+    colorClarity: "EF/VVS/VS", piecut: true, diamondWorld: "natural-piecut",
+    diamondOrigin: "Natural", certificateNumber: "46J838672606",
+    visualCarat: 0.46, goldWeight: 2.067,
+    price: 1515, priceLabel: usd(1515), sizeInfo: "One-of-a-kind — professional resizing available",
+    description:
+      "A 0.23ct emerald PIECUT centre assembled from 9 matched natural diamonds, reading close to 0.46ct on the hand. 0.54ct total diamond weight set in 2.067g of 18K gold. IGI certificate 46J838672606. One-of-one piece.",
+    image: "/images/products/jsnd062601-emerald-piecut-ring/cover.webp",
+    gallery: signatureGallery("jsnd062601-emerald-piecut-ring", 7, "webp"),
+    videoUrl: "/images/products/jsnd062601-emerald-piecut-ring/video-web.mp4",
+    featured: false,
+  },
+  {
+    id: "JSND062602", sku: "JSND062602",
+    name: "Emerald Piecut Earrings",
+    slug: "jsnd062602-emerald-piecut-earrings",
+    category: "Earrings", source: "signature", 
+    style: "Piecut screw-back earrings", material: "18K Gold",
+    centerStone: "Emerald PIECUT cluster", carats: 0.29, diamondPieces: 9,
+    colorClarity: "EF/VVS/VS", piecut: true, diamondWorld: "natural-piecut",
+    diamondOrigin: "Natural", certificateNumber: "46J838682606",
+    visualCarat: 1.25, goldWeight: 2.71,
+    price: 2230, priceLabel: usd(2230), sizeInfo: "Screw-back pair — one-of-a-kind",
+    description:
+      "A 0.29ct emerald PIECUT centre assembled from 9 matched natural diamonds, reading close to 1.25ct on the hand. 0.29ct total diamond weight set in 2.71g of 18K gold. IGI certificate 46J838682606. One-of-one pair.",
+    image: "/images/products/jsnd062602-emerald-piecut-earrings/cover.webp",
+    gallery: signatureGallery("jsnd062602-emerald-piecut-earrings", 7, "webp"),
+    videoUrl: "/images/products/jsnd062602-emerald-piecut-earrings/video-web.mp4",
+    featured: false,
+  },
+  {
+    id: "JSND062603", sku: "JSND062603",
+    name: "Emerald Piecut Pendant",
+    slug: "jsnd062603-emerald-piecut-pendant",
+    category: "Pendants", source: "signature", 
+    style: "Piecut framed pendant", material: "18K Gold",
+    centerStone: "Emerald PIECUT cluster", carats: 0.678, diamondPieces: 9,
+    colorClarity: "FG/VVS/VS", piecut: true, diamondWorld: "natural-piecut",
+    diamondOrigin: "Natural", certificateNumber: "46J838692606",
+    visualCarat: 1.75, goldWeight: 1.111,
+    price: 1422, priceLabel: usd(1422), sizeInfo: "Includes 18K chain — one-of-a-kind",
+    description:
+      "A 0.43ct emerald PIECUT centre assembled from 9 matched natural diamonds, reading close to 1.75ct on the hand. 0.678ct total diamond weight set in 1.111g of 18K gold. IGI certificate 46J838692606. One-of-one piece.",
+    image: "/images/products/jsnd062603-emerald-piecut-pendant/cover.webp",
+    gallery: signatureGallery("jsnd062603-emerald-piecut-pendant", 7, "webp"),
+    videoUrl: "/images/products/jsnd062603-emerald-piecut-pendant/video-web.mp4",
+    featured: false,
+  },
+  {
+    id: "JSND062604", sku: "JSND062604",
+    name: "Oval Piecut Earrings",
+    slug: "jsnd062604-oval-piecut-earrings",
+    category: "Earrings", source: "signature", 
+    style: "Piecut screw-back earrings", material: "18K Gold",
+    centerStone: "Oval PIECUT cluster", carats: 0.698, diamondPieces: 8,
+    colorClarity: "EFG/VVS/VS", piecut: true, diamondWorld: "natural-piecut",
+    diamondOrigin: "Natural", certificateNumber: "46J838702606",
+    visualCarat: 0.75, goldWeight: 2.668,
+    price: 2010, priceLabel: usd(2010), sizeInfo: "Screw-back pair — one-of-a-kind",
+    description:
+      "A 0.45ct oval PIECUT centre assembled from 8 matched natural diamonds, reading close to 0.75ct on the hand. 0.698ct total diamond weight set in 2.668g of 18K gold. IGI certificate 46J838702606. One-of-one pair.",
+    image: "/images/products/jsnd062604-oval-piecut-earrings/cover.webp",
+    gallery: signatureGallery("jsnd062604-oval-piecut-earrings", 7, "webp"),
+    videoUrl: "/images/products/jsnd062604-oval-piecut-earrings/video-web.mp4",
+    featured: false,
+  },
+  {
+    id: "JSND062605", sku: "JSND062605",
+    name: "Heart Piecut Ring",
+    slug: "jsnd062605-heart-piecut-ring",
+    category: "Rings", source: "signature", 
+    style: "Piecut halo ring", material: "18K Gold",
+    centerStone: "Heart PIECUT cluster", carats: 0.482, diamondPieces: 9,
+    colorClarity: "EF/VVS/VS", piecut: true, diamondWorld: "natural-piecut",
+    diamondOrigin: "Natural", certificateNumber: "46J838712606",
+    visualCarat: 0.75, goldWeight: 1.778,
+    price: 1405, priceLabel: usd(1405), sizeInfo: "One-of-a-kind — professional resizing available",
+    description:
+      "A 0.24ct heart PIECUT centre assembled from 9 matched natural diamonds, reading close to 0.75ct on the hand. 0.482ct total diamond weight set in 1.778g of 18K gold. IGI certificate 46J838712606. One-of-one piece.",
+    image: "/images/products/jsnd062605-heart-piecut-ring/cover.webp",
+    gallery: signatureGallery("jsnd062605-heart-piecut-ring", 7, "webp"),
+    videoUrl: "/images/products/jsnd062605-heart-piecut-ring/video-web.mp4",
+    featured: false,
+  },
+  {
+    id: "JSND062606", sku: "JSND062606",
+    name: "Asscher Piecut Earrings",
+    slug: "jsnd062606-asscher-piecut-earrings",
+    category: "Earrings", source: "signature", 
+    style: "Piecut screw-back earrings", material: "18K Gold",
+    centerStone: "Asscher PIECUT cluster", carats: 0.29, diamondPieces: 9,
+    colorClarity: "EF/VVS/VS", piecut: true, diamondWorld: "natural-piecut",
+    diamondOrigin: "Natural", certificateNumber: "46J838722606",
+    visualCarat: 1.25, goldWeight: 4.74,
+    price: 3556, priceLabel: usd(3556), sizeInfo: "Screw-back pair — one-of-a-kind",
+    description:
+      "A 0.29ct asscher PIECUT centre assembled from 9 matched natural diamonds, reading close to 1.25ct on the hand. 0.29ct total diamond weight set in 4.74g of 18K gold. IGI certificate 46J838722606. One-of-one pair.",
+    image: "/images/products/jsnd062606-asscher-piecut-earrings/cover.webp",
+    gallery: signatureGallery("jsnd062606-asscher-piecut-earrings", 7, "webp"),
+    videoUrl: "/images/products/jsnd062606-asscher-piecut-earrings/video-web.mp4",
+    featured: false,
+  },
+  {
+    id: "JSND062607", sku: "JSND062607",
+    name: "Star Piecut Earrings",
+    slug: "jsnd062607-star-piecut-earrings",
+    category: "Earrings", source: "signature", 
+    style: "Piecut screw-back earrings", material: "18K Gold",
+    centerStone: "Round PIECUT cluster", carats: 0.72, diamondPieces: 8,
+    colorClarity: "EF/VVS/VS", piecut: true, diamondWorld: "natural-piecut",
+    diamondOrigin: "Natural", certificateNumber: "46J838732607",
+    visualCarat: 2, goldWeight: 1.741,
+    price: 1674, priceLabel: usd(1674), sizeInfo: "Screw-back pair — one-of-a-kind",
+    description:
+      "A 0.72ct round PIECUT centre assembled from 8 matched natural diamonds, reading close to 2ct on the hand. 0.72ct total diamond weight set in 1.741g of 18K gold. IGI certificate 46J838732607. One-of-one pair.",
+    image: "/images/products/jsnd062607-star-piecut-earrings/cover.webp",
+    gallery: signatureGallery("jsnd062607-star-piecut-earrings", 7, "webp"),
+    videoUrl: "/images/products/jsnd062607-star-piecut-earrings/video-web.mp4",
+    featured: false,
+  },
+  {
+    id: "JSND062608", sku: "JSND062608",
+    name: "Heart Piecut Pendant",
+    slug: "jsnd062608-heart-piecut-pendant",
+    category: "Pendants", source: "signature", 
+    style: "Piecut framed pendant", material: "18K Gold",
+    centerStone: "Heart PIECUT cluster", carats: 1.044, diamondPieces: 3,
+    colorClarity: "EF/VVS/VS", piecut: true, diamondWorld: "natural-piecut",
+    diamondOrigin: "Natural", certificateNumber: "46J838742607",
+    visualCarat: 3, goldWeight: 1.466,
+    price: 2241, priceLabel: usd(2241), sizeInfo: "Includes 18K chain — one-of-a-kind",
+    description:
+      "A 0.82ct heart PIECUT centre assembled from 3 matched natural diamonds, reading close to 3ct on the hand. 1.044ct total diamond weight set in 1.466g of 18K gold. IGI certificate 46J838742607. One-of-one piece.",
+    image: "/images/products/jsnd062608-heart-piecut-pendant/cover.webp",
+    gallery: signatureGallery("jsnd062608-heart-piecut-pendant", 7, "webp"),
+    videoUrl: "/images/products/jsnd062608-heart-piecut-pendant/video-web.mp4",
+    featured: false,
+  },
+  {
+    id: "JSND062609", sku: "JSND062609",
+    name: "Heart Piecut Earrings",
+    slug: "jsnd062609-heart-piecut-earrings",
+    category: "Earrings", source: "signature", 
+    style: "Piecut screw-back earrings", material: "18K Gold",
+    centerStone: "Heart PIECUT cluster", carats: 0.952, diamondPieces: 6,
+    colorClarity: "FGH/VVS/VS", piecut: true, diamondWorld: "natural-piecut",
+    diamondOrigin: "Natural", certificateNumber: "46J838752606",
+    visualCarat: 1.25, goldWeight: 2.397,
+    price: 2249, priceLabel: usd(2249), sizeInfo: "Screw-back pair — one-of-a-kind",
+    description:
+      "A 0.71ct heart PIECUT centre assembled from 6 matched natural diamonds, reading close to 1.25ct on the hand. 0.952ct total diamond weight set in 2.397g of 18K gold. IGI certificate 46J838752606. One-of-one pair.",
+    image: "/images/products/jsnd062609-heart-piecut-earrings/cover.webp",
+    gallery: signatureGallery("jsnd062609-heart-piecut-earrings", 7, "webp"),
+    videoUrl: "/images/products/jsnd062609-heart-piecut-earrings/video-web.mp4",
+    featured: false,
+  },
+  {
+    id: "JSND062610", sku: "JSND062610",
+    name: "Pear Piecut Earrings",
+    slug: "jsnd062610-pear-piecut-earrings",
+    category: "Earrings", source: "signature", 
+    style: "Piecut screw-back earrings", material: "18K Gold",
+    centerStone: "Pear PIECUT cluster", carats: 0.17, diamondPieces: 4,
+    colorClarity: "EF/VVS/VS", piecut: true, diamondWorld: "natural-piecut",
+    diamondOrigin: "Natural", certificateNumber: "46J838762606",
+    visualCarat: 0.5, goldWeight: 1.932,
+    price: 1553, priceLabel: usd(1553), sizeInfo: "Screw-back pair — one-of-a-kind",
+    description:
+      "A 0.17ct pear PIECUT centre assembled from 4 matched natural diamonds, reading close to 0.5ct on the hand. 0.17ct total diamond weight set in 1.932g of 18K gold. IGI certificate 46J838762606. One-of-one pair.",
+    image: "/images/products/jsnd062610-pear-piecut-earrings/cover.webp",
+    gallery: signatureGallery("jsnd062610-pear-piecut-earrings", 7, "webp"),
+    videoUrl: "/images/products/jsnd062610-pear-piecut-earrings/video-web.mp4",
+    featured: false,
+  },
+  {
+    id: "JSND062611", sku: "JSND062611",
+    name: "Pear Piecut Pendant",
+    slug: "jsnd062611-pear-piecut-pendant",
+    category: "Pendants", source: "signature", 
+    style: "Piecut framed pendant", material: "18K Gold",
+    centerStone: "Pear PIECUT cluster", carats: 0.686, diamondPieces: 4,
+    colorClarity: "EF/VVS/VS", piecut: true, diamondWorld: "natural-piecut",
+    diamondOrigin: "Natural", certificateNumber: "46J838772607",
+    visualCarat: 1.25, goldWeight: 1.444,
+    price: 1729, priceLabel: usd(1729), sizeInfo: "Includes 18K chain — one-of-a-kind",
+    description:
+      "A 0.46ct pear PIECUT centre assembled from 4 matched natural diamonds, reading close to 1.25ct on the hand. 0.686ct total diamond weight set in 1.444g of 18K gold. IGI certificate 46J838772607. One-of-one piece.",
+    image: "/images/products/jsnd062611-pear-piecut-pendant/cover.webp",
+    gallery: signatureGallery("jsnd062611-pear-piecut-pendant", 7, "webp"),
+    videoUrl: "/images/products/jsnd062611-pear-piecut-pendant/video-web.mp4",
+    featured: false,
+  },
+  {
+    id: "JSND062612", sku: "JSND062612",
+    name: "Emerald Piecut Statement Ring",
+    slug: "jsnd062612-emerald-piecut-statement-ring",
+    category: "Rings", source: "signature", comingSoon: true,
+    style: "Piecut statement ring", material: "18K Gold",
+    centerStone: "Emerald PIECUT cluster", carats: 0.93, diamondPieces: 9,
+    colorClarity: "EF/VVS/VS", piecut: true, diamondWorld: "natural-piecut",
+    diamondOrigin: "Natural", certificateNumber: "46J838782607",
+    visualCarat: 3, goldWeight: 2.069,
+    price: 2984, priceLabel: usd(2984), sizeInfo: "One-of-a-kind — professional resizing available",
+    description:
+      "A 0.93ct emerald PIECUT centre assembled from 9 matched natural diamonds, reading close to 3ct on the hand. 0.93ct total diamond weight set in 2.069g of 18K gold. IGI certificate 46J838782607. One-of-one piece.",
+    image: PLACEHOLDER.portrait,
+    featured: false,
+  },
+  {
+    id: "JSND062613", sku: "JSND062613",
+    name: "Round Piecut Statement Ring",
+    slug: "jsnd062613-round-piecut-statement-ring",
+    category: "Rings", source: "signature", comingSoon: true,
+    style: "Piecut statement ring", material: "18K Gold",
+    centerStone: "Round PIECUT cluster", carats: 1.04, diamondPieces: 9,
+    colorClarity: "FG/VS", piecut: true, diamondWorld: "natural-piecut",
+    diamondOrigin: "Natural", certificateNumber: "24J135722403",
+    visualCarat: 3, goldWeight: 4.662,
+    price: 4014, priceLabel: usd(4014), sizeInfo: "One-of-a-kind — professional resizing available",
+    description:
+      "A 0.93ct round PIECUT centre assembled from 9 matched natural diamonds, reading close to 3ct on the hand. 1.04ct total diamond weight set in 4.662g of 18K gold. IGI certificate 24J135722403. One-of-one piece.",
+    image: PLACEHOLDER.portrait,
+    featured: false,
+  },
+];
+
 // CVD line comes from the supplier stock sheet (see data/cvd-products.ts).
 export const products: Product[] = [
-  ...signatureProducts,
-  ...labGrownProducts,
-  ...cvdProducts(IMAGERY_READY),
-  customProduct,
-].map(asEighteenKRetail);
+  ...[
+    ...signatureProducts,
+    ...labGrownProducts,
+    ...cvdProducts(IMAGERY_READY),
+    customProduct,
+  ].map(asEighteenKRetail),
+  // PIECUT prices come from the sheet as final retail — no 18K multiplier.
+  ...piecutHouseProducts,
+];
 
 const DIAMOND_SHAPES: DiamondShape[] = [
   "Cushion Brilliant",

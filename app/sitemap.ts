@@ -27,6 +27,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/pages/shipping",
     "/pages/returns",
     "/pages/warranty",
+    "/pages/editorial-standards",
   ];
 
   return [

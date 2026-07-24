@@ -1,0 +1,89 @@
+/* ── About / Maison — premium editorial, Marcellus + Figtree ── */
+.page { background: var(--js-porcelain); color: var(--js-ink); }
+
+/* Hero: full-bleed atelier image, headline flush over a dark gradient */
+.hero { position: relative; height: min(78vh, 680px); min-height: 440px; overflow: hidden; background: #131216; }
+.heroImg { position: absolute; inset: 0; }
+.heroImg img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; filter: saturate(.94) contrast(1.02); }
+.heroImg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(19,18,22,.18) 20%, rgba(19,18,22,.5) 66%, rgba(19,18,22,.78)); }
+.heroCopy { position: absolute; inset: auto 0 0 0; z-index: 2; padding: 0 clamp(1.3rem, 5vw, 4.5rem) clamp(2.4rem, 4vw, 3.6rem); color: #F6F3ED; }
+.heroKicker { margin: 0 0 1.1rem; color: var(--js-gold-light); font-size: clamp(.62rem,.74vw,.7rem); font-weight: 500; letter-spacing: .3em; text-transform: uppercase; }
+.hero h1 { margin: 0; max-width: 16ch; font-family: var(--font-display); font-size: clamp(2.6rem, 5.2vw, 4.6rem); font-weight: 400; line-height: 1.04; text-wrap: balance; }
+.heroSub { margin: 1.1rem 0 0; max-width: 54ch; color: #E4DFD5; font-size: clamp(.96rem,1.05vw,1.05rem); font-weight: 300; line-height: 1.7; }
+
+/* Founder split */
+.founder { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2.5rem, 5vw, 5.5rem); align-items: center; max-width: 1320px; margin: 0 auto; padding: clamp(4.5rem, 8vw, 7rem) clamp(1.3rem, 5vw, 4.5rem); }
+.founderMedia { position: relative; height: clamp(420px, 46vw, 600px); overflow: hidden; border-radius: 2px; background: #17161a; }
+.founderMedia img { width: 100%; height: 100%; object-fit: cover; }
+.kicker { margin: 0 0 1rem; color: var(--js-gold-deep); font-size: clamp(.62rem,.72vw,.69rem); font-weight: 600; letter-spacing: .28em; text-transform: uppercase; }
+.founder h2, .worlds h2, .valuesInner h2, .closer h2 { margin: 0; font-family: var(--font-display); font-weight: 400; line-height: 1.06; }
+.founder h2 { font-size: clamp(2.1rem, 4vw, 3.3rem); }
+.founderName { margin: 1.2rem 0 .2rem; font-family: var(--font-display); font-size: 1.3rem; }
+.founderRole { margin: 0 0 1.4rem; color: var(--js-gold-deep); font-size: .68rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; }
+.founder p.body { margin: 0 0 1.05rem; max-width: 46ch; color: var(--js-ink-soft); font-size: clamp(.95rem,1.05vw,1.02rem); font-weight: 300; line-height: 1.76; }
+.founder p.body strong { color: var(--js-ink); font-weight: 500; }
+.makers { margin-top: 1.9rem; padding-top: 1.6rem; border-top: 1px solid var(--js-line); }
+.makersLabel { margin: 0 0 1rem; color: var(--js-gold-deep); font-size: .6rem; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; }
+.makers ul { display: flex; flex-wrap: wrap; gap: 1.8rem; margin: 0 0 1rem; padding: 0; list-style: none; }
+.makers li { display: flex; flex-direction: column; gap: .15rem; }
+.makers li strong { font-family: var(--font-display); font-size: 1.2rem; font-weight: 400; color: var(--js-ink); }
+.makers li span { font-size: .6rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--js-platinum); }
+.makersNote { margin: 0; max-width: 48ch; color: var(--js-ink-soft); font-size: .92rem; font-weight: 300; line-height: 1.72; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 1.3rem; margin-top: 1.8rem; }
+.btnSolid { display: inline-flex; min-height: 48px; align-items: center; padding: .95rem 2.1rem; border-radius: var(--js-radius-control); background: var(--js-ink); color: var(--js-porcelain); text-decoration: none; font-size: .68rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; }
+.btnGhost { display: inline-flex; min-height: 48px; align-items: center; padding-bottom: 3px; border-bottom: 1px solid var(--js-gold-light); color: var(--js-ink); text-decoration: none; font-size: .68rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; }
+
+/* Heritage timeline band (rose) */
+.heritage { position: relative; padding: clamp(4.5rem, 8vw, 7rem) clamp(1.3rem, 5vw, 4.5rem); background: #241419; color: #F6EFEA; overflow: hidden; }
+.heritageInner { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; text-align: center; }
+.heritageInner .kicker { color: #E8B4A0; }
+.heritage h2 { margin: 1rem 0 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(2.2rem, 4.4vw, 3.6rem); line-height: 1.05; }
+.heritageQuote { margin: clamp(1.6rem,3vw,2.2rem) auto 0; max-width: 30ch; color: #E8B4A0; font-family: var(--font-display); font-size: clamp(1.2rem, 2vw, 1.65rem); line-height: 1.4; }
+.timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.5rem, 3vw, 2.5rem); margin: clamp(2.4rem,4vw,3.4rem) auto 0; text-align: left; }
+.timeStep .year { font-family: var(--font-display); font-size: clamp(1.6rem, 2.6vw, 2.2rem); color: #F6EFEA; }
+.timeStep .line { width: 40px; height: 1px; background: rgba(232,180,160,.5); margin: .7rem 0 .9rem; }
+.timeStep p { margin: 0; color: rgba(246,239,234,.74); font-size: .9rem; font-weight: 300; line-height: 1.68; }
+.heritageBrand { position: relative; z-index: 1; margin-top: clamp(2rem,5vw,3.5rem); color: rgba(232,180,160,.14); font-family: var(--font-display); font-size: clamp(3rem, 14vw, 12rem); line-height: .82; text-align: center; user-select: none; white-space: nowrap; }
+
+/* Worlds + values — numbered rows, not generic cards */
+.worlds { max-width: 1320px; margin: 0 auto; padding: clamp(4.5rem, 8vw, 7rem) clamp(1.3rem, 5vw, 4.5rem); }
+.worldsHead { max-width: 46ch; margin-bottom: clamp(2.2rem, 4vw, 3.2rem); }
+.worlds h2 { font-size: clamp(2rem, 3.6vw, 3rem); }
+.worldsHead p { margin: 1rem 0 0; color: var(--js-ink-soft); font-size: clamp(.95rem,1.05vw,1.02rem); font-weight: 300; line-height: 1.72; }
+.rows { border-top: 1px solid var(--js-line); }
+.row { display: grid; grid-template-columns: 3.5rem 1fr 2fr; gap: clamp(1rem, 3vw, 3rem); align-items: baseline; padding: clamp(1.6rem, 3vw, 2.2rem) 0; border-bottom: 1px solid var(--js-line); }
+.row .num { font-family: var(--font-display); font-size: 1.1rem; color: var(--js-gold-deep); }
+.row h3 { margin: 0; font-family: var(--font-display); font-size: clamp(1.5rem, 2.4vw, 2.1rem); font-weight: 400; line-height: 1.1; }
+.row p { margin: 0; color: var(--js-ink-soft); font-size: clamp(.94rem,1.02vw,1rem); font-weight: 300; line-height: 1.74; }
+
+/* Values band (dark) */
+.values { background: #131216; color: #F5F2EC; }
+.valuesInner { max-width: 1320px; margin: 0 auto; padding: clamp(4.5rem, 8vw, 7rem) clamp(1.3rem, 5vw, 4.5rem); }
+.valuesInner .kicker { color: var(--js-gold-light); }
+.valuesInner h2 { font-size: clamp(2rem, 3.6vw, 3rem); }
+.values .rows { border-top-color: rgba(245,242,236,.16); margin-top: clamp(2rem,4vw,3rem); }
+.values .row { border-bottom-color: rgba(245,242,236,.16); }
+.values .row .num { color: var(--js-gold-light); }
+.values .row h3 { color: #F5F2EC; }
+.values .row p { color: #C8C3B8; }
+
+/* Closer */
+.closer { text-align: center; max-width: 720px; margin: 0 auto; padding: clamp(4.5rem, 8vw, 7rem) clamp(1.3rem, 5vw, 4.5rem); }
+.closer h2 { font-size: clamp(2rem, 3.8vw, 3rem); }
+.closer p { margin: 1.1rem auto 0; color: var(--js-ink-soft); font-size: 1rem; font-weight: 300; }
+.closerActions { display: flex; justify-content: center; flex-wrap: wrap; gap: 1.3rem; margin-top: 1.9rem; }
+
+@media (max-width: 860px) {
+  .founder, .timeline { grid-template-columns: 1fr; }
+  .founder { gap: 2rem; }
+  .founderMedia { order: -1; }
+  .timeline { gap: 1.6rem; text-align: left; }
+  .row { grid-template-columns: 2.4rem 1fr; }
+  .row p { grid-column: 2; }
+}
+@media (max-width: 600px) {
+  .heritageBrand { font-size: clamp(2.4rem, 18vw, 4rem); }
+  .row { grid-template-columns: 1fr; gap: .4rem; }
+  .row p { grid-column: 1; }
+}

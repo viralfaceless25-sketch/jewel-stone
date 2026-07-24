@@ -1,6 +1,51 @@
 "use client";
 
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { useEffect, useRef, type ReactNode } from "react";
+
+const EDITORIAL_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const titleSequence: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      delayChildren: 0.08,
+      staggerChildren: 0.16,
+    },
+  },
+};
+
+const titleWord: Variants = {
+  hidden: { opacity: 0, y: "0.58em" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.82, ease: EDITORIAL_EASE },
+  },
+};
+
+const typedWord: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.055 } },
+};
+
+const typedGlyph: Variants = {
+  hidden: { opacity: 0, y: "0.22em" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.32, ease: EDITORIAL_EASE },
+  },
+};
+
+const typingCursor: Variants = {
+  hidden: { opacity: 0, scaleY: 0.25 },
+  visible: {
+    opacity: [0, 1, 1, 0],
+    scaleY: [0.25, 1, 1, 0.25],
+    transition: { duration: 0.9, times: [0, 0.14, 0.7, 1], ease: EDITORIAL_EASE },
+  },
+};
 
 export function CinematicHome({ className, children }: { className: string; children: ReactNode }) {
   const root = useRef<HTMLElement | null>(null);
@@ -74,6 +119,40 @@ export function CinematicSection({ className, children, id }: { className: strin
   return <section id={id} data-lux-scene className={className}>{children}</section>;
 }
 
-export function CinematicArticle({ className, children }: { className: string; children: ReactNode }) {
-  return <article data-lux-scene className={className}>{children}</article>;
+export function CinematicArticle({ className, children, id }: { className: string; children: ReactNode; id?: string }) {
+  return <article id={id} data-lux-scene className={className}>{children}</article>;
+}
+
+export function AnimatedStoryTitle({ title, className }: { title: string; className: string }) {
+  const reduceMotion = useReducedMotion();
+  const words = title.trim().split(/\s+/);
+  const typed = words.at(-1) ?? "";
+  const lead = words.slice(0, -1);
+
+  return (
+    <motion.h3
+      aria-label={title}
+      className={className}
+      initial={reduceMotion ? false : "hidden"}
+      whileInView={reduceMotion ? undefined : "visible"}
+      viewport={{ once: true, amount: 0.65 }}
+      variants={titleSequence}
+    >
+      <span aria-hidden="true">
+        {lead.map((word, index) => (
+          <motion.span data-title-word key={`${word}-${index}`} variants={titleWord}>
+            {word}
+          </motion.span>
+        ))}
+        <motion.span data-title-typed variants={typedWord}>
+          {Array.from(typed).map((glyph, index) => (
+            <motion.span data-title-glyph key={`${glyph}-${index}`} variants={typedGlyph}>
+              {glyph}
+            </motion.span>
+          ))}
+          <motion.i data-title-cursor variants={typingCursor} />
+        </motion.span>
+      </span>
+    </motion.h3>
+  );
 }

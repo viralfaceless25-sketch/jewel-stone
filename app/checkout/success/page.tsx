@@ -85,7 +85,7 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
         </p>
         <div className={styles.confirmActions}>
           <Link href="/checkout" className={styles.primary}>Return to checkout</Link>
-          <Link href="/pages/contact" className={styles.secondary}>Contact Jewel Stone</Link>
+          <Link href="/contact" className={styles.secondary}>Contact Jewel Stone</Link>
         </div>
       </div>
     </main>

@@ -3,16 +3,34 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { megaNav } from "@/data/site";
 import { cartCount, useCartStore } from "@/store/cart";
 import styles from "./site-chrome.module.css";
 
 const PRIMARY_LABELS = new Set(["Engagement", "Wedding", "Jewelry"]);
-const SECONDARY_LABELS = new Set(["Diamonds", "Custom Design"]);
+const SECONDARY_LABELS = new Set(["Diamonds", "Custom Design", "About"]);
+
+const mobileMenuMotion = {
+  hidden: { opacity: 0, y: -12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.34, ease: [0.22, 1, 0.36, 1] as const },
+  },
+  exit: {
+    opacity: 0,
+    y: -8,
+    transition: { duration: 0.2, ease: [0.4, 0, 1, 1] as const },
+  },
+};
 
 export function SiteNav() {
   const pathname = usePathname();
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const smoothScrollProgress = useSpring(scrollYProgress, { stiffness: 220, damping: 32, mass: 0.25 });
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<number | null>(null);
@@ -78,31 +96,37 @@ export function SiteNav() {
     const selected = active === index;
     const current = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
 
+    // Every top-level entry navigates on click. Items that own a mega menu get a
+    // separate caret button so the panel can still be toggled by click/keyboard.
     return (
       <div key={item.label} className={styles.navItem} onMouseEnter={() => enter(index)}>
+        <Link
+          href={item.href}
+          className={`${styles.navLink} ${selected || current ? styles.navLinkActive : ""}`}
+          aria-current={current ? "page" : undefined}
+          onFocus={() => {
+            clearTimers();
+            setActive(item.groups ? index : null);
+          }}
+          onClick={() => setActive(null)}
+        >
+          {item.label}
+        </Link>
         {item.groups ? (
           <button
             type="button"
-            className={`${styles.navLink} ${selected || current ? styles.navLinkActive : ""}`}
+            className={`${styles.navCaret} ${selected ? styles.navCaretOpen : ""}`}
             aria-haspopup="true"
             aria-expanded={selected}
+            aria-label={`${selected ? "Hide" : "Show"} ${item.label} menu`}
             onClick={() => {
               clearTimers();
-              setActive(index);
-            }}
-            onFocus={() => {
-              clearTimers();
-              setActive(index);
+              setActive(selected ? null : index);
             }}
           >
-            {item.label}
             <i className={styles.caret} aria-hidden />
           </button>
-        ) : (
-          <Link href={item.href} className={`${styles.navLink} ${current ? styles.navLinkActive : ""}`}>
-            {item.label}
-          </Link>
-        )}
+        ) : null}
       </div>
     );
   };
@@ -117,9 +141,13 @@ export function SiteNav() {
 
   return (
     <header
-      className={`${styles.nav} ${scrolled || active !== null ? styles.navScrolled : ""}`}
+      className={`${styles.nav} ${scrolled || active !== null || open ? styles.navScrolled : ""}`}
       onKeyDown={onHeaderKeyDown}
     >
+      <p className={styles.navUtilityBar}>
+        Complimentary insured shipping · New York Diamond District · By appointment
+      </p>
+
       <div className={styles.navInner} onMouseLeave={leave}>
         <button
           type="button"
@@ -140,7 +168,7 @@ export function SiteNav() {
         <Link href="/" className={styles.wordmark} aria-label="Jewel Stone home">
           <Image
             className={styles.navWordmark}
-            src="/brand/jewel-stone-nav-wordmark.webp"
+            src="/brand/jewel-stone-nav-wordmark-alpha.webp"
             alt="Jewel Stone"
             width={166}
             height={23}
@@ -180,6 +208,27 @@ export function SiteNav() {
         </div>
       </div>
 
+      <motion.div
+        aria-hidden="true"
+        className={styles.navProgress}
+        style={{ scaleX: reduceMotion ? scrollYProgress : smoothScrollProgress }}
+      />
+
+      <AnimatePresence>
+        {activeItem?.groups ? (
+          <motion.button
+            type="button"
+            className={styles.navScrim}
+            aria-label="Close navigation menu"
+            initial={reduceMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={reduceMotion ? undefined : { opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            onClick={() => setActive(null)}
+          />
+        ) : null}
+      </AnimatePresence>
+
       <div
         className={`${styles.mega} ${activeItem?.groups ? styles.megaOpen : ""}`}
         onMouseEnter={clearTimers}
@@ -190,7 +239,14 @@ export function SiteNav() {
             <div className={styles.megaGroups}>
               {activeItem.groups.map((group) => (
                 <div key={group.title} className={styles.megaGroup}>
-                  <h4>{group.title}</h4>
+                  <h4>
+                    <Link
+                      href={group.href ?? group.items[0]?.href ?? activeItem.href}
+                      onClick={() => setActive(null)}
+                    >
+                      {group.title}
+                    </Link>
+                  </h4>
                   <ul>
                     {group.items.map((link, index) => (
                       <li key={`${link.label}-${index}`}>
@@ -221,43 +277,64 @@ export function SiteNav() {
         ) : null}
       </div>
 
-      {open ? (
-        <nav id="mobile-navigation" className={styles.mobileMenu} aria-label="Mobile">
-          <div className={styles.mobileMenuInner}>
-            {megaNav.map((item) => {
-              const expanded = mobileExpanded === item.label;
-              return (
-                <section key={item.label} className={styles.mobileSection}>
-                  <div className={styles.mobileTop}>
-                    <Link href={item.href} onClick={() => setOpen(false)}>{item.label}</Link>
-                    {item.groups ? (
-                      <button
-                        type="button"
-                        aria-label={`${expanded ? "Collapse" : "Expand"} ${item.label}`}
-                        aria-expanded={expanded}
-                        onClick={() => setMobileExpanded(expanded ? null : item.label)}
+      <AnimatePresence initial={false}>
+        {open ? (
+          <motion.nav
+            id="mobile-navigation"
+            className={styles.mobileMenu}
+            aria-label="Mobile"
+            initial={reduceMotion ? false : "hidden"}
+            animate="visible"
+            exit={reduceMotion ? undefined : "exit"}
+            variants={mobileMenuMotion}
+          >
+            <div className={styles.mobileMenuInner}>
+              <p className={styles.mobileMenuKicker}>Explore Jewel Stone</p>
+              {megaNav.map((item, itemIndex) => {
+                const expanded = mobileExpanded === item.label;
+                const current = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+                return (
+                  <section key={item.label} className={styles.mobileSection}>
+                    <div className={styles.mobileTop}>
+                      <span className={styles.mobileIndex} aria-hidden>{String(itemIndex + 1).padStart(2, "0")}</span>
+                      <Link
+                        href={item.href}
+                        aria-current={current ? "page" : undefined}
+                        className={current ? styles.mobileCurrent : undefined}
+                        onClick={() => setOpen(false)}
                       >
-                        <span aria-hidden>{expanded ? "−" : "+"}</span>
-                      </button>
-                    ) : null}
-                  </div>
-                  {expanded && item.groups ? (
-                    <div className={styles.mobileChildren}>
-                      {item.groups.flatMap((group) => group.items).map((link, index) => (
-                        <Link key={`${link.label}-${index}`} href={link.href} onClick={() => setOpen(false)}>{link.label}</Link>
-                      ))}
+                        {item.label}
+                      </Link>
+                      {item.groups ? (
+                        <button
+                          type="button"
+                          aria-label={`${expanded ? "Collapse" : "Expand"} ${item.label}`}
+                          aria-expanded={expanded}
+                          onClick={() => setMobileExpanded(expanded ? null : item.label)}
+                        >
+                          <span aria-hidden>{expanded ? "−" : "+"}</span>
+                        </button>
+                      ) : null}
                     </div>
-                  ) : null}
-                </section>
-              );
-            })}
-            <div className={styles.mobileUtility}>
-              <Link href="/contact" onClick={() => setOpen(false)}>Contact</Link>
-              <Link href="/wishlist" onClick={() => setOpen(false)}>Wishlist</Link>
+                    {expanded && item.groups ? (
+                      <div className={styles.mobileChildren}>
+                        {item.groups.flatMap((group) => group.items).map((link, index) => (
+                          <Link key={`${link.label}-${index}`} href={link.href} onClick={() => setOpen(false)}>{link.label}</Link>
+                        ))}
+                      </div>
+                    ) : null}
+                  </section>
+                );
+              })}
+              <div className={styles.mobileUtility}>
+                <Link className={styles.mobileAppointment} href="/contact" onClick={() => setOpen(false)}>Book appointment ↗</Link>
+                <Link href="/contact" onClick={() => setOpen(false)}>Contact</Link>
+                <Link href="/wishlist" onClick={() => setOpen(false)}>Wishlist</Link>
+              </div>
             </div>
-          </div>
-        </nav>
-      ) : null}
+          </motion.nav>
+        ) : null}
+      </AnimatePresence>
     </header>
   );
 }

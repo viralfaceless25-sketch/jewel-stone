@@ -20,7 +20,8 @@ export const navigation = [
 ];
 
 export type NavChild = { href: string; label: string; description?: string };
-export type NavGroup = { title: string; items: NavChild[] };
+/** `href` is optional — the nav falls back to the group's first item. */
+export type NavGroup = { title: string; href?: string; items: NavChild[] };
 export type NavFeatured = { image: string; title: string; subtitle?: string; cta: string; href: string };
 export type NavItem = {
   href: string;
@@ -148,31 +149,31 @@ export const megaNav: NavItem[] = [
     viewAll: '/diamonds',
     groups: [
       {
-        title: 'By Shape',
+        title: 'Loose Diamonds',
+        href: '/diamonds',
         items: [
-          { href: '/diamonds', label: 'Round' },
-          { href: '/diamonds', label: 'Oval' },
-          { href: '/diamonds', label: 'Cushion' },
-          { href: '/diamonds', label: 'Emerald Cut' },
-          { href: '/diamonds', label: 'Pear' },
-          { href: '/diamonds', label: 'Princess' },
+          { href: '/diamonds', label: 'Browse all stones' },
+          { href: '/diamonds', label: 'Certified (IGI)' },
+          { href: '/diamonds', label: 'Non-certified value' },
+          { href: '/diamonds', label: 'The 4 Cs explained' },
         ],
       },
       {
-        title: 'Learn',
+        title: 'Shop by Diamond',
+        href: '/collections',
         items: [
-          { href: '/diamonds', label: 'The 4 Cs' },
-          { href: '/diamonds', label: 'Lab vs Natural' },
-          { href: '/diamonds', label: 'GIA & IGI Certified' },
-          { href: '/diamonds', label: 'How to Choose' },
+          { href: '/collections?world=natural', label: 'Natural diamond jewelry' },
+          { href: '/collections?world=natural-piecut', label: 'Natural PIECUT jewelry' },
+          { href: '/collections?world=lab-grown', label: 'Lab-grown jewelry' },
+          { href: '/collections?type=engagement', label: 'Engagement rings' },
         ],
       },
     ],
     featured: {
-      image: '/images/products/emerald-halo-stud-earrings/cover.jpg',
-      title: 'Compare Certified Stones',
-      subtitle: 'Natural and lab-grown, selected with guidance',
-      cta: 'Search Diamonds',
+      image: '/images/atelier/loose-diamonds.jpg',
+      title: 'Certified & value stones',
+      subtitle: 'Every shape and carat, ready to set',
+      cta: 'Browse loose diamonds',
       href: '/diamonds',
     },
   },

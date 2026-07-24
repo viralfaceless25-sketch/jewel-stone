@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
-import Script from "next/script";
+import "@fontsource/marcellus";
+import "@fontsource-variable/figtree";
 import "./globals.css";
 import { SiteNav } from "@/components/site/SiteNav";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { BrandPreloader } from "@/components/site/BrandPreloader";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationSchema, SITE_URL, websiteSchema } from "@/lib/seo/schema";
-import { INTRO_SESSION_KEY } from "@/lib/site/intro-state";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Jewel Stone | Diamond Jewelry NYC",
+    default: "Jewel Stone NYC | Natural, PIECUT & Lab-Grown Diamond Jewelry",
     template: "%s | Jewel Stone",
   },
   description:
@@ -32,13 +31,23 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  authors: [{ name: "Ishan Vaghani", url: "/about" }],
+  creator: "Jewel Stone",
+  publisher: "Jewel Stone NY LLC",
+  category: "Fine jewelry",
   openGraph: {
-    title: "Jewel Stone | Rare PIECUT & Diamond Jewelry NYC",
+    title: "Jewel Stone NYC | Natural, PIECUT & Lab-Grown Diamond Jewelry",
     description:
       "Rare PIECUT and antique pieces, certified lab-grown and natural diamonds, and bespoke jewelry from NYC's Diamond District — viewable in 3D and AR.",
     url: SITE_URL,
     siteName: "Jewel Stone",
-    images: [{ url: "/logo-transparent.png", alt: "Jewel Stone" }],
+    locale: "en_US",
+    images: [{
+      url: `${SITE_URL}/images/hero/campaign-01.webp`,
+      width: 1671,
+      height: 941,
+      alt: "Jewel Stone diamond jewelry photographed in New York",
+    }],
     type: "website",
   },
   twitter: {
@@ -46,8 +55,11 @@ export const metadata: Metadata = {
     title: "Jewel Stone | Rare PIECUT & Diamond Jewelry NYC",
     description:
       "Rare PIECUT and antique pieces, certified diamonds, and bespoke jewelry from NYC's Diamond District — viewable in 3D and AR.",
-    images: ["/logo-transparent.png"],
+    images: [`${SITE_URL}/images/hero/campaign-01.webp`],
   },
+  ...(process.env.GOOGLE_SITE_VERIFICATION ? {
+    verification: { google: process.env.GOOGLE_SITE_VERIFICATION },
+  } : {}),
   robots: {
     index: true,
     follow: true,
@@ -59,10 +71,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <Script id="intro-session-marker" strategy="beforeInteractive">
-          {`try { if (sessionStorage.getItem("${INTRO_SESSION_KEY}") === "1") document.documentElement.dataset.introSeen = "true"; } catch {}`}
-        </Script>
-        <BrandPreloader />
         <a className="skip-link" href="#main-content">Skip to main content</a>
         <SiteNav />
         <div id="main-content" tabIndex={-1} className="site-shell">{children}</div>

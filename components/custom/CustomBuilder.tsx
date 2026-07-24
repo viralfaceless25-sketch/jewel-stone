@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import styles from "./custom.module.css";
 
@@ -19,6 +20,7 @@ const IMAGE_EXTENSION = /\.(?:jpe?g|png|webp|heic|heif)$/i;
 
 type Upload = { file: File; id: string; preview: string };
 type Status = "idle" | "sending" | "sent" | "error";
+type Submission = { id: string; statusUrl: string; notificationsConfigured: boolean };
 
 function readableSize(bytes: number) {
   return `${(bytes / 1024 / 1024).toFixed(bytes >= 1024 * 1024 ? 1 : 2)} MB`;
@@ -31,6 +33,7 @@ export function CustomBuilder() {
   const [fileError, setFileError] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [submitError, setSubmitError] = useState("");
+  const [submission, setSubmission] = useState<Submission | null>(null);
   const uploadsRef = useRef<Upload[]>([]);
 
   const current = STEPS[step];
@@ -110,43 +113,107 @@ export function CustomBuilder() {
     setStatus("sending");
     setSubmitError("");
     const form = new FormData(event.currentTarget);
-    const notes = String(form.get("notes") ?? "").trim();
-    const brief = [
-      "Custom design brief",
-      ...STEPS.map(({ key, label }) => `${label}: ${choices[key]}`),
-      "",
-      `Additional notes: ${notes || "—"}`,
-    ].join("\n");
-    form.set("context", "Custom design request");
-    form.set("message", brief);
-    form.delete("notes");
+    STEPS.forEach(({ key }) => form.set(key, choices[key]));
     uploads.forEach(({ file }) => form.append("referenceImages", file, file.name));
 
     try {
-      const response = await fetch("/api/inquiry", { method: "POST", body: form });
+      const response = await fetch("/api/custom-requests", { method: "POST", body: form });
       const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.error || "Design brief could not be delivered.");
+      if (!response.ok) throw new Error(result.error || "Custom request could not be created.");
+      setSubmission({
+        id: String(result.id ?? "Custom request"),
+        statusUrl: String(result.statusUrl ?? "/custom"),
+        notificationsConfigured: Boolean(result.notificationsConfigured),
+      });
       setStatus("sent");
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : "Design brief could not be delivered.");
+      setSubmitError(error instanceof Error ? error.message : "Custom request could not be created.");
       setStatus("error");
     }
   };
 
-  if (status === "sent") {
+  if (status === "sent" && submission) {
     return (
       <section className={styles.done} aria-labelledby="custom-sent-title">
         <div className={styles.check} aria-hidden="true">✓</div>
-        <h2 id="custom-sent-title">Your commission is in motion.</h2>
-        <p>We received your design brief{uploads.length ? ` and ${uploads.length} reference ${uploads.length === 1 ? "image" : "images"}` : ""}. Our team will reply within one business day.</p>
+        <p className={styles.doneKick}>Request {submission.id}</p>
+        <h2 id="custom-sent-title">Brief received. Quotation pending.</h2>
+        <p>Owner now reviews your choices{uploads.length ? ` and ${uploads.length} reference ${uploads.length === 1 ? "image" : "images"}` : ""}. Your tracking page will show the estimate, production time, and accept or decline controls.</p>
+        <div className={styles.doneStatus}><span aria-hidden /> Awaiting owner quotation</div>
+        <Link className={styles.trackButton} href={submission.statusUrl}>Check quotation status →</Link>
+        <small>{submission.notificationsConfigured ? "Confirmation sent. We will email again when quotation is ready." : "Keep this status link. Email notifications become active when mail delivery is connected."}</small>
       </section>
     );
   }
 
   return (
     <form className={styles.builder} onSubmit={submit} aria-labelledby="custom-builder-title">
-      <input type="hidden" name="context" value="Custom design request" readOnly />
       <label className={styles.honeypot} htmlFor="custom-company" aria-hidden="true">Company<input id="custom-company" name="company" tabIndex={-1} autoComplete="off" /></label>
+
+      <section className={styles.reference} aria-labelledby="reference-title">
+        <header className={styles.briefHead}>
+          <div>
+            <p className={styles.stepKick}>Start with inspiration</p>
+            <h2 id="reference-title">Show us the reference.</h2>
+          </div>
+          <p>Upload one image or multiple angles of the same piece. Prefer a product page, reel, or post? Paste its link instead—or send both.</p>
+        </header>
+
+        <div className={styles.referenceInputs}>
+          <div>
+            <input
+              id="custom-reference-images"
+              className={styles.fileInput}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif"
+              multiple
+              onChange={addFiles}
+              aria-describedby="custom-file-help custom-file-status"
+            />
+            <label htmlFor="custom-reference-images" className={styles.uploadBox}>
+              <span className={styles.uploadMark} aria-hidden="true">＋</span>
+              <strong>{uploads.length ? "Add another angle" : "Upload reference photos"}</strong>
+              <span id="custom-file-help">1–6 images · JPG, PNG, WEBP, or HEIC · 6 MB each</span>
+            </label>
+          </div>
+          <label className={styles.linkBox} htmlFor="custom-reference-url">
+            <span className={styles.linkMark} aria-hidden="true">↗</span>
+            <strong>Attach a reference link</strong>
+            <span>Product page, Instagram, Pinterest, TikTok, or another public URL</span>
+            <input id="custom-reference-url" name="referenceUrl" type="url" inputMode="url" placeholder="https://…" />
+          </label>
+        </div>
+
+        <p id="custom-file-status" className={styles.fileStatus} aria-live="polite">
+          {uploads.length ? `${uploads.length} of ${MAX_FILES} selected · ${readableSize(uploads.reduce((sum, { file }) => sum + file.size, 0))} total` : "Reference images and link are optional, but help owner quote accurately."}
+        </p>
+        {fileError ? <p className={styles.fileError} role="alert" aria-live="assertive">{fileError}</p> : null}
+
+        {uploads.length ? (
+          <ul className={styles.previews} aria-label="Selected reference images">
+            {uploads.map((upload, index) => (
+              <li key={upload.id}>
+                <div className={styles.previewImage}>
+                  <Image src={upload.preview} alt={`Reference angle ${index + 1}: ${upload.file.name}`} fill sizes="150px" unoptimized />
+                </div>
+                <div>
+                  <strong>Angle {index + 1}</strong>
+                  <span title={upload.file.name}>{upload.file.name}</span>
+                  <small>{readableSize(upload.file.size)}</small>
+                </div>
+                <button type="button" onClick={() => removeFile(upload.id)} aria-label={`Remove ${upload.file.name}`}>Remove</button>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </section>
+
+      <ol className={styles.quoteJourney} aria-label="Custom quotation journey">
+        <li><span>01</span><strong>Send request</strong><small>Photos or link + design choices</small></li>
+        <li><span>02</span><strong>Receive estimate</strong><small>Owner reviews and prices design</small></li>
+        <li><span>03</span><strong>Accept or decline</strong><small>Decision stays in your status page</small></li>
+        <li><span>04</span><strong>Made & shipped</strong><small>Production and tracking updates</small></li>
+      </ol>
 
       <div className={styles.progress} aria-label="Custom design steps">
         {STEPS.map((item, index) => (
@@ -192,55 +259,11 @@ export function CustomBuilder() {
       </section>
 
       {complete ? (
-        <section className={styles.brief} aria-labelledby="reference-title">
-          <header className={styles.briefHead}>
-            <div>
-              <p className={styles.stepKick}>Your reference</p>
-              <h2 id="reference-title">One image, or every angle.</h2>
-            </div>
-            <p>Upload a single inspiration image or up to six views of one reference product. We use them only to understand proportion, setting, and detail.</p>
-          </header>
-
-          <input
-            id="custom-reference-images"
-            className={styles.fileInput}
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif"
-            multiple
-            onChange={addFiles}
-            aria-describedby="custom-file-help custom-file-status"
-          />
-          <label htmlFor="custom-reference-images" className={styles.uploadBox}>
-            <span className={styles.uploadMark} aria-hidden="true">＋</span>
-            <strong>{uploads.length ? "Add another angle" : "Choose reference images"}</strong>
-            <span id="custom-file-help">JPG, PNG, WEBP, or HEIC · up to 6 images · 6 MB each</span>
-          </label>
-          <p id="custom-file-status" className={styles.fileStatus} aria-live="polite">
-            {uploads.length ? `${uploads.length} of ${MAX_FILES} selected · ${readableSize(uploads.reduce((sum, { file }) => sum + file.size, 0))} total` : "Reference images are optional."}
-          </p>
-          {fileError ? <p className={styles.fileError} role="alert" aria-live="assertive">{fileError}</p> : null}
-
-          {uploads.length ? (
-            <ul className={styles.previews} aria-label="Selected reference images">
-              {uploads.map((upload, index) => (
-                <li key={upload.id}>
-                  <div className={styles.previewImage}>
-                    <Image src={upload.preview} alt={`Reference angle ${index + 1}: ${upload.file.name}`} fill sizes="150px" unoptimized />
-                  </div>
-                  <div>
-                    <strong>Angle {index + 1}</strong>
-                    <span title={upload.file.name}>{upload.file.name}</span>
-                    <small>{readableSize(upload.file.size)}</small>
-                  </div>
-                  <button type="button" onClick={() => removeFile(upload.id)} aria-label={`Remove ${upload.file.name}`}>Remove</button>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-
+        <section className={styles.brief} aria-labelledby="contact-title">
           <div className={styles.contactHead}>
-            <p className={styles.stepKick}>Your details</p>
-            <h2>Where should we send the first sketch?</h2>
+            <p className={styles.stepKick}>Request your estimate</p>
+            <h2 id="contact-title">Where should we send the quotation?</h2>
+            <p>Owner reviews your references personally. You will receive a private status link, then an email when estimated price and production time are ready.</p>
           </div>
           <div className={styles.fields}>
             <label htmlFor="custom-name">Name<input id="custom-name" required name="name" autoComplete="name" /></label>
@@ -249,13 +272,13 @@ export function CustomBuilder() {
             <label className={styles.notes} htmlFor="custom-notes">Details to preserve <span>(optional)</span><textarea id="custom-notes" name="notes" rows={4} placeholder="A detail, profile, engraving, timeline, or anything the images do not show…" /></label>
           </div>
           <div className={styles.sendRow}>
-            <p>Images travel with your private brief. Never published or shared.</p>
-            <button className={styles.submit} type="submit" disabled={status === "sending"}>{status === "sending" ? "Sending brief…" : "Send private brief →"}</button>
+            <p>References stay private. No payment is taken until you review and accept owner&apos;s quotation.</p>
+            <button className={styles.submit} type="submit" disabled={status === "sending"}>{status === "sending" ? "Creating request…" : "Request quotation →"}</button>
           </div>
           {status === "error" ? <p className={styles.submitError} role="alert" aria-live="assertive">{submitError}</p> : null}
         </section>
       ) : (
-        <p className={styles.builderHint}>Complete the five choices to add reference images and send your private brief.</p>
+        <p className={styles.builderHint}>Complete five choices. Your contact form and quotation request will appear here.</p>
       )}
     </form>
   );

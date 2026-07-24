@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ProductView } from "@/components/product/ProductView";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getProductBySlug, getRelatedProducts, products } from "@/data/products";
-import { breadcrumbSchema, productSchema } from "@/lib/seo/schema";
+import { absoluteUrl, breadcrumbSchema, productSchema } from "@/lib/seo/schema";
 
 export function generateStaticParams() {
   return products.map((product) => ({ slug: product.slug }));
@@ -16,11 +16,18 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
     title: product.name,
     description: product.description,
     alternates: { canonical: `/products/${product.slug}` },
+    ...(product.comingSoon ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       title: `${product.name} | Jewel Stone`,
       description: product.description,
-      images: [{ url: product.image, alt: product.name }],
+      images: [{ url: absoluteUrl(product.image), alt: product.name }],
       type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${product.name} | Jewel Stone`,
+      description: product.description,
+      images: [absoluteUrl(product.image)],
     },
   };
 }

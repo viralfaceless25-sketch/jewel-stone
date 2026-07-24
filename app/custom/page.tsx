@@ -2,14 +2,35 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { CustomBuilder } from "@/components/custom/CustomBuilder";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { faqPageSchema, type FaqItem } from "@/lib/seo/schema";
 import pages from "@/components/pages/pages.module.css";
 
 export const metadata: Metadata = {
-  title: "Custom Design — Build Your Piece",
+  title: "Custom Jewelry Design NYC — Request a Private Quotation",
   description:
-    "Design a one-of-a-kind piece with Jewel Stone. Choose your metal, stone shape, and budget — we source the diamond and craft the piece in-house.",
+    "Request custom jewelry from Jewel Stone in NYC. Upload reference images or a link, choose metal and diamond direction, then receive a private estimated quotation.",
   alternates: { canonical: "/custom" },
 };
+
+const CUSTOM_FAQS: FaqItem[] = [
+  {
+    question: "How do I request a custom jewelry design?",
+    answer: "Upload one to six reference images, attach a public reference link, or do both, then choose the piece type, metal, stone shape, diamond origin, and budget before sending contact details.",
+  },
+  {
+    question: "When will I receive a custom jewelry price?",
+    answer: "The owner reviews the design reference and brief before sending a private estimated price or range, expected production time, and any design assumptions through the request status page.",
+  },
+  {
+    question: "Can I accept or decline a custom jewelry quotation online?",
+    answer: "Yes. The private request page lets the customer accept the quotation or decline it and request a revision. Acceptance confirms the estimate but does not automatically charge a card.",
+  },
+  {
+    question: "How is a custom piece tracked after approval?",
+    answer: "After final specifications and payment arrangements are confirmed, the owner marks the piece in production. When finished, the customer’s private status page shows the carrier, tracking number, and tracking link.",
+  },
+];
 
 export default function CustomPage() {
   return (
@@ -18,8 +39,8 @@ export default function CustomPage() {
         <p className={pages.eyebrow}><span /> Bespoke</p>
         <h1 className={pages.h1}>Design <em>the one.</em></h1>
         <p className={pages.lede}>
-          From a loose stone up. Answer five quick questions and our team
-          returns stone options and a sketch within a day — no obligation.
+          Upload a reference or attach its link, then answer five quick questions.
+          Owner reviews the brief and sends a private estimated quotation for you to accept or decline.
         </p>
       </section>
 
@@ -38,7 +59,52 @@ export default function CustomPage() {
         </div>
       </section>
 
+      <section className={pages.section} aria-labelledby="custom-ar-title">
+        <div className={`${pages.wrap} ${pages.split}`}>
+          <div>
+            <p className={pages.eyebrow}><span /> 3D + native AR</p>
+            <h2 id="custom-ar-title" className={pages.h2}>Inspect every angle. Place it in your space.</h2>
+            <p className={pages.p}>
+              Rotate and zoom any AR-ready piece on any device. On supported iPhone and
+              Android devices, open native AR to place a true-scale piece in your
+              environment before a single stone is cut.
+            </p>
+            <p className={pages.p}>
+              No fake hand-tracking promise: fit and on-body scale remain guided by model
+              photography and a fitting at the studio.
+            </p>
+            <div className={pages.actions}>
+              <Link href="/products/heart-halo-ring" className={pages.btnGhost}>Open an AR-ready piece</Link>
+            </div>
+          </div>
+          <div className={pages.mediaFrame}>
+            <Image
+              src="/images/products/sr1-round-1ct-solitaire-ring/model.webp"
+              alt="Round solitaire ring worn on the hand, shown at true scale"
+              fill
+              sizes="(max-width:860px) 92vw, 46vw"
+              className={pages.mediaCover}
+            />
+          </div>
+        </div>
+      </section>
+
       <CustomBuilder />
+
+      <section className={pages.section} aria-labelledby="custom-faq-title">
+        <div className={pages.wrap}>
+          <p className={pages.eyebrow}><span /> Custom design answers</p>
+          <h2 id="custom-faq-title" className={pages.h2}>Before you send the brief.</h2>
+          <div className={pages.cards} style={{ marginTop: "2.5rem" }}>
+            {CUSTOM_FAQS.map((item) => (
+              <article className={pages.card} key={item.question}>
+                <h3 className={pages.h3}>{item.question}</h3>
+                <p className={pages.p} style={{ margin: 0 }}>{item.answer}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className={pages.dark}>
         <div className={pages.wrap} style={{ paddingBlock: "clamp(4rem,8vw,7rem)" }}>
@@ -53,6 +119,7 @@ export default function CustomPage() {
           </div>
         </div>
       </section>
+      <JsonLd data={faqPageSchema(CUSTOM_FAQS)} />
     </main>
   );
 }

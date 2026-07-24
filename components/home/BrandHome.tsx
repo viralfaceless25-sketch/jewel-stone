@@ -1,281 +1,305 @@
 import Image from "next/image";
 import Link from "next/link";
+import { brand } from "@/data/site";
+import { DIAMOND_WORLD_LABELS } from "@/lib/commerce/diamond-worlds";
+import { pickDailyArrivals } from "@/lib/home/new-arrivals";
 import styles from "./brand-home.module.css";
-import { CinematicArticle, CinematicHome, CinematicSection } from "./CinematicMotion";
+import { CinematicHome, CinematicSection } from "./CinematicMotion";
 import { HeroSlideshow } from "./HeroSlideshow";
 
-const STORIES = [
+const WORLDS = [
   {
-    eyebrow: "Natural diamond",
-    title: "Asscher, drawn in light",
-    story:
-      "Step-cut geometry gives Asscher diamonds their quiet, hall-of-mirrors character. This pair carries that architecture into an articulated drop: precise, graphic, and alive when worn.",
-    meta: "1.25 ct visual presence · 18K yellow gold · EF / VVS–VS",
-    modelImage: "/images/lifestyle/model-asscher-editorial.jpg",
-    productImage: "/images/products/asscher-halo-drop-earrings/cover.jpg",
-    href: "/products/asscher-halo-drop-earrings",
-    cta: "See piece, film & CAD",
+    id: "natural",
+    numeral: "I",
+    label: "Earth-formed · One of one",
+    title: "Natural",
+    body:
+      "Formed over a billion years and chosen stone by stone for provenance and individual character. When it is gone, there is no second.",
+    specs: ["GIA certified", "Provenance traced", "One of one"],
+    image: "/images/lifestyle/model-diamond-pendant.jpg",
+    alt: "Natural diamond pendant worn by a model, editorial portrait",
+    href: "/collections?world=natural",
+    cta: "Explore Natural",
   },
   {
-    eyebrow: "The PIECUT signature",
-    title: "Many stones. One silhouette.",
-    story:
-      "Nine precisely matched diamonds meet edge to edge, reading as one emerald-cut center. PIECUT turns small geometry into a larger flash—more character, less convention.",
-    meta: "1.25 ct visual presence · 18K white gold · EF / VVS–VS",
-    modelImage: "/images/lifestyle/model-asscher-earrings.jpg",
-    productImage: "/images/products/emerald-halo-stud-earrings/cover.jpg",
-    href: "/products/emerald-halo-stud-earrings",
-    cta: "See piece, film & CAD",
-  },
-  {
-    eyebrow: "Lab-grown diamond",
-    title: "A neckline built in crescendo",
-    story:
-      "Graduated diamonds begin quietly at the clasp and gather scale toward the collarbone. Fifteen carats turn a classical line into an evening piece, made around metal, length, and proportion.",
-    meta: "15.00 ct · 14K gold · made to order",
-    modelImage: "/images/products/fn2-graduated-diamond-necklace/model.webp",
-    productImage: "/images/products/fn2-graduated-diamond-necklace/angle-front-wg.webp",
-    href: "/products/fn2-graduated-diamond-necklace",
-    cta: "See model & all metal views",
+    id: "lab-grown",
+    numeral: "III",
+    label: "Same crystal · Greater freedom",
+    title: "Lab Grown",
+    body:
+      "Diamond in every optical and physical property, with room to go larger, finer, or bolder — on your terms and your budget.",
+    specs: ["IGI certified", "Made to order", "14K & 18K"],
+    image: "/images/products/sr1-round-1ct-solitaire-ring/model.webp",
+    alt: "Lab-grown round solitaire ring worn on the hand",
+    href: "/collections?world=lab-grown",
+    cta: "Explore Lab Grown",
   },
 ] as const;
 
-const EDITORIAL = [
+const HOUSE_FILMS: Array<{
+  id: string;
+  src: string;
+  poster: string;
+  label: string;
+  caption: string;
+  href: string;
+}> = [
   {
-    image: "/images/lifestyle/model-cluster-studs.jpg",
-    title: "Cluster studs",
-    href: "/products/star-cluster-stud-earrings",
+    id: "ring",
+    src: "/images/products/cvd-round-solitaire-halo-ring/video-web.mp4",
+    poster: "/images/products/cvd-round-solitaire-halo-ring/cover.webp",
+    label: "Ring",
+    caption: "Round solitaire halo",
+    href: "/collections/rings",
   },
   {
-    image: "/images/lifestyle/model-asscher-earrings.jpg",
-    title: "Asscher drops",
-    href: "/products/asscher-halo-drop-earrings",
+    id: "necklace",
+    src: "/images/products/cvd-tennis-necklace/video-web.mp4",
+    poster: "/images/products/cvd-tennis-necklace/cover.webp",
+    label: "Necklace",
+    caption: "Tennis line, graduated",
+    href: "/collections/necklaces",
   },
   {
-    image: "/images/products/st4-4ct-diamond-studs/model.jpg",
-    title: "Lab-grown studs",
+    id: "bracelet",
+    src: "/images/products/cvd-tennis-bracelet-4mm/video-web.mp4",
+    poster: "/images/products/cvd-tennis-bracelet-4mm/cover.webp",
+    label: "Bracelet",
+    caption: "4 mm tennis bracelet",
+    href: "/collections/bracelets",
+  },
+  {
+    id: "earring",
+    src: "/images/products/cvd-round-studs-7-4-8-2mm/video-web.mp4",
+    poster: "/images/products/cvd-round-studs-7-4-8-2mm/cover.webp",
+    label: "Earrings",
+    caption: "Round studs, 7.4–8.2 mm",
     href: "/collections/earrings",
   },
-] as const;
+];
 
 export function BrandHome() {
+  const arrivals = pickDailyArrivals(3);
+
   return (
     <CinematicHome className={styles.home}>
       <section className={`${styles.hero} cinematic-scene`}>
         <HeroSlideshow />
-        <div className={styles.heroShade} />
-        <div className={styles.heroCopy}>
-          <p className={styles.eyebrow}>Jewel Stone · Shine with you</p>
-          <h1>Jewelry with{" "}<br /><em>something to say.</em></h1>
-          <p>
-            Natural diamonds, rare PIECUT compositions, and lab-grown pieces—
-            selected with three generations of judgment, then made in-house.
-          </p>
-        </div>
       </section>
 
-      <CinematicSection className={styles.manifesto} id="point-of-view">
-        <div className={styles.manifestoMedia}>
-          <Image src="/images/lifestyle/model-heart-halo-pendant.jpg" alt="Jewel Stone diamond pendant worn on model" fill sizes="(max-width: 800px) 100vw, 46vw" />
-          <div className={styles.manifestoStudio}>
-            <Image src="/images/products/heart-halo-pendant/cover.jpg" alt="Heart halo pendant studio view" fill sizes="220px" />
-            <span>Studio proof · PIECUT</span>
-          </div>
-          <div className={styles.manifestoSeal}>
-            <Image src="/brand/jewel-stone-mark.webp" alt="" width={84} height={102} />
-          </div>
+      {/* ── The three worlds ── */}
+      <CinematicSection className={styles.worldsHead} id="worlds">
+        <p className={styles.worldsKicker}>The three worlds</p>
+        <h2>Natural. Natural&nbsp;PIECUT. Lab&nbsp;Grown.</h2>
+        <p className={styles.worldsSub}>
+          Every Jewel Stone piece begins with one decision — the world its diamond comes
+          from. Three worlds, one standard of cut, colour, and character.
+        </p>
+      </CinematicSection>
+
+      <CinematicSection className={styles.world} id={WORLDS[0].id}>
+        <div className={styles.worldMedia}>
+          <Image src={WORLDS[0].image} alt={WORLDS[0].alt} fill sizes="(max-width: 860px) 100vw, 46vw" />
         </div>
-        <div className={styles.manifestoCopy}>
-          <p className={styles.eyebrow}>Jewel Stone point of view</p>
-          <h2>Stone first.<br /><em>Story close behind.</em></h2>
-          <p className={styles.manifestoLede}>
-            We begin with proportion, light, and how jewelry changes when it meets
-            skin. Family knowledge since 1980 guides every stone selected and every
-            piece developed in-house.
-          </p>
-          <div className={styles.manifestoProof}>
-            <Link href="/collections"><b>01</b><strong>Natural</strong><span>Character, rarity, provenance</span></Link>
-            <Link href="/collections"><b>02</b><strong>PIECUT</strong><span>Many stones, one silhouette</span></Link>
-            <Link href="/collections"><b>03</b><strong>Lab-grown</strong><span>Scale and specification, your way</span></Link>
-          </div>
-          <Link href="/about" className={styles.manifestoLink}>Inside the maison <span>↗</span></Link>
+        <div className={styles.worldCopy}>
+          <p className={styles.worldLabel}>{WORLDS[0].numeral} — {WORLDS[0].label}</p>
+          <h3>{WORLDS[0].title}</h3>
+          <p className={styles.worldBody}>{WORLDS[0].body}</p>
+          <ul className={styles.worldSpecs}>
+            {WORLDS[0].specs.map((spec) => <li key={spec}>{spec}</li>)}
+          </ul>
+          <Link href={WORLDS[0].href} className={styles.worldCta}>{WORLDS[0].cta}</Link>
         </div>
       </CinematicSection>
 
-      <section className={styles.stories} aria-labelledby="story-title">
-        <header className={styles.sectionHead}>
-          <p>The collection, three ways</p>
-          <h2 id="story-title">Three ways to find your diamond.</h2>
-          <span>Explore one-of-a-kind PIECUT, certified natural, and lab-grown jewelry.</span>
-        </header>
+      <CinematicSection className={styles.worldSignature} id="natural-piecut">
+        <div className={styles.worldSignatureInner}>
+          <div className={styles.worldCopy}>
+            <p className={styles.worldLabel}>II — The signature</p>
+            <h3>Natural&nbsp;PIECUT</h3>
+            <p className={styles.worldBody}>
+              Precisely matched natural diamonds, assembled by hand to read as one larger
+              geometric silhouette.
+            </p>
+            <p className={styles.worldSignatureNote}>Found nowhere else</p>
+            <Link href="/collections?world=natural-piecut" className={styles.worldCtaPill}>Explore PIECUT</Link>
+          </div>
+          <div className={styles.worldMedia}>
+            <Image
+              src="/images/lifestyle/model-asscher-editorial.jpg"
+              alt="Model wearing Natural PIECUT emerald-cut drop earrings, editorial portrait"
+              fill
+              sizes="(max-width: 860px) 100vw, 46vw"
+            />
+          </div>
+        </div>
+      </CinematicSection>
 
-        {STORIES.map((item, index) => (
-          <CinematicArticle className={styles.story} key={item.title}>
-            <div className={styles.storyMedia}>
-              <Link href={item.href} className={styles.storyModel} aria-label={`See ${item.title} worn`}>
-                <Image src={item.modelImage} alt={`${item.title}, worn`} fill sizes="(max-width: 800px) 100vw, 42vw" className={styles.storyImage} />
-              </Link>
-              <Link href={item.href} className={styles.storyProduct} aria-label={`Inspect ${item.title}`}>
-                <Image src={item.productImage} alt={`${item.title}, studio view`} fill sizes="(max-width: 800px) 42vw, 18vw" />
-                <span>Studio view</span>
-              </Link>
-              <b>{String(index + 1).padStart(2, "0")}</b>
-            </div>
-            <div className={styles.storyCopy}>
-              <p className={styles.eyebrow}>{item.eyebrow}</p>
-              <h3>{item.title}</h3>
-              <p>{item.story}</p>
-              <small>{item.meta}</small>
-              <Link href={item.href}>{item.cta} <span>↗</span></Link>
-            </div>
-          </CinematicArticle>
-        ))}
+      <CinematicSection className={`${styles.world} ${styles.worldReverse}`} id={WORLDS[1].id}>
+        <div className={styles.worldMedia}>
+          <Image src={WORLDS[1].image} alt={WORLDS[1].alt} fill sizes="(max-width: 860px) 100vw, 46vw" />
+        </div>
+        <div className={styles.worldCopy}>
+          <p className={styles.worldLabel}>{WORLDS[1].numeral} — {WORLDS[1].label}</p>
+          <h3>{WORLDS[1].title}</h3>
+          <p className={styles.worldBody}>{WORLDS[1].body}</p>
+          <ul className={styles.worldSpecs}>
+            {WORLDS[1].specs.map((spec) => <li key={spec}>{spec}</li>)}
+          </ul>
+          <Link href={WORLDS[1].href} className={styles.worldCta}>{WORLDS[1].cta}</Link>
+        </div>
+      </CinematicSection>
+
+      <section className={styles.worldFilters} aria-label="Shop by diamond world">
+        <p className={styles.worldsKicker}>Shop by world</p>
+        <h2>Every style. Three worlds.</h2>
+        <div className={styles.worldPills}>
+          <Link href="/collections" className={styles.worldPillActive}>All worlds</Link>
+          <Link href="/collections?world=natural" className={styles.worldPill}>Natural</Link>
+          <Link href="/collections?world=natural-piecut" className={styles.worldPill}>Natural&nbsp;PIECUT</Link>
+          <Link href="/collections?world=lab-grown" className={styles.worldPill}>Lab Grown</Link>
+        </div>
       </section>
 
-      <CinematicSection className={styles.houseStudy} id="product-film">
-        <header className={styles.houseStudyHead}>
+      {/* ── House selection, in motion ── */}
+      <CinematicSection className={styles.films} id="product-film">
+        <header className={styles.filmsHead}>
           <div>
-            <p className={styles.eyebrow}>The house selection · in motion</p>
-            <h2>High jewelry,<br /><em>seen clearly.</em></h2>
+            <p className={styles.worldsKicker}>The house selection · in motion</p>
+            <h2>High jewelry, seen clearly.</h2>
           </div>
-          <p>Sharp studio film and high-resolution jewelry studies. No haze, no placeholder imagery—only pieces worth looking at twice.</p>
+          <p>
+            Studio film shot against black so the only thing moving is the light inside
+            the stone. One piece from each category, and the collection together.
+          </p>
         </header>
-        <div className={styles.houseBento}>
-          <Link href="/collections" className={`${styles.bentoTile} ${styles.bentoLead}`} data-lux-parallax="26">
-            <video
-              src="/videos/jewelry-collage.mp4"
-              poster="/images/new/tennis-bracelet.jpg"
-              muted loop playsInline preload="metadata" data-lux-video
-              aria-label="Jewel Stone high jewelry collection film"
-            />
-            <span>House selection · in motion</span>
-          </Link>
-          <Link href="/products/fr4-emerald-hidden-halo-ring" className={`${styles.bentoTile} ${styles.bentoPortrait}`} data-lux-parallax="-18">
-            <video
-              src="/videos/hero-ring.mp4"
-              poster="/images/products/fr4-emerald-hidden-halo-ring/angle-front-wg.webp"
-              muted loop playsInline preload="metadata" data-lux-video
-              aria-label="Emerald hidden halo ring film"
-            />
-            <span>Emerald hidden halo · ring study</span>
-          </Link>
-          <Link href="/collections/bracelets" className={`${styles.bentoTile} ${styles.bentoWide}`} data-lux-parallax="18">
-            <video
-              src="/videos/gallery-bracelet.mp4"
-              poster="/images/products/tb8-8ct-tennis-bracelet/model.webp"
-              muted loop playsInline preload="metadata" data-lux-video
-              aria-label="Diamond tennis bracelet film"
-            />
-            <span>Tennis bracelet · light in motion</span>
-          </Link>
-          <Link href="/products/heart-halo-ring" className={`${styles.bentoTile} ${styles.bentoSquare}`} data-lux-parallax="-14">
-            <video
-              src="/videos/ring-360.mp4"
-              poster="/images/products/heart-halo-ring/cover.jpg"
-              muted loop playsInline preload="metadata" data-lux-video
-              aria-label="Heart halo ring rotating through every angle"
-            />
-            <span>Heart halo · every angle</span>
-          </Link>
-          <Link href="/products/fr4-emerald-hidden-halo-ring" className={`${styles.bentoTile} ${styles.bentoSquare} ${styles.bentoStill}`} data-lux-parallax="14">
-            <Image src="/images/products/fr4-emerald-hidden-halo-ring/angle-front-wg.webp" alt="Emerald hidden-halo lab-grown diamond ring in its presentation box" fill sizes="(max-width:800px) 100vw, 42vw" />
-            <span>Emerald hidden halo · 5 ct</span>
-          </Link>
-          <Link href="/products/fn2-graduated-diamond-necklace" className={`${styles.bentoTile} ${styles.bentoWide} ${styles.bentoStill}`} data-lux-parallax="-18">
-            <Image src="/images/products/fn2-graduated-diamond-necklace/model.webp" alt="Graduated diamond necklace worn on model" fill sizes="(max-width:800px) 100vw, 42vw" />
-            <span>Graduated necklace · 15 ct</span>
-          </Link>
-        </div>
-      </CinematicSection>
+        <Link href="/collections" className={styles.filmLead}>
+          <Image
+            src="/images/hero/campaign-02.webp"
+            alt="Jewel Stone model wearing the full collection — necklaces, pendant, earrings, rings, and bracelets"
+            fill
+            sizes="(max-width: 860px) 100vw, 90vw"
+            className={styles.filmLeadImage}
+          />
+          <div className={styles.filmCaption}>
+            <span>The house collection</span>
+            <p>Natural, PIECUT, and lab-grown — worn together.</p>
+          </div>
+        </Link>
 
-      <CinematicSection className={styles.editorial} id="earrings">
-        <header className={styles.sectionHead}>
-          <p>Best-covered category</p>
-          <h2>Earrings, on the person.</h2>
-          <span>Model imagery first. Studio proof, film, and CAD inside each piece.</span>
-        </header>
-        <div className={styles.editorialGrid}>
-          {EDITORIAL.map((item) => (
-            <Link href={item.href} key={item.title}>
-              <div><Image src={item.image} alt={item.title} fill sizes="(max-width: 720px) 100vw, 33vw" /></div>
-              <span>{item.title} ↗</span>
+        <div className={styles.filmGrid}>
+          {HOUSE_FILMS.map((film) => (
+            <Link key={film.id} href={film.href} className={styles.filmTile}>
+              <video
+                src={film.src}
+                poster={film.poster}
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                data-lux-video
+                aria-label={`${film.label} — ${film.caption}`}
+              />
+              <div className={styles.filmCaption}>
+                <span>{film.label}</span>
+                <p>{film.caption}</p>
+              </div>
             </Link>
           ))}
         </div>
       </CinematicSection>
 
-      <CinematicSection className={styles.arSection} id="ar">
-        <div className={styles.arVisual}>
-          <Image src="/images/products/sr1-round-1ct-solitaire-ring/model.webp" alt="Round solitaire ring worn on hand" fill sizes="(max-width: 800px) 100vw, 50vw" />
-          <span>True-scale preview</span>
+      {/* ── New arrivals, rotating daily ── */}
+      <CinematicSection className={styles.arrivals} id="new-arrivals">
+        <header className={styles.arrivalsHead}>
+          <div>
+            <p className={styles.worldsKicker}>New arrivals · refreshed daily</p>
+            <h2>Today at the house.</h2>
+          </div>
+          <p>A new selection across all three worlds every day. Seen something? It may move tomorrow.</p>
+        </header>
+        <div className={styles.arrivalsGrid}>
+          {arrivals.map((arrival) => (
+            <Link href={arrival.href} key={arrival.key} className={styles.arrivalCard}>
+              <div className={styles.arrivalMedia}>
+                <Image src={arrival.image} alt={arrival.name} fill sizes="(max-width: 860px) 100vw, 30vw" />
+              </div>
+              <span className={styles.arrivalWorld}>{DIAMOND_WORLD_LABELS[arrival.world]}</span>
+              <h3>{arrival.name}</h3>
+              <p>{arrival.priceLabel ?? arrival.note}</p>
+            </Link>
+          ))}
         </div>
-        <div className={styles.arCopy}>
-          <p className={styles.eyebrow}>3D + native AR</p>
-          <h2>Inspect every angle.<br />Place it in your space.</h2>
-          <p>
-            Rotate and zoom on any device. On supported iPhone and Android devices,
-            open native AR to place a true-scale piece in your environment. No fake
-            hand-tracking promise: fit and on-body scale remain guided by model photography.
-          </p>
-          <ol>
-            <li><span>01</span> Open product with 3D + AR badge</li>
-            <li><span>02</span> Tap “View in your space” on supported phone</li>
-            <li><span>03</span> Move phone slowly until placement surface appears</li>
-          </ol>
-          <Link href="/products/heart-halo-ring" className={styles.primary}>Open AR-ready piece</Link>
-        </div>
+        <Link href="/collections" className={styles.arrivalsLink}>View the full collection</Link>
       </CinematicSection>
 
-      <CinematicSection className={styles.making} id="making">
-        <header className={styles.makingHead}>
-          <p className={styles.eyebrow}>How a piece comes to life</p>
-          <h2>From eye, to line,<br />to the bench.</h2>
-        </header>
-        <div className={styles.makingGrid}>
-          <figure className={styles.makingPrimary}>
-            <Image src="/images/atelier/bench-setting.jpg" alt="Jeweler setting a diamond by hand at the bench" fill sizes="(max-width: 800px) 100vw, 62vw" />
-            <figcaption><span>03</span> Setting &amp; finish</figcaption>
-          </figure>
-          <div className={styles.makingSide}>
-            <figure>
-              <Image src="/images/new/custom-design-editorial.jpg" alt="Jewelry design sketches, tools, and diamonds on the worktable" fill sizes="(max-width: 800px) 100vw, 38vw" />
-              <figcaption><span>01</span> Sketch &amp; proportion</figcaption>
-            </figure>
-            <div className={styles.makingText}>
-              <p>
-                First, stone and silhouette. Then CAD resolves scale, balance, and
-                construction before metal is cast. Final character arrives at the bench:
-                stones set by hand, edges refined, surfaces polished, every angle checked.
-              </p>
-              <Link href="/custom">Follow custom process ↗</Link>
-            </div>
+      {/* ── Family knowledge ── */}
+      <CinematicSection className={styles.legacy} id="legacy">
+        <div className={styles.legacyInner}>
+          <p className={styles.legacyKicker}>Family knowledge · since 1980</p>
+          <h2 className={styles.legacyTitle}>New name.<br />Deep roots.</h2>
+          <blockquote className={styles.legacyQuote}>
+            “A diamond will tell you the truth if you turn it slowly enough.”
+          </blockquote>
+          <div className={styles.legacyStory}>
+            <p>
+              Jewel Stone is young. The knowledge behind it is not. Since 1980 this family
+              has worked in diamonds — first selecting rough, then cutting, then setting for
+              other houses whose names you would recognise on a boulevard.
+            </p>
+            <p>
+              What passed down was never a slogan. It was the habit of turning a stone under
+              a lamp until it gives itself away: where the light leaks, where the cut was
+              rushed, which pair will actually match once they sit on a face. That judgment
+              now sits at 47th Street, in a workshop where every Jewel Stone piece is
+              developed, and where {brand.owner} still takes the meetings himself.
+            </p>
+            <p>
+              Three generations of looking closely — in a house that finally carries its own
+              name.
+            </p>
+          </div>
+          <div className={styles.legacyActions}>
+            <Link href="/about" className={styles.legacyCta}>Read our story</Link>
+            <Link href="/contact" className={styles.legacyCtaGhost}>Meet {brand.owner.split(" ")[0]}</Link>
           </div>
         </div>
+        <div className={styles.legacyBranding} aria-hidden="true">Jewel Stone</div>
       </CinematicSection>
 
-      <CinematicSection className={styles.legacy} id="legacy">
-        <div>
-          <p className={styles.eyebrow}>Family knowledge · since 1980</p>
-          <h2>New name.<br />Deep roots.</h2>
-        </div>
-        <div>
-          <p>
-            Jewel Stone grows from a family jewelry business operating since 1980.
-            Experience passes through stone selection, proportion, construction,
-            setting, and finish—not through inherited slogans.
+      {/* ── Appointment ── */}
+      <CinematicSection className={styles.appointment} id="appointment">
+        <div className={styles.appointmentCopy}>
+          <p className={styles.worldsKicker}>Private appointment</p>
+          <h2>Come see the stones in person.</h2>
+          <p className={styles.appointmentBody}>
+            Diamonds photograph well and read differently in the hand. Book a private
+            viewing at the studio, or start the conversation remotely — either way you
+            speak directly with {brand.owner}.
           </p>
-          <p>Every piece is developed in-house. Every client gets direct guidance.</p>
-          <Link href="/about">Read our story ↗</Link>
+          <div className={styles.appointmentActions}>
+            <Link href="/contact" className={styles.appointmentCta}>Book an appointment</Link>
+            <Link href="/custom" className={styles.appointmentGhost}>Start a custom piece</Link>
+          </div>
         </div>
-      </CinematicSection>
-
-      <CinematicSection className={styles.closer} id="contact">
-        <p>Private viewing · custom design · stone sourcing</p>
-        <h2>Made around your story.<br /><em>Made to shine with you.</em></h2>
-        <div className={styles.actions}>
-          <Link href="/contact" className={styles.primary}>Start conversation</Link>
-          <Link href="/collections" className={styles.secondary}>Explore collection</Link>
-        </div>
+        <dl className={styles.appointmentDetails}>
+          <div>
+            <dt>Studio</dt>
+            <dd>{brand.address}</dd>
+          </div>
+          <div>
+            <dt>Hours</dt>
+            <dd>{brand.hours}</dd>
+          </div>
+          <div>
+            <dt>Direct</dt>
+            <dd>
+              <a href={`tel:${brand.phone.replace(/[^+\d]/g, "")}`}>{brand.phone}</a>
+              <br />
+              <a href={`mailto:${brand.email}`}>{brand.email}</a>
+            </dd>
+          </div>
+        </dl>
       </CinematicSection>
     </CinematicHome>
   );

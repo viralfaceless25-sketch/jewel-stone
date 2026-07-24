@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CollectionGallery } from "@/components/collections/CollectionGallery";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { getProductsByCategory, products } from "@/data/products";
 import type { ProductCategory } from "@/data/products";
+import { breadcrumbSchema, itemListSchema } from "@/lib/seo/schema";
 import pages from "@/components/pages/pages.module.css";
 
 const SLUG_TO_CATEGORY: Record<string, ProductCategory> = {
@@ -64,6 +67,7 @@ export default function CollectionCategoryPage({ params }: { params: { category:
   );
 
   return (
+    <>
     <main className={pages.page}>
       <section className={pages.hero}>
         <p className={pages.eyebrow}><span /> {copy.eyebrow}</p>
@@ -86,7 +90,9 @@ export default function CollectionCategoryPage({ params }: { params: { category:
       {items.length ? (
         <section aria-labelledby="category-pieces-title">
           <h2 id="category-pieces-title" className="sr-only">{copy.eyebrow} pieces</h2>
-          <CollectionGallery items={items} />
+          <Suspense fallback={null}>
+            <CollectionGallery items={items} />
+          </Suspense>
         </section>
       ) : (
         <section className={pages.cta}>
@@ -103,5 +109,12 @@ export default function CollectionCategoryPage({ params }: { params: { category:
         </section>
       )}
     </main>
+    <JsonLd data={itemListSchema(`${copy.eyebrow} diamond jewelry`, items.filter((product) => !product.comingSoon))} />
+    <JsonLd data={breadcrumbSchema([
+      { name: "Home", url: "/" },
+      { name: "Collections", url: "/collections" },
+      { name: copy.eyebrow, url: `/collections/${params.category}` },
+    ])} />
+    </>
   );
 }

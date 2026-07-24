@@ -1,0 +1,32 @@
+# Source media + working files — never ship these to Vercel.
+# The site only serves what's under public/. Leading slash = repo root only,
+# so these do NOT accidentally match public/images/hero, public/images/img, etc.
+/Lab AI jewelry/
+/CVD jewelry photography/
+/Pie-cut jewelry photo video/
+/product image/
+/img/
+/hero/
+/out/
+/source-assets/
+/.backup-20260702/
+
+# Spreadsheets, PDFs, and raw data audits
+*.xlsx
+*.xls
+*.csv
+*.pdf
+*.rar
+
+# Docs, specs, and generated prompt packs
+docs/
+CODEX_*.md
+IMAGE_GEN_*.md
+CLAUDE_HANDOFF.md
+*_SPEC.md
+
+# Local-only
+.data/
+.next/
+scratchpad/
+generated-missing-product-images-v2.zip

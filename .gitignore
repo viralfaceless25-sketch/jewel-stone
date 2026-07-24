@@ -2,6 +2,7 @@ node_modules
 .next
 out
 dist
+.data/
 .env*
 !.env.local.example
 npm-debug.log*
@@ -17,3 +18,13 @@ __pycache__/
 /.codex-spec-*.md
 /.DS_Store
 **/.DS_Store
+.vercel
+
+# Generated image staging + large source archives (not needed in repo)
+/generated-missing-product-images/
+/generated-missing-product-images-v2/
+/generated-missing-product-images*.zip
+
+# Confidential source spreadsheets — dealer pricing, cert numbers. Never push.
+/LGD Stock*.xlsx
+/JEWELSTONE_final_Inventory_price.xlsx

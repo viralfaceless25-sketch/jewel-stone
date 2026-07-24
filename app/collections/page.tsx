@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CollectionGallery } from "@/components/collections/CollectionGallery";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { products } from "@/data/products";
+import { itemListSchema } from "@/lib/seo/schema";
 import styles from "@/components/collections/collections.module.css";
 import rarMediaImport from "@/data/rar-media-import.json";
 
@@ -30,6 +33,7 @@ const studioArrivals = rarMediaImport.piecutArrivals;
 
 export default function CollectionsPage() {
   return (
+    <>
     <main className={styles.page}>
       <section className={styles.hero}>
         <p className={styles.heroEyebrow}><span /> The signature vitrine</p>
@@ -70,7 +74,9 @@ export default function CollectionsPage() {
         </div>
       </section>
 
-      <CollectionGallery items={signature} />
+      <Suspense fallback={null}>
+        <CollectionGallery items={signature} />
+      </Suspense>
 
       <section className={styles.mto}>
         <div className={styles.mtoInner}>
@@ -106,5 +112,7 @@ export default function CollectionsPage() {
         </div>
       </section>
     </main>
+    <JsonLd data={itemListSchema("Jewel Stone diamond jewelry collections", signature.filter((product) => !product.comingSoon))} />
+    </>
   );
 }
