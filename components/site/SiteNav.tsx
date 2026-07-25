@@ -166,14 +166,7 @@ export function SiteNav() {
         </nav>
 
         <Link href="/" className={styles.wordmark} aria-label="Jewel Stone home">
-          <Image
-            className={styles.navWordmark}
-            src="/brand/jewel-stone-nav-wordmark-alpha.webp"
-            alt="Jewel Stone"
-            width={166}
-            height={23}
-            priority
-          />
+          <span className={styles.wordmarkText}>Jewel Stone</span>
         </Link>
 
         <div className={styles.navRight}>

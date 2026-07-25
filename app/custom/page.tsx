@@ -89,6 +89,39 @@ export default function CustomPage() {
         </div>
       </section>
 
+      <section className={pages.section} aria-labelledby="custom-makers-title">
+        <div className={pages.wrap}>
+          <p className={pages.eyebrow}><span /> The hands behind it</p>
+          <h2 id="custom-makers-title" className={pages.h2}>Two makers, one bench.</h2>
+          <p className={pages.p} style={{ maxWidth: "56ch" }}>
+            Your commission never leaves the family workshop. From rough and cutting through
+            casting, setting, and final polish, every Jewel Stone piece is built end to end
+            under one roof — by two master craftsmen who have spent their working lives at the
+            bench.
+          </p>
+          <div className={pages.cards} style={{ marginTop: "2.5rem" }}>
+            <article className={pages.card}>
+              <p style={{ fontSize: ".72rem", letterSpacing: ".14em", textTransform: "uppercase", color: "var(--js-platinum)", margin: 0 }}>Build &amp; casting</p>
+              <h3 className={pages.h3} style={{ marginTop: ".5rem" }}>Prakash Vaghani</h3>
+              <p className={pages.p} style={{ margin: ".6rem 0 0" }}>
+                Prakash oversees manufacturing from the first cut. He reads a stone before it
+                is set — how it will hold light, where the metal must carry weight — and turns
+                a CAD file into a piece with real presence in the hand.
+              </p>
+            </article>
+            <article className={pages.card}>
+              <p style={{ fontSize: ".72rem", letterSpacing: ".14em", textTransform: "uppercase", color: "var(--js-platinum)", margin: 0 }}>Setting &amp; finish</p>
+              <h3 className={pages.h3} style={{ marginTop: ".5rem" }}>Mitul Shihora</h3>
+              <p className={pages.p} style={{ margin: ".6rem 0 0" }}>
+                Mitul is responsible for the details you feel more than see — every prong
+                seated true, every surface finished clean, every angle inspected by hand before
+                a piece is allowed to leave the workshop.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <CustomBuilder />
 
       <section className={pages.section} aria-labelledby="custom-faq-title">

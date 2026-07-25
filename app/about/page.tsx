@@ -31,11 +31,6 @@ const timeline = [
   { year: "Today", body: `${brand.owner} carries that knowledge into Jewel Stone at 47th Street, overseeing every piece himself.` },
 ];
 
-const makers = [
-  { name: "Prakash Vaghani", role: "Manufacturing" },
-  { name: "Mitul Shihora", role: "Manufacturing" },
-];
-
 export default function AboutPage() {
   return (
     <>
@@ -74,19 +69,6 @@ export default function AboutPage() {
               mass production, no anonymous catalogue story. Just carefully chosen stones,
               honest grading, and judgment built over more than forty years.
             </p>
-            <div className={styles.makers}>
-              <p className={styles.makersLabel}>Manufacturing · scratch to finish, in India</p>
-              <ul>
-                {makers.map((m) => (
-                  <li key={m.name}><strong>{m.name}</strong><span>{m.role}</span></li>
-                ))}
-              </ul>
-              <p className={styles.makersNote}>
-                Prakash Vaghani and Mitul Shihora run our workshop in India end to end —
-                from rough and cutting through casting, setting, and final finish — so every
-                Jewel Stone piece is made under one roof, start to finish.
-              </p>
-            </div>
             <div className={styles.actions}>
               <Link href="/appointment" className={styles.btnSolid}>Book a private viewing</Link>
               <Link href="/collections" className={styles.btnGhost}>See the vitrine</Link>

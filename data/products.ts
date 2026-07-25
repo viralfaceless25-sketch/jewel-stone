@@ -632,38 +632,6 @@ const piecutHouseProducts: Product[] = [
     videoUrl: "/images/products/jsnd062611-pear-piecut-pendant/video-web.mp4",
     featured: false,
   },
-  {
-    id: "JSND062612", sku: "JSND062612",
-    name: "Emerald Piecut Statement Ring",
-    slug: "jsnd062612-emerald-piecut-statement-ring",
-    category: "Rings", source: "signature", comingSoon: true,
-    style: "Piecut statement ring", material: "18K Gold",
-    centerStone: "Emerald PIECUT cluster", carats: 0.93, diamondPieces: 9,
-    colorClarity: "EF/VVS/VS", piecut: true, diamondWorld: "natural-piecut",
-    diamondOrigin: "Natural", certificateNumber: "46J838782607",
-    visualCarat: 3, goldWeight: 2.069,
-    price: 2984, priceLabel: usd(2984), sizeInfo: "One-of-a-kind — professional resizing available",
-    description:
-      "A 0.93ct emerald PIECUT centre assembled from 9 matched natural diamonds, reading close to 3ct on the hand. 0.93ct total diamond weight set in 2.069g of 18K gold. IGI certificate 46J838782607. One-of-one piece.",
-    image: PLACEHOLDER.portrait,
-    featured: false,
-  },
-  {
-    id: "JSND062613", sku: "JSND062613",
-    name: "Round Piecut Statement Ring",
-    slug: "jsnd062613-round-piecut-statement-ring",
-    category: "Rings", source: "signature", comingSoon: true,
-    style: "Piecut statement ring", material: "18K Gold",
-    centerStone: "Round PIECUT cluster", carats: 1.04, diamondPieces: 9,
-    colorClarity: "FG/VS", piecut: true, diamondWorld: "natural-piecut",
-    diamondOrigin: "Natural", certificateNumber: "24J135722403",
-    visualCarat: 3, goldWeight: 4.662,
-    price: 4014, priceLabel: usd(4014), sizeInfo: "One-of-a-kind — professional resizing available",
-    description:
-      "A 0.93ct round PIECUT centre assembled from 9 matched natural diamonds, reading close to 3ct on the hand. 1.04ct total diamond weight set in 4.662g of 18K gold. IGI certificate 24J135722403. One-of-one piece.",
-    image: PLACEHOLDER.portrait,
-    featured: false,
-  },
 ];
 
 // CVD line comes from the supplier stock sheet (see data/cvd-products.ts).
