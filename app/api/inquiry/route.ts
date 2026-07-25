@@ -86,8 +86,10 @@ export async function POST(request: Request) {
   }
 
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.INQUIRY_TO_EMAIL;
-  const from = process.env.INQUIRY_FROM_EMAIL ?? "Jewel Stone <inquiries@jewelstonenyc.com>";
+  const to = process.env.INQUIRY_TO_EMAIL ?? "ishan@thejewelstone.com";
+  // onboarding@resend.dev works with no domain verification (delivers to the
+  // Resend account's own address); swap to a verified sender for production.
+  const from = process.env.INQUIRY_FROM_EMAIL ?? "Jewel Stone <onboarding@resend.dev>";
   if (!apiKey || !to) {
     return NextResponse.json(
       { error: "Online delivery is being configured. Please email or call us directly." },

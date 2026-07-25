@@ -27,7 +27,7 @@ export default function ShowroomPage() {
           {" "}{brand.hours.toLowerCase()}.
         </p>
         <div className={`${pages.actions} ${pages.centerActions}`}>
-          <Link href="/contact" className={pages.btnPrimary}>Book an appointment</Link>
+          <Link href="/appointment" className={pages.btnPrimary}>Book an appointment</Link>
           <a href={`tel:${brand.phone.replace(/[^+\d]/g, "")}`} className={pages.btnGhost}>Call {brand.phone}</a>
         </div>
       </section>

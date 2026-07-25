@@ -73,7 +73,7 @@ export default function DiamondsPage() {
           options from our full inventory, then bring a focused selection to your private viewing.
         </p>
         <div className={`${pages.actions} ${pages.centerActions}`}>
-          <Link href="/contact" className={pages.btnPrimary}>Book a diamond viewing</Link>
+          <Link href="/appointment" className={pages.btnPrimary}>Book a diamond viewing</Link>
           <Link href="/custom" className={pages.btnGhost}>Start a custom design</Link>
         </div>
       </section>

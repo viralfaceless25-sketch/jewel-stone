@@ -4,11 +4,12 @@
 .row { display: flex; gap: 1rem; }
 .form label { display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.8rem; color: var(--js-ink-soft); flex: 1; }
 .form label span { color: var(--js-platinum); }
-.form input, .form textarea {
+.form input, .form textarea, .form select {
   padding: 0.85rem 0; border: 0; border-bottom: 1px solid var(--js-line); border-radius: 0; background: transparent;
   font-family: var(--font-body); font-size: 0.94rem; color: var(--js-ink); width: 100%;
 }
-.form input:focus, .form textarea:focus { outline: 2px solid var(--js-gold); outline-offset: 1px; border-color: var(--js-gold); }
+.form input:focus, .form textarea:focus, .form select:focus { outline: 2px solid var(--js-gold); outline-offset: 1px; border-color: var(--js-gold); }
+.form select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--js-ink-soft) 50%), linear-gradient(135deg, var(--js-ink-soft) 50%, transparent 50%); background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; }
 .submit {
   margin-top: 0.3rem; padding: 0.95rem 1.6rem; border: 1px solid var(--js-garnet); border-radius: var(--js-radius-control);
   background: var(--js-garnet); color: #fff; font-size: .76rem; letter-spacing:.1em; text-transform:uppercase; cursor: pointer; transition: background .25s ease;

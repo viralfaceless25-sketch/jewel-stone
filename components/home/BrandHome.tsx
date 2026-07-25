@@ -126,8 +126,8 @@ export function BrandHome() {
           </div>
           <div className={styles.worldMedia}>
             <Image
-              src="/images/lifestyle/model-asscher-editorial.jpg"
-              alt="Model wearing Natural PIECUT emerald-cut drop earrings, editorial portrait"
+              src="/images/lifestyle/model-asscher-earrings.jpg"
+              alt="Model wearing a Natural PIECUT asscher-cut drop earring in warm daylight"
               fill
               sizes="(max-width: 860px) 100vw, 46vw"
             />
@@ -278,7 +278,7 @@ export function BrandHome() {
             speak directly with {brand.owner}.
           </p>
           <div className={styles.appointmentActions}>
-            <Link href="/contact" className={styles.appointmentCta}>Book an appointment</Link>
+            <Link href="/appointment" className={styles.appointmentCta}>Book an appointment</Link>
             <Link href="/custom" className={styles.appointmentGhost}>Start a custom piece</Link>
           </div>
         </div>

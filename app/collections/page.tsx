@@ -107,7 +107,7 @@ export default function CollectionsPage() {
         <h2>Find the one, or design it.</h2>
         <p>Book a private viewing in the Diamond District, or start a bespoke commission from a loose stone.</p>
         <div className={styles.closerActions}>
-          <Link href="/contact" className={styles.btnPrimary}>Book a viewing</Link>
+          <Link href="/appointment" className={styles.btnPrimary}>Book a viewing</Link>
           <Link href="/diamonds" className={styles.btnGhost}>Search loose diamonds</Link>
         </div>
       </section>

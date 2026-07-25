@@ -88,7 +88,7 @@ export default function AboutPage() {
               </p>
             </div>
             <div className={styles.actions}>
-              <Link href="/contact" className={styles.btnSolid}>Book a private viewing</Link>
+              <Link href="/appointment" className={styles.btnSolid}>Book a private viewing</Link>
               <Link href="/collections" className={styles.btnGhost}>See the vitrine</Link>
             </div>
           </div>
@@ -151,7 +151,7 @@ export default function AboutPage() {
           <h2>Come see them in person.</h2>
           <p>{brand.address} · {brand.hours}</p>
           <div className={styles.closerActions}>
-            <Link href="/contact" className={styles.btnSolid}>Book an appointment</Link>
+            <Link href="/appointment" className={styles.btnSolid}>Book an appointment</Link>
             <Link href="/showroom" className={styles.btnGhost}>Visit the showroom</Link>
           </div>
         </section>
