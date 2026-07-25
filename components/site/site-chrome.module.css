@@ -357,11 +357,11 @@
 .wordmarkText {
   display:block;
   font-family: var(--font-display);
-  font-size: clamp(1.55rem, 2.35vw, 2.1rem);
+  font-size: clamp(1.3rem, 1.8vw, 1.62rem);
   line-height: 1;
   text-transform: uppercase;
-  letter-spacing: .2em;
-  padding-left: .2em;            /* balance the trailing letter-spacing */
+  letter-spacing: .13em;
+  padding-left: .13em;           /* balance the trailing letter-spacing */
   font-weight: 400;
   white-space: nowrap;
   background: linear-gradient(94deg, #9B6F6B 0%, #C4924A 42%, #E8C877 58%, #A9803B 80%, #6E5540 100%);
