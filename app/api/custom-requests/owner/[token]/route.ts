@@ -90,7 +90,18 @@ export async function PATCH(request: Request, { params }: { params: { token: str
       if (validUntil && !/^\d{4}-\d{2}-\d{2}$/.test(validUntil)) {
         return NextResponse.json({ error: "Quotation expiry date is invalid." }, { status: 400 });
       }
-      const quote: CustomQuote = { estimate, leadTime, message, validUntil, createdAt: now };
+      // Optional exact charge amount (USD) that the customer pays on acceptance.
+      const rawAmount = typeof body.amount === "string" || typeof body.amount === "number"
+        ? Number(String(body.amount).replace(/[^0-9.]/g, ""))
+        : NaN;
+      let amountCents: number | undefined;
+      if (Number.isFinite(rawAmount) && rawAmount > 0) {
+        if (rawAmount > 1_000_000) {
+          return NextResponse.json({ error: "Charge amount is too large." }, { status: 400 });
+        }
+        amountCents = Math.round(rawAmount * 100);
+      }
+      const quote: CustomQuote = { estimate, leadTime, message, validUntil, createdAt: now, amountCents };
       updated = { ...record, status: "quoted", quote, decision: undefined, updatedAt: now };
       notification = "quote";
     } else if (action === "start_production") {

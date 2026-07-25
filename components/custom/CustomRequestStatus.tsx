@@ -69,6 +69,10 @@ export function CustomRequestStatus({ token }: { token: string }) {
       });
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.error || "Decision could not be saved.");
+      if (action === "accept" && result.paymentUrl) {
+        window.location.href = result.paymentUrl as string; // → Stripe checkout
+        return;
+      }
       setCustomRequest(result.request);
       setNotice(result.notified
         ? `Quotation ${action === "accept" ? "accepted" : "declined"}. Confirmation sent.`
@@ -85,6 +89,10 @@ export function CustomRequestStatus({ token }: { token: string }) {
 
   const activeStage = stageIndex(customRequest.status);
   const quoted = Boolean(customRequest.quote);
+  const amountCents = customRequest.quote?.amountCents;
+  const payable = Boolean(amountCents);
+  const amountLabel = amountCents ? `$${(amountCents / 100).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}` : "";
+  const paid = Boolean(customRequest.paidAt) || (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("paid") === "1");
 
   return (
     <div className={styles.portal}>
@@ -119,6 +127,7 @@ export function CustomRequestStatus({ token }: { token: string }) {
             <p>Owner&apos;s estimated quotation</p>
             <h2 id="quote-title">{customRequest.quote.estimate}</h2>
             <span>Estimated production · {customRequest.quote.leadTime}</span>
+            {payable ? <span><strong>Amount due on acceptance · {amountLabel}</strong></span> : null}
           </div>
           <div className={styles.quoteMessage}>
             <p>{customRequest.quote.message || "Final specifications will be confirmed with you before production."}</p>
@@ -129,10 +138,10 @@ export function CustomRequestStatus({ token }: { token: string }) {
 
       {canCustomerDecide(customRequest.status) ? (
         <form className={styles.decisionCard} onSubmit={(event) => { event.preventDefault(); void decide(event.currentTarget, "accept"); }}>
-          <div><p>Your decision</p><h2>Ready to move forward?</h2><span>Accepting confirms quotation, not a card charge. Owner contacts you before production.</span></div>
+          <div><p>Your decision</p><h2>Ready to move forward?</h2><span>{payable ? `Accepting takes you to secure Stripe checkout to pay ${amountLabel}. Your card is charged only there.` : "Accepting confirms the quotation, not a card charge. The owner contacts you before production."}</span></div>
           <label htmlFor="decision-note">Note for owner <span>(optional)</span><textarea id="decision-note" name="decisionNote" rows={3} placeholder="Sizing, deadline, or a requested adjustment…" /></label>
           <div className={styles.decisionButtons}>
-            <button type="submit" disabled={decisionState === "saving"}>Accept quotation</button>
+            <button type="submit" disabled={decisionState === "saving"}>{decisionState === "saving" ? "Working…" : payable ? `Accept & pay ${amountLabel}` : "Accept quotation"}</button>
             <button type="button" disabled={decisionState === "saving"} onClick={(event) => {
               if (event.currentTarget.form) void decide(event.currentTarget.form, "decline");
             }}>Decline / request revision</button>
@@ -140,7 +149,8 @@ export function CustomRequestStatus({ token }: { token: string }) {
         </form>
       ) : null}
 
-      {customRequest.status === "accepted" ? <section className={styles.noticeCard}><strong>Quotation accepted.</strong><span>Owner has your confirmation and will finalize details before marking piece in production.</span></section> : null}
+      {paid ? <section className={styles.noticeCard}><strong>Payment received ✓</strong><span>Thank you — your custom piece is confirmed and enters production. Ishan will be in touch with final details.</span></section> : null}
+      {customRequest.status === "accepted" && !paid ? <section className={styles.noticeCard}><strong>Quotation accepted.</strong><span>Owner has your confirmation and will finalize details before marking piece in production.</span></section> : null}
       {customRequest.status === "declined" ? <section className={styles.noticeCard}><strong>Quotation declined.</strong><span>Owner received your response and may post a revised estimate here.</span></section> : null}
       {customRequest.status === "in_production" ? <section className={styles.noticeCard}><strong>At the bench.</strong><span>Your piece is being made. Shipping details appear here after final inspection.</span></section> : null}
       {customRequest.status === "shipped" && customRequest.shipment ? (

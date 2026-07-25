@@ -72,6 +72,7 @@ export function CustomQuoteManager({ token }: { token: string }) {
     void update({
       action: "quote",
       estimate: String(form.get("estimate") ?? ""),
+      amount: String(form.get("amount") ?? ""),
       leadTime: String(form.get("leadTime") ?? ""),
       validUntil: String(form.get("validUntil") ?? ""),
       message: String(form.get("message") ?? ""),
@@ -120,6 +121,7 @@ export function CustomQuoteManager({ token }: { token: string }) {
               <p>{customRequest.quote ? "Revise quotation" : "Prepare quotation"}</p>
               <h2>Owner estimate</h2>
               <label>Estimated price or range<input required name="estimate" defaultValue={customRequest.quote?.estimate} placeholder="$4,800–$5,400" /></label>
+              <label>Charge amount on acceptance — USD <span>(optional; enables Accept &amp; Pay)</span><input name="amount" type="number" min="0" step="0.01" defaultValue={customRequest.quote?.amountCents ? (customRequest.quote.amountCents / 100).toString() : ""} placeholder="5200" /></label>
               <label>Estimated production time<input required name="leadTime" defaultValue={customRequest.quote?.leadTime} placeholder="4–6 weeks after approval" /></label>
               <label>Estimate valid until <span>(optional)</span><input name="validUntil" type="date" defaultValue={customRequest.quote?.validUntil} /></label>
               <label>Message to customer <span>(optional)</span><textarea name="message" rows={6} defaultValue={customRequest.quote?.message} placeholder="Materials, stone assumptions, included services, or adjustments…" /></label>

@@ -2,29 +2,30 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import {
-  DIAMOND_CLARITY_OPTIONS,
-  DIAMOND_COLOR_OPTIONS,
   type MetalVariant,
   type Product,
 } from "@/data/products";
+import {
+  type Axis,
+  type Selection,
+  isListed,
+  optionsForCategory,
+  parseGrade,
+  productSpec,
+  resolveChange,
+} from "@/lib/commerce/variants";
 import { hasModel, modelFor } from "@/lib/models";
 import { PieceViewer } from "@/components/ar/PieceViewer";
+import { QuoteRequestForm } from "@/components/product/QuoteRequestForm";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
 import { Reveal } from "@/components/home/vitrine/Reveal";
 import { CompactDiamondFinder } from "@/components/product/CompactDiamondFinder";
 import { swipeDelta, wrappedIndex } from "@/lib/commerce/gallery-navigation";
 import styles from "./product.module.css";
-
-const METALS: { key: MetalVariant; label: string; swatch: string }[] = [
-  { key: "yellow", label: "18K Yellow Gold", swatch: "linear-gradient(135deg,#e8c876,#b8892f)" },
-  { key: "rose", label: "18K Rose Gold", swatch: "linear-gradient(135deg,#e8bfa8,#c17e63)" },
-  { key: "white", label: "18K White Gold", swatch: "linear-gradient(135deg,#f3f2ee,#c7c2b8)" },
-  { key: "platinum", label: "Platinum", swatch: "linear-gradient(135deg,#ffffff,#b8b9ba)" },
-  { key: "silver", label: "Sterling Silver", swatch: "linear-gradient(135deg,#fafafa,#aeb2b5)" },
-];
 
 function nativeMetal(material: string): MetalVariant {
   const m = material.toLowerCase();
@@ -39,8 +40,17 @@ const CHAIN_LENGTHS = ['16"', '18"', '20"'];
 
 export function ProductView({ product, related }: { product: Product; related: Product[] }) {
   const model = modelFor(product.slug);
-  const [metal, setMetal] = useState<MetalVariant>(() => nativeMetal(product.material));
-  const visualMetal: MetalVariant = metal === "platinum" || metal === "silver" ? "white" : metal;
+  const router = useRouter();
+  const options = useMemo(() => optionsForCategory(product.category), [product.category]);
+  const [selection, setSelection] = useState<Selection>(() => productSpec(product));
+  useEffect(() => { setSelection(productSpec(product)); }, [product]);
+  const customized = useMemo(() => !isListed(product.category, selection), [product.category, selection]);
+  const showGrade = parseGrade(product.colorClarity) !== null;
+  const [showQuote, setShowQuote] = useState(false);
+  const color = selection.color;
+  const clarity = selection.clarity;
+  const metalLabel = selection.metal;
+  const visualMetal: MetalVariant = /yellow/i.test(selection.metal) ? "yellow" : /rose/i.test(selection.metal) ? "rose" : "white";
   const metalMedia = product.mediaByMetal?.[visualMetal];
   const gallery = useMemo(() => [
     metalMedia?.cover ?? product.image,
@@ -79,23 +89,22 @@ export function ProductView({ product, related }: { product: Product; related: P
   const isNeck = product.category === "Pendants" || product.category === "Necklaces";
   const [size, setSize] = useState<string>(isRing ? "6.5" : isNeck ? '18"' : "");
   const [added, setAdded] = useState(false);
-  // Every piece is cut to order, so colour/clarity are chosen here rather than
-  // fixed per SKU. Seed from the grade the supplier sheet quoted when parseable.
-  const [color, setColor] = useState<string>(() => {
-    const c = product.colorClarity?.split("/")[0]?.trim();
-    return c && DIAMOND_COLOR_OPTIONS.includes(c as never) ? c : "F";
-  });
-  const [clarity, setClarity] = useState<string>(() => {
-    const c = product.colorClarity?.split("/")[1]?.trim();
-    return c && DIAMOND_CLARITY_OPTIONS.includes(c as never) ? c : "VS1";
-  });
+
+  const changeAxis = useCallback((axis: Axis, value: string) => {
+    const result = resolveChange(product, selection, axis, value);
+    if (result.type === "navigate") { router.push(`/products/${result.slug}`); return; }
+    setSelection(result.selection);
+    setActiveImg(0);
+    setShowModel(false);
+    setShowVideo(false);
+    setShowQuote(false);
+  }, [product, selection, router]);
 
   const add = useCartStore((s) => s.add);
   const wishItems = useWishlistStore((s) => s.items);
   const toggleWish = useWishlistStore((s) => s.toggleItem);
   const saved = wishItems.includes(product.id);
-  const metalLabel = METALS.find((m) => m.key === metal)?.label ?? product.material;
-  const displayedGrade = product.source === "signature"
+  const displayedGrade = customized || product.source === "signature"
     ? product.colorClarity.replace("/", " · ")
     : `${color} · ${clarity}`;
 
@@ -238,8 +247,17 @@ export function ProductView({ product, related }: { product: Product; related: P
           </p>
           <h1 className={styles.title}>{product.name}</h1>
           <div className={styles.priceRow}>
-            <strong className={styles.price}>{product.priceLabel}</strong>
-            <span className={styles.priceNote}>Certification included · ships insured</span>
+            {customized ? (
+              <>
+                <strong className={styles.price}>Price on request</strong>
+                <span className={styles.priceNote}>Custom configuration — request a quotation</span>
+              </>
+            ) : (
+              <>
+                <strong className={styles.price}>{product.priceLabel}</strong>
+                <span className={styles.priceNote}>Certification included · ships insured</span>
+              </>
+            )}
           </div>
 
           <ul className={styles.chips}>
@@ -260,61 +278,81 @@ export function ProductView({ product, related }: { product: Product; related: P
             {model ? <li><b>3D · AR</b><span>angle and scale preview</span></li> : null}
           </ul>
 
-          {/* Configurator */}
+          {/* Configurator — the listed spec is buy-now; any off-catalogue change becomes a quotation */}
           <div className={styles.config}>
+            {customized ? (
+              <p className={styles.customNotice}>
+                You&apos;ve taken this beyond the listed specification. The price for this exact custom
+                piece is by quotation — request one below and it&apos;s priced for you personally.
+              </p>
+            ) : null}
+
+            <div className={styles.configRow}>
+              <label>Carat — <em>{selection.carat} ct</em></label>
+              <div className={styles.sizes}>
+                {options.carats.map((c) => (
+                  <button key={c} className={`${styles.size} ${selection.carat === c ? styles.sizeActive : ""}`} onClick={() => changeAxis("carat", String(c))} aria-pressed={selection.carat === c}>{c} ct</button>
+                ))}
+              </div>
+            </div>
+
+            {options.shapes.length > 1 ? (
+              <div className={styles.configRow}>
+                <label>Shape — <em>{selection.shape}</em></label>
+                <div className={styles.sizes}>
+                  {options.shapes.map((s) => (
+                    <button key={s} className={`${styles.size} ${selection.shape === s ? styles.sizeActive : ""}`} onClick={() => changeAxis("shape", s)} aria-pressed={selection.shape === s}>{s}</button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {options.settings.length > 1 ? (
+              <div className={styles.configRow}>
+                <label>Setting — <em>{selection.setting}</em></label>
+                <div className={styles.sizes}>
+                  {options.settings.map((s) => (
+                    <button key={s} className={`${styles.size} ${selection.setting === s ? styles.sizeActive : ""}`} onClick={() => changeAxis("setting", s)} aria-pressed={selection.setting === s}>{s}</button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
             <div className={styles.configRow}>
               <label>Metal — <em>{metalLabel}</em></label>
-              <div className={styles.swatches}>
-                {METALS.map((m) => (
-                  <button
-                    key={m.key}
-                    className={`${styles.swatch} ${metal === m.key ? styles.swatchActive : ""}`}
-                    style={{ background: m.swatch }}
-                    onClick={() => {
-                      setMetal(m.key);
-                      setActiveImg(0);
-                      setShowModel(false);
-                      setShowVideo(false);
-                    }}
-                    aria-label={m.label}
-                    title={m.label}
-                  />
+              <div className={styles.sizes}>
+                {options.metals.map((m) => (
+                  <button key={m} className={`${styles.size} ${metalLabel === m ? styles.sizeActive : ""}`} onClick={() => changeAxis("metal", m)} aria-pressed={metalLabel === m}>{m}</button>
                 ))}
               </div>
               {!exactMetalMedia ? <p className={styles.mediaNotice}>Showing {product.material} photography until this finish&apos;s complete media set is available.</p> : null}
             </div>
 
-            {product.source === "lab-grown" ? <>
+            {showGrade ? (<>
               <div className={styles.configRow}>
                 <label>Colour — <em>{color}</em></label>
                 <div className={styles.sizes}>
-                  {DIAMOND_COLOR_OPTIONS.map((c) => (
-                    <button key={c} className={`${styles.size} ${color === c ? styles.sizeActive : ""}`} onClick={() => setColor(c)} aria-pressed={color === c}>{c}</button>
+                  {options.colors.map((c) => (
+                    <button key={c} className={`${styles.size} ${color === c ? styles.sizeActive : ""}`} onClick={() => changeAxis("color", c)} aria-pressed={color === c}>{c}</button>
                   ))}
                 </div>
               </div>
               <div className={styles.configRow}>
                 <label>Clarity — <em>{clarity}</em></label>
                 <div className={styles.sizes}>
-                  {DIAMOND_CLARITY_OPTIONS.map((c) => (
-                    <button key={c} className={`${styles.size} ${clarity === c ? styles.sizeActive : ""}`} onClick={() => setClarity(c)} aria-pressed={clarity === c}>{c}</button>
+                  {options.clarities.map((c) => (
+                    <button key={c} className={`${styles.size} ${clarity === c ? styles.sizeActive : ""}`} onClick={() => changeAxis("clarity", c)} aria-pressed={clarity === c}>{c}</button>
                   ))}
                 </div>
               </div>
-            </> : null}
+            </>) : null}
 
             {isRing ? (
               <div className={styles.configRow}>
                 <label>Ring size — <em>US {size}</em></label>
                 <div className={styles.sizes}>
                   {RING_SIZES.map((s) => (
-                    <button
-                      key={s}
-                      className={`${styles.size} ${size === s ? styles.sizeActive : ""}`}
-                      onClick={() => setSize(s)}
-                    >
-                      {s}
-                    </button>
+                    <button key={s} className={`${styles.size} ${size === s ? styles.sizeActive : ""}`} onClick={() => setSize(s)}>{s}</button>
                   ))}
                 </div>
               </div>
@@ -325,13 +363,7 @@ export function ProductView({ product, related }: { product: Product; related: P
                 <label>Chain length — <em>{size}</em></label>
                 <div className={styles.sizes}>
                   {CHAIN_LENGTHS.map((s) => (
-                    <button
-                      key={s}
-                      className={`${styles.size} ${size === s ? styles.sizeActive : ""}`}
-                      onClick={() => setSize(s)}
-                    >
-                      {s}
-                    </button>
+                    <button key={s} className={`${styles.size} ${size === s ? styles.sizeActive : ""}`} onClick={() => setSize(s)}>{s}</button>
                   ))}
                 </div>
               </div>
@@ -339,9 +371,15 @@ export function ProductView({ product, related }: { product: Product; related: P
           </div>
 
           <div className={styles.actions}>
-            <button className={styles.addBtn} onClick={onAdd}>
-              {added ? "Added to bag ✓" : "Add to bag"}
-            </button>
+            {customized ? (
+              <button className={styles.addBtn} onClick={() => setShowQuote((v) => !v)}>
+                {showQuote ? "Close quotation form" : "Inquire for quotation"}
+              </button>
+            ) : (
+              <button className={styles.addBtn} onClick={onAdd}>
+                {added ? "Added to bag ✓" : "Add to bag"}
+              </button>
+            )}
             <button
               className={styles.wishBtn}
               onClick={() => toggleWish(product.id)}
@@ -354,6 +392,9 @@ export function ProductView({ product, related }: { product: Product; related: P
               </svg>
             </button>
           </div>
+          {customized && showQuote ? (
+            <QuoteRequestForm product={product} selection={selection} sizeLabel={size} />
+          ) : null}
           {model ? (
             <Link href={`/try-on?piece=${product.slug}`} className={styles.viewingLink}>Try it on with your camera →</Link>
           ) : null}

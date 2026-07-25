@@ -29,6 +29,9 @@ export type CustomQuote = {
   message: string;
   validUntil?: string;
   createdAt: string;
+  // Exact amount the customer pays when they accept (in cents). When absent,
+  // accepting is a confirmation only (no card charge).
+  amountCents?: number;
 };
 
 export type CustomDecision = {
@@ -60,6 +63,8 @@ export type CustomRequestRecord = {
   referenceFiles: CustomReferenceFile[];
   quote?: CustomQuote;
   decision?: CustomDecision;
+  paidAt?: string;
+  paymentSessionId?: string;
   productionStartedAt?: string;
   shipment?: CustomShipment;
 };

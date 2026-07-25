@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { checkoutOrigin } from "@/lib/commerce/checkout-policy";
-import { canCustomerDecide, toCustomerCustomRequest, type CustomDecision } from "@/lib/custom-request-types";
+import { canCustomerDecide, toCustomerCustomRequest, type CustomDecision, type CustomRequestRecord } from "@/lib/custom-request-types";
 import { notifyCustomerDecision } from "@/lib/custom-request-notifications";
 import { CustomRequestStoreError, getCustomRequestByPublicToken, saveCustomRequest } from "@/lib/custom-request-store";
+import { stripe } from "@/lib/stripe";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -54,16 +55,44 @@ export async function PATCH(request: Request, { params }: { params: { token: str
       note,
       createdAt: now,
     };
-    const updated = {
+    const updated: CustomRequestRecord = {
       ...record,
       status: decision.value,
       decision,
       updatedAt: now,
-    } as const;
+    };
     const origin = checkoutOrigin(request.url, process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL);
+
+    // Accepting a quotation that carries an exact amount collects payment on Stripe.
+    let paymentUrl: string | undefined;
+    if (decision.value === "accepted" && record.quote?.amountCents && stripe) {
+      const session = await stripe.checkout.sessions.create({
+        mode: "payment",
+        payment_method_types: ["card"],
+        customer_email: record.email,
+        billing_address_collection: "required",
+        line_items: [{
+          quantity: 1,
+          price_data: {
+            currency: "usd",
+            unit_amount: record.quote.amountCents,
+            product_data: {
+              name: `Jewel Stone custom piece · ${record.id}`,
+              description: `${record.choices.type} · ${record.choices.metal} · ${record.choices.shape}`.slice(0, 200),
+            },
+          },
+        }],
+        success_url: `${origin}/custom/request/${record.publicToken}?paid=1`,
+        cancel_url: `${origin}/custom/request/${record.publicToken}`,
+        metadata: { source: "jewelstone-custom", requestId: record.id, publicToken: record.publicToken },
+      });
+      updated.paymentSessionId = session.id;
+      paymentUrl = session.url ?? undefined;
+    }
+
     await saveCustomRequest(updated);
     const notified = await notifyCustomerDecision(updated, origin);
-    return NextResponse.json({ request: toCustomerCustomRequest(updated), notified });
+    return NextResponse.json({ request: toCustomerCustomRequest(updated), notified, paymentUrl });
   } catch (error) {
     if (error instanceof SyntaxError) return NextResponse.json({ error: "Invalid request." }, { status: 400 });
     return storeError(error);
