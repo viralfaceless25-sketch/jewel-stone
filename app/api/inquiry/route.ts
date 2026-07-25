@@ -123,7 +123,14 @@ export async function POST(request: Request) {
   });
 
   if (!response.ok) {
-    return NextResponse.json({ error: "Message could not be delivered. Please try again or contact us directly." }, { status: 502 });
+    const detail = await response.text().catch(() => "");
+    console.error("Resend inquiry error", response.status, detail);
+    let reason = "Message could not be delivered. Please try again or contact us directly.";
+    try {
+      const parsed = JSON.parse(detail) as { message?: string };
+      if (parsed.message) reason = parsed.message;
+    } catch {}
+    return NextResponse.json({ error: reason }, { status: 502 });
   }
   return NextResponse.json({ ok: true });
 }

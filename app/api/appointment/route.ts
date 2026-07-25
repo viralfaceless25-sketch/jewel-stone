@@ -72,7 +72,14 @@ export async function POST(request: Request) {
   });
 
   if (!response.ok) {
-    return NextResponse.json({ error: "Could not send the request. Please try again or call us." }, { status: 502 });
+    const detail = await response.text().catch(() => "");
+    console.error("Resend appointment error", response.status, detail);
+    let reason = "Could not send the request. Please try again or call us.";
+    try {
+      const parsed = JSON.parse(detail) as { message?: string };
+      if (parsed.message) reason = parsed.message;
+    } catch {}
+    return NextResponse.json({ error: reason }, { status: 502 });
   }
   return NextResponse.json({ ok: true });
 }
