@@ -374,6 +374,32 @@
 .wordmark:hover .wordmarkText { transform:scale(1.03); filter:brightness(1.08); }
 .navScrolled .wordmarkText { transform:scale(.95); }
 .navScrolled .wordmark:hover .wordmarkText { transform:scale(.985); }
+
+/* On each full page load the JS monogram holds for a beat, then flips away on
+   the X axis as the "Jewel Stone" wordmark flips up in its place. */
+.brandReveal { position:relative; display:inline-flex; align-items:center; justify-content:center; perspective:900px; }
+.brandTextFace { display:inline-block; transform-origin:center; animation:brandTextReveal 3.4s cubic-bezier(.65,0,.3,1) both; }
+.brandMono {
+  position:absolute; top:50%; left:50%;
+  height:2.7rem; width:auto;
+  transform-origin:center;
+  filter:brightness(1.06) saturate(1.06) drop-shadow(0 1px 2px rgba(60,30,20,.16));
+  animation:brandMonoReveal 3.4s cubic-bezier(.65,0,.3,1) both;
+  pointer-events:none;
+}
+@keyframes brandMonoReveal {
+  0%,56%   { opacity:1; transform:translate(-50%,-50%) rotateX(0deg); }
+  78%,100% { opacity:0; transform:translate(-50%,-50%) rotateX(-90deg); }
+}
+@keyframes brandTextReveal {
+  0%,56%   { opacity:0; transform:rotateX(90deg); }
+  78%,100% { opacity:1; transform:rotateX(0deg); }
+}
+@media (max-width:600px){ .brandMono { height:2.15rem; } }
+@media (prefers-reduced-motion: reduce){
+  .brandMono { display:none; }
+  .brandTextFace { animation:none; }
+}
 .iconBtn { width:42px; height:42px; transition:background .25s ease, color .25s ease, transform .3s cubic-bezier(.22,1,.36,1); }
 .iconBtn:hover { color:var(--js-gold-deep); transform:translateY(-2px); }
 .bagBtn { min-height:40px; padding-inline:.8rem; border:1px solid rgba(23,22,26,.28); border-radius:999px; transition:background .25s ease, color .25s ease, border-color .25s ease, transform .3s cubic-bezier(.22,1,.36,1); }

@@ -166,7 +166,19 @@ export function SiteNav() {
         </nav>
 
         <Link href="/" className={styles.wordmark} aria-label="Jewel Stone home">
-          <span className={styles.wordmarkText}>Jewel Stone</span>
+          <span className={styles.brandReveal} aria-hidden="true">
+            <Image
+              className={styles.brandMono}
+              src="/brand/jewel-stone-mono-mark.png"
+              alt=""
+              width={375}
+              height={655}
+              priority
+            />
+            <span className={styles.brandTextFace}>
+              <span className={styles.wordmarkText}>Jewel Stone</span>
+            </span>
+          </span>
         </Link>
 
         <div className={styles.navRight}>
