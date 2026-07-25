@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import "@fontsource/marcellus";
 import "@fontsource-variable/figtree";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SiteNav } from "@/components/site/SiteNav";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { ScrollTop } from "@/components/site/ScrollTop";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationSchema, SITE_URL, websiteSchema } from "@/lib/seo/schema";
 
@@ -71,6 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
+        <ScrollTop />
         <a className="skip-link" href="#main-content">Skip to main content</a>
         <SiteNav />
         <div id="main-content" tabIndex={-1} className="site-shell">{children}</div>
@@ -78,6 +82,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CartDrawer />
         <JsonLd data={organizationSchema()} />
         <JsonLd data={websiteSchema()} />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
