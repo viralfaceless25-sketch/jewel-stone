@@ -131,7 +131,7 @@
   .navUtilityBar { display: none; }
   .burger { display: flex; }
   .navInner { display:flex; position:relative; justify-content:space-between; }
-  .wordmark { position:absolute; left:50%; transform:translateX(-50%); }
+  .wordmark { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); }
   .navRight { margin-left:auto; }
   .navSecondary { display: none; }
   .mobileMenu { display: flex; }
@@ -145,11 +145,6 @@
   .bagBtn { min-width: 42px; padding: 0.48rem 0.55rem; font-size: 0.7rem; }
   .navMark { display: none; }
   .navWordmark { width: 154px; height: auto; }
-  .wordmarkText { font-size: 1.28rem; letter-spacing: .13em; padding-left:.13em; }
-}
-
-@media (max-width: 380px) {
-  .wordmarkText { font-size: 1.1rem; letter-spacing: .09em; padding-left:.09em; }
 }
 
 /* ── Mega menu ── */
@@ -297,9 +292,13 @@
 
 .nav { background:rgba(246,243,237,.97); }
 .navScrolled { background:rgba(246,243,237,.94); border-bottom-color:rgba(23,22,26,.12); }
-.navInner { height:var(--nav-height); grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:clamp(.7rem,1.4vw,1.2rem); }
-.navLeft { display:flex; gap:clamp(1rem,2vw,2rem); align-items:center; min-width:0; }
-.navRight { display:flex; justify-content:flex-end; align-items:center; gap:clamp(1rem,1.8vw,1.9rem); min-width:0; }
+/* The wordmark is taken out of the grid and pinned to the true horizontal
+   centre of the bar. Letting it sit in a middle grid track made it drift
+   whenever the left and right navigation groups had different widths, which
+   varies with viewport size and font rendering. */
+.navInner { height:var(--nav-height); grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(.7rem,1.4vw,1.2rem); }
+.navLeft { display:flex; gap:clamp(.8rem,1.7vw,2rem); align-items:center; min-width:0; justify-self:start; padding-right:clamp(5.5rem,12vw,8.5rem); }
+.navRight { display:flex; justify-content:flex-end; align-items:center; gap:clamp(.7rem,1.5vw,1.9rem); min-width:0; justify-self:end; padding-left:clamp(5.5rem,12vw,8.5rem); }
 .navSecondary { display:flex; align-items:center; gap:clamp(1rem,2vw,2rem); }
 .navActions { display:flex; align-items:center; gap:.3rem; }
 .navItem { position:relative; display:flex; align-items:center; gap:.28rem; height:var(--nav-height); }
@@ -350,7 +349,14 @@
 }
 .navCaret:hover { color:var(--js-gold-deep); }
 .navCaretOpen { color:var(--js-gold-deep); transform:rotate(180deg); }
-.wordmark { gap:0; }
+.wordmark {
+  gap:0;
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  justify-self:auto;
+}
 /* Bigger, brighter text wordmark rendered in the display face with a metallic
    gold sheen — replaces the muted rose/grey image so the house name reads
    clearly and reads "lit" on the pale navbar. */
@@ -419,7 +425,7 @@
   .navSecondary { display:none; }
   .mega,.navScrim { display:none; }
   .burger { display:flex; z-index:2; }
-  .wordmark { position:absolute; left:50%; transform:translateX(-50%); }
+  .wordmark { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); }
   .navRight { margin-left:auto; }
   .mobileMenu {
     position:absolute;
@@ -607,4 +613,18 @@
   .serviceRail { grid-template-columns:1fr 1fr; }
   .serviceRail span:nth-child(2) { border-right:0; }
   .serviceRail span:nth-child(-n+2) { border-bottom:1px solid rgba(250,248,245,.18); }
+}
+
+/* ── Wordmark sizing per breakpoint ──────────────────────────────────────────
+   Declared last so they override the base .wordmarkText rule above. The
+   wordmark is absolutely centred in the bar, so at narrow desktop widths it
+   has to give width back to keep clear of the two navigation groups. */
+@media (min-width: 861px) and (max-width: 1260px) {
+  .wordmarkText { font-size: 1.06rem; letter-spacing: .09em; padding-left: .09em; }
+}
+@media (max-width: 600px) {
+  .wordmarkText { font-size: 1.28rem; letter-spacing: .13em; padding-left: .13em; }
+}
+@media (max-width: 380px) {
+  .wordmarkText { font-size: 1.05rem; letter-spacing: .08em; padding-left: .08em; }
 }

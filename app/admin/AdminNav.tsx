@@ -13,6 +13,7 @@ import {
   LogOut,
   ReceiptText,
   Settings,
+  ShieldCheck,
   Users,
 } from "lucide-react";
 import styles from "./admin.module.css";
@@ -23,6 +24,7 @@ const links = [
   { href: "/admin/diamonds", label: "Loose diamonds", Icon: Gem },
   { href: "/admin/orders", label: "Orders", Icon: ReceiptText },
   { href: "/admin/customers", label: "Customers", Icon: Users },
+  { href: "/admin/kyc", label: "KYC", Icon: ShieldCheck },
   { href: "/admin/inbox", label: "Inbox", Icon: Inbox },
   { href: "/admin/invoices", label: "Invoices & memos", Icon: FileText },
   { href: "/admin/operations", label: "Operations", Icon: CircleDollarSign },

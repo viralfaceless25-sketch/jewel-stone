@@ -16,6 +16,11 @@ export type AdminSettings = {
   invoicePrefix: string;
   memoPrefix: string;
   defaultPaymentInstructions: string;
+  /** Printed on invoices and memoranda so customers can settle three ways. */
+  bankName: string;
+  bankAccountNumber: string;
+  bankRoutingNumber: string;
+  zelleId: string;
   updatedAt: string;
 };
 
@@ -34,6 +39,10 @@ export const defaultAdminSettings: AdminSettings = {
   invoicePrefix: "INV",
   memoPrefix: "MEMO",
   defaultPaymentInstructions: "",
+  bankName: "",
+  bankAccountNumber: "2910099681",
+  bankRoutingNumber: "021000021",
+  zelleId: "5513413256",
   updatedAt: new Date(0).toISOString(),
 };
 
@@ -67,6 +76,10 @@ export async function saveAdminSettings(input: Partial<AdminSettings>) {
     invoicePrefix: prefix(input.invoicePrefix, current.invoicePrefix),
     memoPrefix: prefix(input.memoPrefix, current.memoPrefix),
     defaultPaymentInstructions: String(input.defaultPaymentInstructions ?? current.defaultPaymentInstructions).trim().slice(0, 3000),
+    bankName: String(input.bankName ?? current.bankName).trim().slice(0, 120),
+    bankAccountNumber: String(input.bankAccountNumber ?? current.bankAccountNumber).trim().slice(0, 40),
+    bankRoutingNumber: String(input.bankRoutingNumber ?? current.bankRoutingNumber).trim().slice(0, 40),
+    zelleId: String(input.zelleId ?? current.zelleId).trim().slice(0, 80),
     updatedAt: new Date().toISOString(),
   };
   await kvSet(key, next);

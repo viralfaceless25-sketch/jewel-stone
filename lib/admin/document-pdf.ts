@@ -11,6 +11,8 @@ import {
 import { brand } from "@/data/site";
 import type { BusinessDocument } from "./documents";
 import { formatDocumentDate, formatUsd, lineTotal, statusLabel } from "./document-math";
+import { embedBrandLogo, logoBox } from "./pdf-logo";
+import { getAdminSettings } from "./settings";
 
 const PAGE_WIDTH = 612;
 const PAGE_HEIGHT = 792;
@@ -151,6 +153,8 @@ export async function renderDocumentPdf(document: BusinessDocument) {
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
   const display = await pdf.embedFont(StandardFonts.TimesRoman);
   const displayBold = await pdf.embedFont(StandardFonts.TimesRomanBold);
+  const logo = await embedBrandLogo(pdf);
+  const settings = await getAdminSettings().catch(() => null);
 
   pdf.setTitle(`${document.kind === "memo" ? "Memorandum" : "Invoice"} ${document.number}`);
   pdf.setAuthor(issuer.displayName);
@@ -189,15 +193,20 @@ export async function renderDocumentPdf(document: BusinessDocument) {
       });
       y = 684;
     } else {
-      page.drawRectangle({
-        x: MARGIN,
-        y: 712,
-        width: 28,
-        height: 28,
-        borderColor: color.gold,
-        borderWidth: 1,
-      });
-      page.drawText("JS", { x: 49, y: 721, font: displayBold, size: 12, color: color.gold });
+      if (logo) {
+        const box = logoBox(logo, 34);
+        page.drawImage(logo, { x: MARGIN, y: 709, width: box.width, height: box.height });
+      } else {
+        page.drawRectangle({
+          x: MARGIN,
+          y: 712,
+          width: 28,
+          height: 28,
+          borderColor: color.gold,
+          borderWidth: 1,
+        });
+        page.drawText("JS", { x: 49, y: 721, font: displayBold, size: 12, color: color.gold });
+      }
       page.drawText(safeText(issuer.displayName.toUpperCase()), {
         x: 80,
         y: 728,
@@ -413,9 +422,21 @@ export async function renderDocumentPdf(document: BusinessDocument) {
       ? `Goods listed on this memorandum are delivered for examination and approval only and remain the property of ${issuer.legalName}. No sale or transfer of title occurs until ${issuer.displayName} confirms the sale and issues an invoice. Goods are held at the recipient's risk against loss or damage and must be returned by the stated return date or immediately on request.`
       : `Payment is subject to the terms shown above. Please reference ${document.number} with payment. Item descriptions, weights, and diamond information should be read together with any accompanying laboratory certificates or product records.`;
   const payment = document.kind === "invoice" ? document.paymentInstructions.trim() : "";
+  // Three ways to settle, shown on every document so the customer never has to ask.
+  const methods = [
+    settings?.bankAccountNumber
+      ? `Bank transfer - account ${settings.bankAccountNumber}${settings.bankName ? ` (${settings.bankName})` : ""}`
+      : "",
+    settings?.bankRoutingNumber ? `Routing number - ${settings.bankRoutingNumber}` : "",
+    settings?.zelleId ? `Zelle - ${settings.zelleId}` : "",
+  ].filter(Boolean);
+  const methodsLine = methods.length
+    ? `${methods.join("   |   ")}. Please reference ${document.number} with your payment.`
+    : "";
   const blockLines = [
     ...(notes ? [{ title: "NOTES", value: notes }] : []),
     ...(payment ? [{ title: "PAYMENT INSTRUCTIONS", value: payment }] : []),
+    ...(methodsLine ? [{ title: "HOW TO PAY", value: methodsLine }] : []),
     { title: document.kind === "memo" ? "MEMORANDUM TERMS" : "TERMS", value: terms },
   ];
 

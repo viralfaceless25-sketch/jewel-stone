@@ -90,32 +90,42 @@ export default function CustomPage() {
       </section>
 
       <section className={pages.section} aria-labelledby="custom-makers-title">
-        <div className={pages.wrap}>
+        <div className={`${pages.wrap} ${pages.centeredHead}`}>
           <p className={pages.eyebrow}><span /> The hands behind it</p>
           <h2 id="custom-makers-title" className={pages.h2}>Two makers, one bench.</h2>
-          <p className={pages.p} style={{ maxWidth: "56ch" }}>
+          <p className={pages.p}>
             Your commission never leaves the family workshop. From rough and cutting through
             casting, setting, and final polish, every Jewel Stone piece is built end to end
             under one roof — by two master craftsmen who have spent their working lives at the
-            bench.
+            bench, and who still sign off on every piece by eye before it is allowed to leave.
           </p>
-          <div className={pages.cards} style={{ marginTop: "2.5rem" }}>
+          <p className={pages.p}>
+            Between them they carry decades of the kind of knowledge that cannot be written
+            down: the feel of a stone seating correctly, the moment a polish turns from good
+            to right. It is quiet, unhurried work, and it is the reason a Jewel Stone piece
+            holds its light for a lifetime.
+          </p>
+          <div className={pages.cards} style={{ marginTop: "2.5rem", textAlign: "left" }}>
             <article className={pages.card}>
               <p style={{ fontSize: ".72rem", letterSpacing: ".14em", textTransform: "uppercase", color: "var(--js-platinum)", margin: 0 }}>Build &amp; casting</p>
               <h3 className={pages.h3} style={{ marginTop: ".5rem" }}>Prakash Vaghani</h3>
               <p className={pages.p} style={{ margin: ".6rem 0 0" }}>
-                Prakash oversees manufacturing from the first cut. He reads a stone before it
-                is set — how it will hold light, where the metal must carry weight — and turns
-                a CAD file into a piece with real presence in the hand.
+                Prakash oversees manufacturing from the first cut, and he is exceptional at it.
+                He reads a stone before it is set — how it will hold light, where the metal must
+                carry weight — and turns a CAD file into a piece with real presence in the hand.
+                Nothing leaves his bench until the proportions are honest and the build is sound
+                enough to be worn for a lifetime.
               </p>
             </article>
             <article className={pages.card}>
               <p style={{ fontSize: ".72rem", letterSpacing: ".14em", textTransform: "uppercase", color: "var(--js-platinum)", margin: 0 }}>Setting &amp; finish</p>
               <h3 className={pages.h3} style={{ marginTop: ".5rem" }}>Mitul Shihora</h3>
               <p className={pages.p} style={{ margin: ".6rem 0 0" }}>
-                Mitul is responsible for the details you feel more than see — every prong
-                seated true, every surface finished clean, every angle inspected by hand before
-                a piece is allowed to leave the workshop.
+                Mitul is responsible for the details you feel more than see — every prong seated
+                true, every surface finished clean, every angle inspected by hand. His patience
+                is the reason a setting still looks immaculate years later; he will happily spend
+                an extra afternoon on a single millimetre nobody else would notice, and that care
+                is what you are really buying.
               </p>
             </article>
           </div>

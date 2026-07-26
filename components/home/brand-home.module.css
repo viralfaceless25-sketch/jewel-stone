@@ -206,7 +206,7 @@
 }
 .worldMedia {
   position: relative;
-  height: clamp(360px, 42vw, 540px);
+  height: clamp(340px, 38vw, 500px);
   overflow: hidden;
   border-radius: 2px;
   background: #17161a;
@@ -231,12 +231,24 @@
 }
 .worldBody {
   margin: 1.05rem 0 0;
-  max-width: 46ch;
+  max-width: 52ch;
   color: var(--js-ink-soft);
-  font-size: clamp(.93rem, 1.02vw, 1rem);
+  font-size: clamp(1.02rem, 1.18vw, 1.18rem);
   font-weight: 300;
-  line-height: 1.72;
+  line-height: 1.66;
 }
+/* Second paragraph: fills the height the image occupies so the copy column
+   never reads as a small block of text stranded beside a large picture. */
+.worldDetail {
+  margin: .85rem 0 0;
+  max-width: 52ch;
+  color: var(--js-ink-soft);
+  font-size: clamp(.92rem, 1.02vw, 1.02rem);
+  font-weight: 300;
+  line-height: 1.75;
+  opacity: .88;
+}
+.worldSignature .worldDetail { color: rgba(245,242,236,.72); }
 .worldSpecs {
   display: flex;
   flex-wrap: wrap;

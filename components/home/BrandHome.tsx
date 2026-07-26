@@ -15,6 +15,8 @@ const WORLDS = [
     title: "Natural",
     body:
       "Formed over a billion years and chosen stone by stone for provenance and individual character. When it is gone, there is no second.",
+    detail:
+      "Every natural stone we take is examined loose, under the lamp, before it is ever committed to a setting — for how it returns light, how clean it reads to the eye, and whether it deserves the design we have in mind. The certificate confirms what we have already seen by hand.",
     specs: ["GIA certified", "Provenance traced", "One of one"],
     image: "/images/lifestyle/model-diamond-pendant.jpg",
     alt: "Natural diamond pendant worn by a model, editorial portrait",
@@ -28,6 +30,8 @@ const WORLDS = [
     title: "Lab Grown",
     body:
       "Diamond in every optical and physical property, with room to go larger, finer, or bolder — on your terms and your budget.",
+    detail:
+      "Grown rather than mined, then cut and set to exactly the same standard as everything else we make. It is the most direct route to real size and high clarity, and because each piece is made to order you choose the carat, the colour, the clarity, and the metal.",
     specs: ["IGI certified", "Made to order", "14K & 18K"],
     image: "/images/products/sr1-round-1ct-solitaire-ring/model.webp",
     alt: "Lab-grown round solitaire ring worn on the hand",
@@ -105,6 +109,7 @@ export function BrandHome() {
           <p className={styles.worldLabel}>{WORLDS[0].numeral} — {WORLDS[0].label}</p>
           <h3>{WORLDS[0].title}</h3>
           <p className={styles.worldBody}>{WORLDS[0].body}</p>
+          <p className={styles.worldDetail}>{WORLDS[0].detail}</p>
           <ul className={styles.worldSpecs}>
             {WORLDS[0].specs.map((spec) => <li key={spec}>{spec}</li>)}
           </ul>
@@ -120,6 +125,12 @@ export function BrandHome() {
             <p className={styles.worldBody}>
               Precisely matched natural diamonds, assembled by hand to read as one larger
               geometric silhouette.
+            </p>
+            <p className={styles.worldDetail}>
+              Nine or more stones are cut, matched, and set so exactly that the seams disappear
+              and the eye reads a single emerald, heart, or asscher many times the carat weight.
+              It takes days at the bench and cannot be mass produced — which is why every PIECUT
+              piece is made once, and only once.
             </p>
             <p className={styles.worldSignatureNote}>Found nowhere else</p>
             <Link href="/collections?world=natural-piecut" className={styles.worldCtaPill}>Explore PIECUT</Link>
@@ -143,6 +154,7 @@ export function BrandHome() {
           <p className={styles.worldLabel}>{WORLDS[1].numeral} — {WORLDS[1].label}</p>
           <h3>{WORLDS[1].title}</h3>
           <p className={styles.worldBody}>{WORLDS[1].body}</p>
+          <p className={styles.worldDetail}>{WORLDS[1].detail}</p>
           <ul className={styles.worldSpecs}>
             {WORLDS[1].specs.map((spec) => <li key={spec}>{spec}</li>)}
           </ul>
