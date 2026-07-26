@@ -4,6 +4,7 @@ import { stripe } from "@/lib/stripe";
 import { getCustomRequestByPublicToken, saveCustomRequest } from "@/lib/custom-request-store";
 import { parseSessionItems, quantitiesBySlug } from "@/lib/admin/order-items";
 import { createOrder, upsertCustomerFromOrder } from "@/lib/admin/orders";
+import { recordRedemption } from "@/lib/admin/promo-codes";
 import type { OrderItem, ShippingAddress } from "@/lib/admin/order-shared";
 import { decrementStock, publicCatalog } from "@/lib/admin/inventory";
 
@@ -88,6 +89,18 @@ async function recordWebOrder(session: Stripe.Checkout.Session) {
   for (const [slug, quantity] of quantitiesBySlug(order.items)) {
     if (!slug) continue;
     await decrementStock(slug, quantity);
+  }
+  // Count the promotion code only once the money has actually arrived.
+  const promoCode = text(session.metadata?.promo_code);
+  if (promoCode) {
+    const amountOff = session.total_details?.amount_discount ?? 0;
+    await recordRedemption({
+      code: promoCode,
+      email: order.customer.email,
+      orderId: order.id,
+      amountOff,
+      at: new Date().toISOString(),
+    }).catch((error) => console.error("promo redemption not recorded", promoCode, error));
   }
   return order;
 }

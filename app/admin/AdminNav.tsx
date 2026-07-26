@@ -14,6 +14,7 @@ import {
   ReceiptText,
   Settings,
   ShieldCheck,
+  Ticket,
   Users,
 } from "lucide-react";
 import styles from "./admin.module.css";
@@ -27,6 +28,7 @@ const links = [
   { href: "/admin/kyc", label: "KYC", Icon: ShieldCheck },
   { href: "/admin/inbox", label: "Inbox", Icon: Inbox },
   { href: "/admin/invoices", label: "Invoices & memos", Icon: FileText },
+  { href: "/admin/promotions", label: "Promotions", Icon: Ticket },
   { href: "/admin/operations", label: "Operations", Icon: CircleDollarSign },
   { href: "/admin/settings", label: "Settings", Icon: Settings },
 ] as const;

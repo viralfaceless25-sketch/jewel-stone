@@ -18,6 +18,39 @@ export function CheckoutClient({ paymentsEnabled }: CheckoutClientProps) {
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const total = cartTotal(items);
+  // Promotion code — validated on the server, then re-checked at payment time.
+  const [promoInput, setPromoInput] = useState("");
+  const [promo, setPromo] = useState<{ code: string; amountOff: number; label: string } | null>(null);
+  const [promoBusy, setPromoBusy] = useState(false);
+  const [promoError, setPromoError] = useState("");
+  const discount = promo ? promo.amountOff / 100 : 0;
+  const payable = Math.max(0, total - discount);
+
+  async function applyPromo() {
+    const code = promoInput.trim();
+    if (!code) return;
+    setPromoBusy(true);
+    setPromoError("");
+    try {
+      const response = await fetch("/api/promo/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, items: items.map((item) => ({ slug: item.slug, qty: item.qty })) }),
+      });
+      const result = await response.json();
+      if (!result.ok) {
+        setPromo(null);
+        setPromoError(result.reason || "That code can't be used.");
+        return;
+      }
+      setPromo({ code: result.code, amountOff: result.amountOff, label: result.label });
+      setPromoInput("");
+    } catch {
+      setPromoError("Could not check that code. Try again.");
+    } finally {
+      setPromoBusy(false);
+    }
+  }
   // Persisted carts created before product-source tracking are treated safely as
   // reservations. Only known made-to-order products may enter instant checkout.
   const needsInventoryReview = items.some((item) => item.source !== "lab-grown");
@@ -33,7 +66,7 @@ export function CheckoutClient({ paymentsEnabled }: CheckoutClientProps) {
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items }),
+        body: JSON.stringify({ items, ...(promo ? { promoCode: promo.code } : {}) }),
       });
       const data = await response.json();
 
@@ -81,7 +114,8 @@ export function CheckoutClient({ paymentsEnabled }: CheckoutClientProps) {
           message: [
             "Reservation request",
             order,
-            `Total: $${total.toLocaleString("en-US")}`,
+            ...(promo ? [`Promotion code: ${promo.code} (${promo.label}) -$${discount.toLocaleString("en-US")}`] : []),
+            `Total: $${payable.toLocaleString("en-US")}`,
             "",
             `Ship to: ${formData.get("address")}, ${formData.get("city")}, ${formData.get("state")} ${formData.get("postalCode")}`,
             `Notes: ${formData.get("notes") || "—"}`,
@@ -140,7 +174,7 @@ export function CheckoutClient({ paymentsEnabled }: CheckoutClientProps) {
           </div>
           {error ? <p className={styles.error} role="alert">{error}</p> : null}
           <button type="submit" className={styles.submit} disabled={sending}>
-            {sending ? "Opening Stripe…" : `Continue to secure payment · $${total.toLocaleString("en-US")}`}
+            {sending ? "Opening Stripe…" : `Continue to secure payment · $${payable.toLocaleString("en-US")}`}
           </button>
           <p className={styles.secure}>◆ SSL secured · GIA/IGI certified · fully insured shipping</p>
         </form>
@@ -181,7 +215,7 @@ export function CheckoutClient({ paymentsEnabled }: CheckoutClientProps) {
 
           {error ? <p className={styles.error} role="alert">{error}</p> : null}
           <button type="submit" className={styles.submit} disabled={sending}>
-            {sending ? "Sending securely…" : `Reserve & request payment link · $${total.toLocaleString("en-US")}`}
+            {sending ? "Sending securely…" : `Reserve & request payment link · $${payable.toLocaleString("en-US")}`}
           </button>
           <p className={styles.secure}>◆ SSL secured · GIA/IGI certified · fully insured shipping</p>
         </form>
@@ -204,10 +238,37 @@ export function CheckoutClient({ paymentsEnabled }: CheckoutClientProps) {
             </div>
           ))}
         </div>
+        <div className={styles.promoRow}>
+          {promo ? (
+            <div className={styles.promoApplied}>
+              <span><strong>{promo.code}</strong> · {promo.label}</span>
+              <button type="button" onClick={() => { setPromo(null); setPromoError(""); }}>Remove</button>
+            </div>
+          ) : (
+            <>
+              <label className={styles.srOnlyLabel} htmlFor="promo-code">Promotion code</label>
+              <div className={styles.promoInputRow}>
+                <input
+                  id="promo-code"
+                  value={promoInput}
+                  onChange={(event) => setPromoInput(event.target.value.toUpperCase())}
+                  onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); void applyPromo(); } }}
+                  placeholder="Promotion code"
+                  autoComplete="off"
+                />
+                <button type="button" onClick={() => void applyPromo()} disabled={promoBusy || !promoInput.trim()}>
+                  {promoBusy ? "Checking…" : "Apply"}
+                </button>
+              </div>
+            </>
+          )}
+          {promoError ? <p className={styles.promoError}>{promoError}</p> : null}
+        </div>
         <dl className={styles.totals}>
           <div><dt>Subtotal</dt><dd>${total.toLocaleString("en-US")}</dd></div>
+          {promo ? <div><dt>Discount</dt><dd>−${discount.toLocaleString("en-US")}</dd></div> : null}
           <div><dt>Shipping</dt><dd>Insured · complimentary</dd></div>
-          <div className={styles.grand}><dt>Total</dt><dd>${total.toLocaleString("en-US")}</dd></div>
+          <div className={styles.grand}><dt>Total</dt><dd>${payable.toLocaleString("en-US")}</dd></div>
         </dl>
         <Link href="/collections" className={styles.keep}>Continue browsing</Link>
       </aside>

@@ -77,3 +77,64 @@
 .error { margin:0; padding:.85rem 1rem; border:1px solid #9b4d5b; color:#7f2f3e; background:#fff7f7; font-size:.86rem; }
 .notice { margin:0; padding:.85rem 1rem; border:1px solid var(--js-gold); color:var(--js-ink-soft); background:#fffaf0; font-size:.86rem; line-height:1.5; }
 .submit:disabled { cursor:wait; opacity:.62; }
+
+/* ── Promotion code ────────────────────────────────────────────────────────── */
+.promoRow { margin: 1.1rem 0 .4rem; }
+.srOnlyLabel {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.promoInputRow { display: flex; gap: .5rem; }
+.promoInputRow input {
+  flex: 1;
+  min-width: 0;
+  padding: .7rem .8rem;
+  border: 1px solid var(--js-line);
+  border-radius: var(--js-radius-control, 10px);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: .85rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--js-ink);
+}
+.promoInputRow input:focus { outline: none; border-color: var(--js-gold-deep); }
+.promoInputRow button {
+  padding: .7rem 1.1rem;
+  border: 1px solid var(--js-ink);
+  border-radius: var(--js-radius-control, 10px);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: .78rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--js-ink);
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease;
+}
+.promoInputRow button:hover:not(:disabled) { background: var(--js-ink); color: var(--js-porcelain, #faf8f5); }
+.promoInputRow button:disabled { opacity: .45; cursor: not-allowed; }
+
+.promoApplied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  padding: .7rem .85rem;
+  border: 1px solid var(--js-gold-light, #e8d4b6);
+  border-radius: var(--js-radius-control, 10px);
+  background: rgba(122, 98, 76, .07);
+  font-size: .84rem;
+  color: var(--js-ink);
+}
+.promoApplied button {
+  border: 0;
+  background: none;
+  color: var(--js-platinum);
+  font-size: .74rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.promoApplied button:hover { color: var(--js-ink); }
+.promoError { margin: .5rem 0 0; color: #8a2a22; font-size: .8rem; }
