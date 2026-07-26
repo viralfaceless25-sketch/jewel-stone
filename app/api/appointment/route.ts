@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { saveAppointment } from "@/lib/admin/leads";
 
 export const runtime = "nodejs";
 
@@ -47,6 +48,16 @@ export async function POST(request: Request) {
       { status: 503 },
     );
   }
+
+  await saveAppointment({
+    name,
+    email,
+    phone,
+    requestedDate: date,
+    requestedTime: time,
+    interest,
+    notes,
+  }).catch((error) => console.error("appointment admin record failed", error));
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",

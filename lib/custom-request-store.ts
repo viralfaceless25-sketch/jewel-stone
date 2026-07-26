@@ -3,6 +3,7 @@ import "server-only";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { CustomRequestRecord } from "@/lib/custom-request-types";
+import { kvGetMany, kvSet, kvSetAdd, kvSetMembers } from "@/lib/kv";
 
 type LocalCollection = Record<string, CustomRequestRecord>;
 
@@ -91,9 +92,12 @@ export async function saveCustomRequest(record: CustomRequestRecord) {
       kvCommand(["SET", publicKey(record.publicToken), record.id]),
       kvCommand(["SET", ownerKey(record.ownerToken), record.id]),
     ]);
+    await kvSetAdd("jewelstone:custom-requests", record.id);
     return;
   }
   await saveLocalRecord(record);
+  await kvSet(recordKey(record.id), record);
+  await kvSetAdd("jewelstone:custom-requests", record.id);
 }
 
 async function getRemoteRecord(indexKey: string) {
@@ -118,4 +122,12 @@ export async function getCustomRequestByOwnerToken(token: string) {
   if (requireProductionStore()) return getRemoteRecord(ownerKey(token));
   const collection = await readLocalCollection();
   return Object.values(collection).find((record) => record.ownerToken === token) ?? null;
+}
+
+export async function listCustomRequests() {
+  const ids = await kvSetMembers("jewelstone:custom-requests");
+  const rows = await kvGetMany<CustomRequestRecord>(ids.map(recordKey));
+  return rows
+    .filter((row): row is CustomRequestRecord => Boolean(row))
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }

@@ -1,0 +1,257 @@
+.composer {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.section {
+  padding: 1.2rem;
+  border: 1px solid rgba(24, 21, 18, 0.13);
+  border-radius: 14px;
+  background: #fffdf9;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sectionHead h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.grid2,
+.grid3,
+.grid4 {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.grid2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.lineCard {
+  padding: 1rem;
+  border: 1px solid rgba(24, 21, 18, 0.13);
+  border-radius: 12px;
+  background: #f9f5ee;
+}
+
+.lineHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.lineHead strong {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.remove {
+  border: 0;
+  background: transparent;
+  color: #9d332d;
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.totals {
+  width: min(100%, 330px);
+  margin-left: auto;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.totals th,
+.totals td {
+  padding: 0.38rem 0;
+  font-weight: 400;
+  text-align: right;
+}
+
+.totals td {
+  padding-left: 2rem;
+  white-space: nowrap;
+}
+
+.grand th,
+.grand td {
+  padding-top: 0.75rem;
+  border-top: 1px solid #a57a35;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+.submitBar {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(24, 21, 18, 0.13);
+  border-radius: 14px;
+  background: rgba(255, 253, 249, 0.96);
+  backdrop-filter: blur(12px);
+}
+
+.preview {
+  width: min(100%, 8.5in);
+  margin-inline: auto;
+  padding: clamp(1.5rem, 4vw, 2.7rem);
+  border: 1px solid #d9cfc2;
+  background: #fffdf9;
+  box-shadow: 0 22px 60px rgba(45, 34, 22, 0.08);
+  color: #181512;
+}
+
+.previewHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid #a57a35;
+}
+
+.previewBrand {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  letter-spacing: 0.12em;
+}
+
+.previewTag {
+  margin-top: 0.35rem;
+  color: #7d5923;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.previewTitle {
+  text-align: right;
+}
+
+.previewTitle h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.previewTitle p {
+  margin: 0.35rem 0 0;
+  color: #7d5923;
+  font-size: 0.8rem;
+}
+
+.previewMeta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.35rem 0;
+  padding: 1rem;
+  border: 1px solid #d9cfc2;
+}
+
+.previewMeta span {
+  display: block;
+  color: #7d5923;
+  font-size: 0.62rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.previewMeta strong {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 400;
+}
+
+.previewTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.previewTable th {
+  padding: 0.55rem;
+  border-bottom: 1px solid #a57a35;
+  color: #7d5923;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.previewTable td {
+  padding: 0.75rem 0.55rem;
+  border-bottom: 1px solid #d9cfc2;
+  vertical-align: top;
+}
+
+.previewTable small {
+  display: block;
+  margin-top: 0.2rem;
+  color: #6d6257;
+  line-height: 1.5;
+}
+
+.docActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 1.2rem;
+}
+
+.sendBox {
+  display: grid;
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
+  padding: 1rem;
+  border: 1px solid rgba(24, 21, 18, 0.13);
+  border-radius: 12px;
+  background: #fffdf9;
+}
+
+.sendBox p {
+  margin: 0;
+  color: #6d6257;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 760px) {
+  .grid2,
+  .grid3,
+  .grid4 {
+    grid-template-columns: 1fr;
+  }
+
+  .previewHeader,
+  .previewMeta {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .previewTitle {
+    text-align: left;
+  }
+}
+

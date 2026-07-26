@@ -1,0 +1,486 @@
+import "server-only";
+
+import {
+  PDFDocument,
+  StandardFonts,
+  degrees,
+  rgb,
+  type PDFFont,
+  type PDFPage,
+} from "pdf-lib";
+import { brand } from "@/data/site";
+import type { BusinessDocument } from "./documents";
+import { formatDocumentDate, formatUsd, lineTotal, statusLabel } from "./document-math";
+
+const PAGE_WIDTH = 612;
+const PAGE_HEIGHT = 792;
+const MARGIN = 42;
+const CONTENT_WIDTH = PAGE_WIDTH - MARGIN * 2;
+
+const color = {
+  paper: rgb(0.992, 0.984, 0.965),
+  ink: rgb(0.105, 0.09, 0.075),
+  soft: rgb(0.40, 0.36, 0.32),
+  muted: rgb(0.58, 0.53, 0.47),
+  line: rgb(0.84, 0.80, 0.74),
+  gold: rgb(0.63, 0.45, 0.20),
+  goldPale: rgb(0.95, 0.90, 0.81),
+  white: rgb(1, 1, 1),
+  red: rgb(0.58, 0.16, 0.14),
+};
+
+function safeText(value: string) {
+  return value.replace(/[^\x20-\x7E\n]/g, (character) => {
+    if (character === "–" || character === "—") return "-";
+    if (character === "’" || character === "‘") return "'";
+    if (character === "“" || character === "”") return '"';
+    if (character === "×") return "x";
+    return " ";
+  });
+}
+
+function wrapText(font: PDFFont, value: string, size: number, maxWidth: number) {
+  const paragraphs = safeText(value).split(/\r?\n/);
+  const lines: string[] = [];
+  for (const paragraph of paragraphs) {
+    const words = paragraph.split(/\s+/).filter(Boolean);
+    if (!words.length) {
+      lines.push("");
+      continue;
+    }
+    let current = "";
+    for (const word of words) {
+      const candidate = current ? `${current} ${word}` : word;
+      if (font.widthOfTextAtSize(candidate, size) <= maxWidth) {
+        current = candidate;
+        continue;
+      }
+      if (current) lines.push(current);
+      if (font.widthOfTextAtSize(word, size) <= maxWidth) {
+        current = word;
+        continue;
+      }
+      let segment = "";
+      for (const character of word) {
+        if (font.widthOfTextAtSize(`${segment}${character}`, size) > maxWidth && segment) {
+          lines.push(segment);
+          segment = character;
+        } else {
+          segment += character;
+        }
+      }
+      current = segment;
+    }
+    if (current) lines.push(current);
+  }
+  return lines;
+}
+
+function drawLines(
+  page: PDFPage,
+  lines: string[],
+  options: {
+    x: number;
+    y: number;
+    font: PDFFont;
+    size: number;
+    lineHeight: number;
+    color?: ReturnType<typeof rgb>;
+  },
+) {
+  lines.forEach((line, index) => {
+    page.drawText(line, {
+      x: options.x,
+      y: options.y - index * options.lineHeight,
+      font: options.font,
+      size: options.size,
+      color: options.color ?? color.ink,
+    });
+  });
+  return options.y - lines.length * options.lineHeight;
+}
+
+function drawRight(
+  page: PDFPage,
+  value: string,
+  right: number,
+  y: number,
+  font: PDFFont,
+  size: number,
+  fill = color.ink,
+) {
+  const text = safeText(value);
+  page.drawText(text, {
+    x: right - font.widthOfTextAtSize(text, size),
+    y,
+    font,
+    size,
+    color: fill,
+  });
+}
+
+function itemDetails(item: BusinessDocument["lineItems"][number]) {
+  const details = [
+    item.code ? `Code ${item.code}` : "",
+    item.category ?? "",
+    item.metal ?? "",
+    item.metalWeight ? `Metal wt ${item.metalWeight}` : "",
+    item.diamondCarats ? `Diamond ${item.diamondCarats}` : "",
+    item.grossWeight ? `Gross wt ${item.grossWeight}` : "",
+    item.shape ?? "",
+    item.color ? `Color ${item.color}` : "",
+    item.clarity ? `Clarity ${item.clarity}` : "",
+    item.cutPolishSymmetry ? `Cut/Polish/Sym ${item.cutPolishSymmetry}` : "",
+    item.certificateNumber ? `Certificate ${item.certificateNumber}` : "",
+  ].filter(Boolean);
+  return details.join("  |  ");
+}
+
+export async function renderDocumentPdf(document: BusinessDocument) {
+  const issuer = document.issuer ?? {
+    displayName: brand.name,
+    legalName: process.env.INVOICE_LEGAL_NAME ?? brand.name,
+    address: brand.address,
+    phone: brand.phone,
+    email: brand.email,
+    website: brand.website,
+    tagline: brand.tagline,
+  };
+  const pdf = await PDFDocument.create();
+  const regular = await pdf.embedFont(StandardFonts.Helvetica);
+  const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
+  const display = await pdf.embedFont(StandardFonts.TimesRoman);
+  const displayBold = await pdf.embedFont(StandardFonts.TimesRomanBold);
+
+  pdf.setTitle(`${document.kind === "memo" ? "Memorandum" : "Invoice"} ${document.number}`);
+  pdf.setAuthor(issuer.displayName);
+  pdf.setSubject(`${issuer.displayName} ${document.kind}`);
+  pdf.setCreator("Jewel Stone Owner Panel");
+  pdf.setProducer("Jewel Stone Owner Panel");
+
+  let page!: PDFPage;
+  let y = 0;
+
+  function addPage(continuation = false) {
+    page = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
+    page.drawRectangle({ x: 0, y: 0, width: PAGE_WIDTH, height: PAGE_HEIGHT, color: color.paper });
+    page.drawRectangle({ x: 0, y: PAGE_HEIGHT - 8, width: PAGE_WIDTH, height: 8, color: color.gold });
+
+    if (continuation) {
+      page.drawText(safeText(issuer.displayName.toUpperCase()), {
+        x: MARGIN,
+        y: 742,
+        font: displayBold,
+        size: 15,
+        color: color.ink,
+      });
+      page.drawText(`${document.kind === "memo" ? "MEMORANDUM" : "INVOICE"} ${document.number} - CONTINUED`, {
+        x: MARGIN,
+        y: 721,
+        font: bold,
+        size: 8,
+        color: color.gold,
+      });
+      page.drawLine({
+        start: { x: MARGIN, y: 706 },
+        end: { x: PAGE_WIDTH - MARGIN, y: 706 },
+        thickness: 1,
+        color: color.line,
+      });
+      y = 684;
+    } else {
+      page.drawRectangle({
+        x: MARGIN,
+        y: 712,
+        width: 28,
+        height: 28,
+        borderColor: color.gold,
+        borderWidth: 1,
+      });
+      page.drawText("JS", { x: 49, y: 721, font: displayBold, size: 12, color: color.gold });
+      page.drawText(safeText(issuer.displayName.toUpperCase()), {
+        x: 80,
+        y: 728,
+        font: displayBold,
+        size: 21,
+        color: color.ink,
+      });
+      page.drawText(safeText(issuer.tagline.toUpperCase()), {
+        x: 80,
+        y: 712,
+        font: bold,
+        size: 6.5,
+        color: color.gold,
+      });
+
+      const heading = document.kind === "memo" ? "MEMORANDUM" : "INVOICE";
+      drawRight(page, heading, PAGE_WIDTH - MARGIN, 730, display, 20);
+      drawRight(page, document.number, PAGE_WIDTH - MARGIN, 711, bold, 9, color.gold);
+
+      const businessLines = [
+        issuer.legalName,
+        issuer.address,
+        `${issuer.phone}  |  ${issuer.email}`,
+        issuer.website.replace(/^https?:\/\//, ""),
+      ];
+      drawLines(page, businessLines, {
+        x: MARGIN,
+        y: 687,
+        font: regular,
+        size: 7.5,
+        lineHeight: 11,
+        color: color.soft,
+      });
+
+      const metaX = 402;
+      const metaRight = PAGE_WIDTH - MARGIN;
+      const dueLabel = document.kind === "memo" ? "RETURN BY" : "DUE DATE";
+      page.drawText("ISSUED", { x: metaX, y: 684, font: bold, size: 6, color: color.muted });
+      drawRight(page, formatDocumentDate(document.issueDate), metaRight, 684, regular, 8);
+      page.drawText(dueLabel, { x: metaX, y: 671, font: bold, size: 6, color: color.muted });
+      drawRight(page, formatDocumentDate(document.dueDate), metaRight, 671, regular, 8);
+      page.drawText("TERMS", { x: metaX, y: 658, font: bold, size: 6, color: color.muted });
+      drawRight(page, document.terms, metaRight, 658, regular, 8);
+      page.drawText("STATUS", { x: metaX, y: 645, font: bold, size: 6, color: color.muted });
+      drawRight(
+        page,
+        statusLabel(document.status).toUpperCase(),
+        metaRight,
+        645,
+        bold,
+        7,
+        document.status === "void" ? color.red : color.gold,
+      );
+
+      page.drawLine({
+        start: { x: MARGIN, y: 628 },
+        end: { x: PAGE_WIDTH - MARGIN, y: 628 },
+        thickness: 1.2,
+        color: color.gold,
+      });
+
+      page.drawText("BILL TO", { x: MARGIN, y: 609, font: bold, size: 6.5, color: color.gold });
+      page.drawText("SHIP TO", { x: 320, y: 609, font: bold, size: 6.5, color: color.gold });
+      page.drawText(safeText(document.customer.name), {
+        x: MARGIN,
+        y: 590,
+        font: displayBold,
+        size: 12,
+        color: color.ink,
+      });
+      page.drawText(safeText(document.customer.name), {
+        x: 320,
+        y: 590,
+        font: displayBold,
+        size: 12,
+        color: color.ink,
+      });
+
+      const billing = [
+        document.customer.address,
+        [document.customer.phone, document.customer.email].filter(Boolean).join("  |  "),
+      ].filter(Boolean).join("\n");
+      const shipping = document.customer.shippingAddress || document.customer.address || "Same as billing address";
+      drawLines(page, wrapText(regular, billing || "-", 7.5, 225), {
+        x: MARGIN,
+        y: 574,
+        font: regular,
+        size: 7.5,
+        lineHeight: 10,
+        color: color.soft,
+      });
+      drawLines(page, wrapText(regular, shipping, 7.5, 246), {
+        x: 320,
+        y: 574,
+        font: regular,
+        size: 7.5,
+        lineHeight: 10,
+        color: color.soft,
+      });
+      y = 530;
+    }
+  }
+
+  function drawTableHeader() {
+    page.drawRectangle({
+      x: MARGIN,
+      y: y - 17,
+      width: CONTENT_WIDTH,
+      height: 21,
+      color: color.goldPale,
+    });
+    page.drawText("#", { x: MARGIN + 5, y: y - 10, font: bold, size: 6.5, color: color.gold });
+    page.drawText("ITEM DETAILS", { x: 68, y: y - 10, font: bold, size: 6.5, color: color.gold });
+    page.drawText("QTY", { x: 374, y: y - 10, font: bold, size: 6.5, color: color.gold });
+    page.drawText("UNIT", { x: 433, y: y - 10, font: bold, size: 6.5, color: color.gold });
+    drawRight(page, "AMOUNT", PAGE_WIDTH - MARGIN - 5, y - 10, bold, 6.5, color.gold);
+    y -= 24;
+  }
+
+  addPage(false);
+  drawTableHeader();
+
+  document.lineItems.forEach((item, index) => {
+    const titleLines = wrapText(bold, item.description, 8.2, 286);
+    const detail = itemDetails(item);
+    const detailLines = detail ? wrapText(regular, detail, 6.4, 286) : [];
+    const rowHeight = Math.max(34, 12 + titleLines.length * 10 + detailLines.length * 8);
+
+    if (y - rowHeight < 112) {
+      addPage(true);
+      drawTableHeader();
+    }
+
+    page.drawText(String(index + 1), {
+      x: MARGIN + 5,
+      y: y - 13,
+      font: regular,
+      size: 7.5,
+      color: color.soft,
+    });
+    drawLines(page, titleLines, {
+      x: 68,
+      y: y - 12,
+      font: bold,
+      size: 8.2,
+      lineHeight: 10,
+      color: color.ink,
+    });
+    if (detailLines.length) {
+      drawLines(page, detailLines, {
+        x: 68,
+        y: y - 14 - titleLines.length * 10,
+        font: regular,
+        size: 6.4,
+        lineHeight: 8,
+        color: color.soft,
+      });
+    }
+    page.drawText(String(item.quantity), {
+      x: 380,
+      y: y - 13,
+      font: regular,
+      size: 7.5,
+      color: color.ink,
+    });
+    drawRight(page, formatUsd(item.unitPrice), 479, y - 13, regular, 7.5);
+    drawRight(page, formatUsd(lineTotal(item)), PAGE_WIDTH - MARGIN - 5, y - 13, bold, 7.5);
+    page.drawLine({
+      start: { x: MARGIN, y: y - rowHeight },
+      end: { x: PAGE_WIDTH - MARGIN, y: y - rowHeight },
+      thickness: 0.55,
+      color: color.line,
+    });
+    y -= rowHeight;
+  });
+
+  if (y < 310) {
+    addPage(true);
+  }
+
+  y -= 10;
+  const totalX = 365;
+  const totalRight = PAGE_WIDTH - MARGIN;
+  const totalRows = [
+    ["Subtotal", formatUsd(document.subtotal)],
+    ...(document.taxAmount ? [[`Sales tax (${document.taxRate}%)`, formatUsd(document.taxAmount)]] : []),
+    ...(document.shipping ? [["Shipping & handling", formatUsd(document.shipping)]] : []),
+  ];
+  totalRows.forEach(([label, amount]) => {
+    page.drawText(label, { x: totalX, y, font: regular, size: 8, color: color.soft });
+    drawRight(page, amount, totalRight, y, regular, 8);
+    y -= 15;
+  });
+  page.drawLine({
+    start: { x: totalX, y: y + 5 },
+    end: { x: totalRight, y: y + 5 },
+    thickness: 1.1,
+    color: color.gold,
+  });
+  page.drawText(document.kind === "memo" ? "Declared value" : "Amount due", {
+    x: totalX,
+    y: y - 10,
+    font: displayBold,
+    size: 11,
+    color: color.ink,
+  });
+  drawRight(page, formatUsd(document.total), totalRight, y - 10, displayBold, 11);
+  y -= 42;
+
+  const notes = document.notes.trim();
+  const terms =
+    document.kind === "memo"
+      ? `Goods listed on this memorandum are delivered for examination and approval only and remain the property of ${issuer.legalName}. No sale or transfer of title occurs until ${issuer.displayName} confirms the sale and issues an invoice. Goods are held at the recipient's risk against loss or damage and must be returned by the stated return date or immediately on request.`
+      : `Payment is subject to the terms shown above. Please reference ${document.number} with payment. Item descriptions, weights, and diamond information should be read together with any accompanying laboratory certificates or product records.`;
+  const payment = document.kind === "invoice" ? document.paymentInstructions.trim() : "";
+  const blockLines = [
+    ...(notes ? [{ title: "NOTES", value: notes }] : []),
+    ...(payment ? [{ title: "PAYMENT INSTRUCTIONS", value: payment }] : []),
+    { title: document.kind === "memo" ? "MEMORANDUM TERMS" : "TERMS", value: terms },
+  ];
+
+  for (const block of blockLines) {
+    const lines = wrapText(regular, block.value, 7.2, CONTENT_WIDTH);
+    const height = 18 + lines.length * 9;
+    if (y - height < 92) addPage(true);
+    page.drawText(block.title, { x: MARGIN, y, font: bold, size: 6.5, color: color.gold });
+    y -= 13;
+    y = drawLines(page, lines, {
+      x: MARGIN,
+      y,
+      font: regular,
+      size: 7.2,
+      lineHeight: 9,
+      color: color.soft,
+    }) - 9;
+  }
+
+  if (y < 125) addPage(true);
+  page.drawLine({ start: { x: MARGIN, y: 92 }, end: { x: 250, y: 92 }, thickness: 0.7, color: color.ink });
+  page.drawLine({ start: { x: 362, y: 92 }, end: { x: PAGE_WIDTH - MARGIN, y: 92 }, thickness: 0.7, color: color.ink });
+  page.drawText("JEWEL STONE AUTHORIZED SIGNATURE", {
+    x: MARGIN,
+    y: 78,
+    font: bold,
+    size: 5.8,
+    color: color.muted,
+  });
+  page.drawText("CUSTOMER RECEIPT / ACCEPTANCE", {
+    x: 362,
+    y: 78,
+    font: bold,
+    size: 5.8,
+    color: color.muted,
+  });
+
+  const pages = pdf.getPages();
+  pages.forEach((pdfPage, index) => {
+    pdfPage.drawLine({
+      start: { x: MARGIN, y: 45 },
+      end: { x: PAGE_WIDTH - MARGIN, y: 45 },
+      thickness: 0.5,
+      color: color.line,
+    });
+    pdfPage.drawText(`${issuer.displayName}  |  ${issuer.address}  |  ${issuer.phone}`, {
+      x: MARGIN,
+      y: 29,
+      font: regular,
+      size: 5.8,
+      color: color.muted,
+    });
+    drawRight(pdfPage, `Page ${index + 1} of ${pages.length}`, PAGE_WIDTH - MARGIN, 29, regular, 5.8, color.muted);
+    if (document.status === "void") {
+      pdfPage.drawText("VOID", {
+        x: 210,
+        y: 380,
+        font: displayBold,
+        size: 70,
+        color: rgb(0.86, 0.70, 0.69),
+        rotate: degrees(-18),
+        opacity: 0.35,
+      });
+    }
+  });
+
+  return pdf.save();
+}

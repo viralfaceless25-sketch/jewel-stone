@@ -4,8 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CollectionGallery } from "@/components/collections/CollectionGallery";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getProductsByCategory, products } from "@/data/products";
 import type { ProductCategory } from "@/data/products";
+import { publicCatalog } from "@/lib/admin/inventory";
 import { breadcrumbSchema, itemListSchema } from "@/lib/seo/schema";
 import pages from "@/components/pages/pages.module.css";
 
@@ -54,7 +54,9 @@ export function generateMetadata({ params }: { params: { category: string } }): 
   };
 }
 
-export default function CollectionCategoryPage({ params }: { params: { category: string } }) {
+export const revalidate = 60;
+
+export default async function CollectionCategoryPage({ params }: { params: { category: string } }) {
   const category = SLUG_TO_CATEGORY[params.category];
   const copy = COPY[params.category];
   if (!category || !copy) notFound();
@@ -62,9 +64,9 @@ export default function CollectionCategoryPage({ params }: { params: { category:
   // The whole catalogue, not just the signature vitrine: the made-to-order
   // lab-grown pieces have product pages, and this is the only place that links
   // to them. One-of-a-kind pieces lead, then the made-to-order range.
-  const items = getProductsByCategory(category).sort(
-    (a, b) => Number(b.source === "signature") - Number(a.source === "signature"),
-  );
+  const items = (await publicCatalog())
+    .filter((product) => product.category === category)
+    .sort((a, b) => Number(b.source === "signature") - Number(a.source === "signature"));
 
   return (
     <>

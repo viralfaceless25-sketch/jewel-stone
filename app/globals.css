@@ -664,6 +664,22 @@ body::after { display: none !important; }         /* kill dark film grain */
 .site-shell { min-height: 60vh; padding-top: 97px; overflow: clip; }
 @media (max-width: 860px) { .site-shell { padding-top: 72px; } }
 
+body:has(.admin-root) > header,
+body:has(.admin-root) > footer,
+body:has(.admin-root)::after {
+  display: none !important;
+}
+
+html:has(.admin-root),
+body:has(.admin-root) {
+  background: #f6f1e8 !important;
+}
+
+.site-shell:has(.admin-root) {
+  padding-top: 0 !important;
+  overflow: visible !important;
+}
+
 :where(a, button, input, select, textarea):focus-visible {
   outline: 2px solid var(--js-garnet);
   outline-offset: 4px;

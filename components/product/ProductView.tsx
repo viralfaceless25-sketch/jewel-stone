@@ -38,7 +38,15 @@ function nativeMetal(material: string): MetalVariant {
 const RING_SIZES = ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9"];
 const CHAIN_LENGTHS = ['16"', '18"', '20"'];
 
-export function ProductView({ product, related }: { product: Product; related: Product[] }) {
+export function ProductView({
+  product,
+  related,
+  availability,
+}: {
+  product: Product;
+  related: Product[];
+  availability?: { stock: number; soldOut: boolean };
+}) {
   const model = modelFor(product.slug);
   const router = useRouter();
   const options = useMemo(() => optionsForCategory(product.category), [product.category]);
@@ -255,7 +263,9 @@ export function ProductView({ product, related }: { product: Product; related: P
             ) : (
               <>
                 <strong className={styles.price}>{product.priceLabel}</strong>
-                <span className={styles.priceNote}>Certification included · ships insured</span>
+                <span className={styles.priceNote}>
+                  {availability?.soldOut ? "Sold out · contact us for availability" : "Certification included · ships insured"}
+                </span>
               </>
             )}
           </div>
@@ -374,6 +384,10 @@ export function ProductView({ product, related }: { product: Product; related: P
             {customized ? (
               <button className={styles.addBtn} onClick={() => setShowQuote((v) => !v)}>
                 {showQuote ? "Close quotation form" : "Inquire for quotation"}
+              </button>
+            ) : availability?.soldOut ? (
+              <button className={styles.addBtn} disabled>
+                Sold out
               </button>
             ) : (
               <button className={styles.addBtn} onClick={onAdd}>

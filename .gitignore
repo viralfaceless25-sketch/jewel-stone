@@ -16,6 +16,7 @@ __pycache__/
 /.opencode/
 /.windsurf/
 /.codex-spec-*.md
+/.claude/worktrees/
 /.DS_Store
 **/.DS_Store
 .vercel

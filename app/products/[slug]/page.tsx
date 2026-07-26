@@ -2,15 +2,18 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProductView } from "@/components/product/ProductView";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getProductBySlug, getRelatedProducts, products } from "@/data/products";
+import { products } from "@/data/products";
+import { publicCatalog, publicStateFor } from "@/lib/admin/inventory";
 import { absoluteUrl, breadcrumbSchema, productSchema } from "@/lib/seo/schema";
+
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return products.map((product) => ({ slug: product.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const product = getProductBySlug(params.slug);
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const product = (await publicCatalog()).find((candidate) => candidate.slug === params.slug);
   if (!product) return {};
   return {
     title: product.name,
@@ -32,14 +35,18 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
-export default function ProductDetailPage({ params }: { params: { slug: string } }) {
-  const product = getProductBySlug(params.slug);
+export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
+  const catalog = await publicCatalog();
+  const product = catalog.find((candidate) => candidate.slug === params.slug);
   if (!product) notFound();
-  const related = getRelatedProducts(product);
+  const availability = await publicStateFor(product.slug);
+  const related = catalog
+    .filter((candidate) => candidate.category === product.category && candidate.slug !== product.slug)
+    .slice(0, 4);
 
   return (
     <>
-      <ProductView product={product} related={related} />
+      <ProductView product={product} related={related} availability={availability} />
       <JsonLd data={productSchema(product)} />
       <JsonLd
         data={breadcrumbSchema([

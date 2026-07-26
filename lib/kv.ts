@@ -84,6 +84,28 @@ export async function kvSet(key: string, value: unknown): Promise<void> {
   await command(["SET", key, raw]);
 }
 
+/** Claim a key once. Optional TTL is used for short-lived distributed locks. */
+export async function kvSetIfAbsent(
+  key: string,
+  value: unknown,
+  ttlSeconds?: number,
+): Promise<boolean> {
+  const raw = JSON.stringify(value);
+  if (!kvConfigured) {
+    let created = false;
+    await writeLocal((data) => {
+      if (data.values[key] === undefined) {
+        data.values[key] = raw;
+        created = true;
+      }
+    });
+    return created;
+  }
+  const args: (string | number)[] = ["SET", key, raw, "NX"];
+  if (ttlSeconds && ttlSeconds > 0) args.push("EX", Math.ceil(ttlSeconds));
+  return (await command(args)) === "OK";
+}
+
 export async function kvDel(key: string): Promise<void> {
   if (!kvConfigured) {
     await writeLocal((data) => { delete data.values[key]; });

@@ -7,6 +7,35 @@
 
 ---
 
+## 0 · Admin completion update — 2026-07-26
+
+The admin panel described as unfinished below is now implemented and production-ready in the working tree:
+
+- Password-protected `/admin` dashboard and mobile-responsive owner navigation.
+- Inventory overlays for stock, visibility, and price; individual and Excel product creation; multi-image upload; missing-image publishing gate; duplicate/delete; filters; bulk price adjustments.
+- Storefront product/collection integration, sold-out UI, checkout stock validation, and idempotent webhook stock decrement.
+- Orders, customers, purchase history, notes, tracking, full Stripe refunds, and CSV exports.
+- Inbox for custom quotations, appointments, and messages.
+- Loose-diamond inventory browser and CSV export.
+- Designed Jewel Stone invoice and memorandum PDFs with sequential numbers, jewelry/loose-stone fields, pagination, totals, terms, signatures, void watermark, file-save/download, email attachment, statuses, editing, and CSV export.
+- Repairs/service tickets, off-site Stripe payment links, activity log, and business/document settings.
+- Incoming website payments now create orders and customer records for storefront, custom-design, and off-site payment-link checkouts.
+
+Verification completed locally:
+
+- `npx tsc --noEmit`
+- `npx next lint` — no warnings
+- `npm run build` — 136/136 static pages generated
+- `npm test` — 37/37 passing
+- Authenticated API/browser QA at desktop and 390px mobile widths
+- Real workbook import: 56 products, 0 row errors, all correctly held hidden pending photography
+- Multi-page PDF QA: 28 items across 3 Letter pages
+- Sold-out product UI and checkout rejection verified
+
+Stripe-dependent features remain gracefully disabled until the client restores valid live `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` values as described in §6.
+
+---
+
 ## 1 · What this is
 
 Luxury diamond-jewelry e-commerce site for a NYC Diamond District jeweler.

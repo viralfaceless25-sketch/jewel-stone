@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CollectionGallery } from "@/components/collections/CollectionGallery";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { products } from "@/data/products";
+import { publicCatalog } from "@/lib/admin/inventory";
 import { itemListSchema } from "@/lib/seo/schema";
 import styles from "@/components/collections/collections.module.css";
 import rarMediaImport from "@/data/rar-media-import.json";
@@ -18,10 +18,6 @@ export const metadata: Metadata = {
 
 // Signature pieces lead, then the made-to-order lab-grown range — otherwise the
 // lab-grown catalogue is unreachable except by direct URL.
-const signature = [...products].sort(
-  (a, b) => Number(b.source === "signature") - Number(a.source === "signature"),
-);
-
 const madeToOrder = [
   { title: "Tennis Bracelets", note: "2ct–30ct continuous diamond lines", href: "/custom" },
   { title: "Diamond Necklaces", note: "Tennis & fancy styles, 5ct–30ct", href: "/custom" },
@@ -31,7 +27,12 @@ const madeToOrder = [
 
 const studioArrivals = rarMediaImport.piecutArrivals;
 
-export default function CollectionsPage() {
+export const revalidate = 60;
+
+export default async function CollectionsPage() {
+  const signature = (await publicCatalog()).sort(
+    (a, b) => Number(b.source === "signature") - Number(a.source === "signature"),
+  );
   return (
     <>
     <main className={styles.page}>

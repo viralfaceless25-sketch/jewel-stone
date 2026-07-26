@@ -238,6 +238,12 @@
   transition: background 0.25s ease, transform 0.2s ease;
 }
 .addBtn:hover { background: transparent; color: var(--js-garnet); }
+.addBtn:disabled {
+  border-color: var(--js-line);
+  background: var(--js-line);
+  color: var(--js-platinum);
+  cursor: not-allowed;
+}
 .viewingBtn {
   display: inline-flex;
   align-items: center;

@@ -1,8 +1,9 @@
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
-import { products } from "@/data/products";
+import { publicCatalog, publicStateFor } from "@/lib/admin/inventory";
 import { checkoutMode, checkoutOrigin, envFlag } from "@/lib/commerce/checkout-policy";
+import { KvError } from "@/lib/kv";
 
 export const dynamic = "force-dynamic";
 
@@ -30,12 +31,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "empty_cart" }, { status: 400 });
     }
 
-    const items = incoming.map((item) => {
+    const catalog = await publicCatalog();
+    const items = await Promise.all(incoming.map(async (item) => {
       if (!item || typeof item !== "object") throw new Error("invalid_cart_item");
-      const product = products.find((candidate) => candidate.slug === item.slug);
+      const product = catalog.find((candidate) => candidate.slug === item.slug);
       const qty = Number.isInteger(item.qty) ? item.qty : 0;
       if (!product || qty < 1 || qty > 10) throw new Error("invalid_cart_item");
       if (product.source === "signature" && qty !== 1) throw new Error("signature_quantity");
+      const availability = await publicStateFor(product.slug);
+      if (!availability.visible || availability.stock < qty) throw new Error("sold_out");
       return {
         slug: item.slug,
         qty,
@@ -44,7 +48,7 @@ export async function POST(req: Request) {
         grade: cleanOption(item.grade),
         product,
       };
-    });
+    }));
 
     const allowsSignatureCheckout = envFlag(process.env.STRIPE_ALLOW_SIGNATURE_CHECKOUT);
     if (checkoutMode(items.map((item) => item.product.source), allowsSignatureCheckout) === "reservation") {
@@ -85,7 +89,9 @@ export async function POST(req: Request) {
           product_data: {
             name: i.product.name,
             description: [i.metal, i.size ? `Size ${i.size}` : null, i.grade].filter(Boolean).join(" · ") || undefined,
-            images: [new URL(i.product.image, origin).toString()],
+            images: i.product.image.startsWith("data:")
+              ? undefined
+              : [new URL(i.product.image, origin).toString()],
             metadata: { slug: i.slug },
           },
         },
@@ -104,11 +110,15 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ enabled: true, url: session.url });
   } catch (err) {
-    if (err instanceof Error && ["invalid_cart_item", "signature_quantity"].includes(err.message)) {
+    if (err instanceof Error && ["invalid_cart_item", "signature_quantity", "sold_out"].includes(err.message)) {
       return NextResponse.json({ error: err.message }, { status: 400 });
     }
     if (err instanceof SyntaxError) {
       return NextResponse.json({ error: "invalid_request" }, { status: 400 });
+    }
+    if (err instanceof KvError) {
+      console.error("checkout inventory store unavailable");
+      return NextResponse.json({ error: "inventory_unavailable" }, { status: 503 });
     }
     if (err instanceof Error && ["site_url_unconfigured", "site_url_invalid"].includes(err.message)) {
       console.error("checkout site URL is not configured safely");

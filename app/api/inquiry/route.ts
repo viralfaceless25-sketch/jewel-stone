@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { saveInquiry } from "@/lib/admin/leads";
 
 export const runtime = "nodejs";
 
@@ -101,6 +102,15 @@ export async function POST(request: Request) {
     filename: safeFilename(file.name, index),
     content: Buffer.from(await file.arrayBuffer()).toString("base64"),
   })));
+
+  await saveInquiry({
+    name,
+    email,
+    phone,
+    context,
+    message,
+    referenceFiles: files.map((file, index) => safeFilename(file.name, index)),
+  }).catch((error) => console.error("inquiry admin record failed", error));
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
