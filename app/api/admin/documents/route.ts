@@ -1,6 +1,7 @@
 import { requireAdminApi } from "@/lib/admin/auth";
 import { recordActivity } from "@/lib/admin/activity";
 import { createDocument, listDocuments, type DocumentDraft } from "@/lib/admin/documents";
+import { syncDocumentCustomer } from "@/lib/admin/document-orders";
 import { documentErrorResponse, readJson } from "./errors";
 
 export const runtime = "nodejs";
@@ -35,6 +36,8 @@ export async function POST(request: Request) {
       orderId: body.orderId,
     };
     const document = await createDocument(draft);
+    // Anyone invoiced belongs in the customer base, even before they pay.
+    await syncDocumentCustomer(document);
     await recordActivity(
       `Created ${document.kind === "memo" ? "memorandum" : "invoice"}`,
       document.number,

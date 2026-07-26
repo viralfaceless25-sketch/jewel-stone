@@ -122,6 +122,40 @@ export async function updateOrder(
   return next;
 }
 
+/**
+ * Make sure a customer exists from contact details alone — used when a document
+ * is raised for someone who has never bought online. Never touches purchase
+ * totals; those only move when an actual order is recorded.
+ */
+export async function ensureCustomer(input: { name?: string; email: string; phone?: string }) {
+  const email = input.email.trim();
+  if (!email) return null;
+  const current = await kvGet<Customer>(customerRecordKey(email));
+  const now = new Date().toISOString();
+  const next: Customer = current
+    ? {
+        ...current,
+        name: input.name?.trim() || current.name,
+        phone: input.phone?.trim() || current.phone,
+        updatedAt: now,
+      }
+    : {
+        name: input.name?.trim() ?? "",
+        email,
+        phone: input.phone?.trim() ?? "",
+        firstPurchase: "",
+        lastPurchase: "",
+        orderCount: 0,
+        totalSpent: 0,
+        orderIds: [],
+        notes: "",
+        updatedAt: now,
+      };
+  await kvSet(customerRecordKey(email), next);
+  await kvSetAdd(customerIndex, customerKey(email));
+  return next;
+}
+
 export async function upsertCustomerFromOrder(order: Order) {
   const email = order.customer.email.trim();
   if (!email) return null;

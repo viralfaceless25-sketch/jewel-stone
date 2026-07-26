@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CheckoutClient } from "@/components/checkout/CheckoutClient";
 import { isStripeEnabled } from "@/lib/stripe";
+import { envFlag } from "@/lib/commerce/checkout-policy";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,10 @@ export const metadata: Metadata = {
 export default function CheckoutPage() {
   return (
     <main>
-      <CheckoutClient paymentsEnabled={isStripeEnabled} />
+      <CheckoutClient
+        paymentsEnabled={isStripeEnabled}
+        allowSignatureCheckout={envFlag(process.env.STRIPE_ALLOW_SIGNATURE_CHECKOUT)}
+      />
     </main>
   );
 }

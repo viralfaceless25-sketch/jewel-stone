@@ -1,5 +1,6 @@
 import { requireAdminApi } from "@/lib/admin/auth";
 import { recordActivity } from "@/lib/admin/activity";
+import { recordPaidDocument, syncDocumentCustomer } from "@/lib/admin/document-orders";
 import {
   DocumentError,
   getDocument,
@@ -51,6 +52,9 @@ export async function PATCH(request: Request, { params }: Context) {
       if (patch[key as keyof DocumentPatch] === undefined) delete patch[key as keyof DocumentPatch];
     });
     const document = await updateDocument(params.number, patch);
+    await syncDocumentCustomer(document);
+    // A paid invoice is a real sale — record it so Orders and revenue include it.
+    await recordPaidDocument(document);
     await recordActivity("Updated document", document.number, document.status);
     return Response.json({ document });
   } catch (error) {

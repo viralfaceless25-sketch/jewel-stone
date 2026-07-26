@@ -4,13 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { cartTotal, useCartStore } from "@/store/cart";
+import { checkoutMode } from "@/lib/commerce/checkout-policy";
 import styles from "./checkout.module.css";
 
 type CheckoutClientProps = {
   paymentsEnabled: boolean;
+  /** Mirrors STRIPE_ALLOW_SIGNATURE_CHECKOUT so the button matches what the API will do. */
+  allowSignatureCheckout?: boolean;
 };
 
-export function CheckoutClient({ paymentsEnabled }: CheckoutClientProps) {
+export function CheckoutClient({ paymentsEnabled, allowSignatureCheckout = false }: CheckoutClientProps) {
   const { items, clear } = useCartStore();
   const [done, setDone] = useState(false);
   const [sending, setSending] = useState(false);
@@ -53,7 +56,13 @@ export function CheckoutClient({ paymentsEnabled }: CheckoutClientProps) {
   }
   // Persisted carts created before product-source tracking are treated safely as
   // reservations. Only known made-to-order products may enter instant checkout.
-  const needsInventoryReview = items.some((item) => item.source !== "lab-grown");
+  // Same rule the checkout API applies, so the button never promises something
+  // the server will refuse (or hide payment the server would have allowed).
+  const needsInventoryReview =
+    checkoutMode(
+      items.map((item) => item.source ?? "lab-grown"),
+      allowSignatureCheckout,
+    ) === "reservation";
   const canPayNow = paymentsEnabled && !needsInventoryReview && !forceReservation;
 
   async function beginPayment(event: FormEvent<HTMLFormElement>) {
