@@ -4,6 +4,7 @@ import { randomBytes } from "node:crypto";
 import { kvGet, kvGetMany, kvSet, kvSetAdd, kvSetMembers } from "@/lib/kv";
 import { nextDocumentNumber } from "@/lib/admin/inventory";
 import { getAdminSettings } from "@/lib/admin/settings";
+import { memoDueDate, memoTermsLabel, resolveTerms } from "@/lib/admin/terms";
 import {
   computeTotals,
   looksLikeEmail,
@@ -111,7 +112,7 @@ function customerFrom(raw: Partial<DocumentCustomer>): DocumentCustomer {
   return customer;
 }
 
-function bodyFrom(kind: DocumentKind, draft: DocumentDraft) {
+function bodyFrom(kind: DocumentKind, draft: DocumentDraft, fallbackTerms?: string, fallbackDueDate?: string) {
   const lineItems = normalizeLineItems(draft.lineItems);
   if (!lineItems.length) throw new DocumentError("line_items_required");
   const shippingCents =
@@ -119,14 +120,14 @@ function bodyFrom(kind: DocumentKind, draft: DocumentDraft) {
       ? draft.shippingCents
       : parseMoneyToCents(draft.shipping);
   const issueDate = parseDateOnly(draft.issueDate) ?? new Date().toISOString().slice(0, 10);
-  const dueDate = parseDateOnly(draft.dueDate);
+  const dueDate = parseDateOnly(draft.dueDate) ?? fallbackDueDate;
   const orderId = clean(draft.orderId, 120);
   return {
     customer: customerFrom(draft.customer ?? {}),
     lineItems,
     issueDate,
     ...(dueDate ? { dueDate } : {}),
-    terms: clean(draft.terms, 80) || (kind === "memo" ? "15 days" : "Due on receipt"),
+    terms: clean(draft.terms, 80) || fallbackTerms || (kind === "memo" ? "Return within 7 days" : "Advance payment"),
     ...computeTotals(kind, lineItems, draft.taxRate, shippingCents),
     notes: clean(draft.notes, 5000),
     paymentInstructions: kind === "invoice" ? clean(draft.paymentInstructions, 3000) : "",
@@ -148,6 +149,11 @@ export async function createDocument(draft: DocumentDraft) {
     kind === "memo" ? "MEMO" : "INV",
     kind === "memo" ? settings.memoPrefix : settings.invoicePrefix,
   );
+  // A customer with agreed terms gets them automatically; everyone else gets
+  // the house default (advance payment, 7-day memo).
+  const terms = await resolveTerms(draft.customer?.email ? String(draft.customer.email) : undefined);
+  const fallbackTerms = kind === "memo" ? memoTermsLabel(terms.memoDays) : terms.invoiceTerms;
+  const fallbackDueDate = kind === "memo" ? memoDueDate(terms.memoDays) : undefined;
   const enrichedDraft = {
     ...draft,
     taxRate: draft.taxRate === undefined ? settings.defaultTaxRate : draft.taxRate,
@@ -177,7 +183,7 @@ export async function createDocument(draft: DocumentDraft) {
     createdAt: now,
     updatedAt: now,
     status: "draft",
-    ...bodyFrom(kind, enrichedDraft),
+    ...bodyFrom(kind, enrichedDraft, fallbackTerms, fallbackDueDate),
   } satisfies BusinessDocument);
 }
 

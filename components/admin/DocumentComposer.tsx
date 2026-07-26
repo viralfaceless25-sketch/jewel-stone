@@ -59,6 +59,8 @@ export function DocumentComposer({
   defaultKind,
   existing,
   defaults,
+  customers = [],
+  productOptions = [],
 }: {
   defaultKind: DocumentKind;
   existing?: BusinessDocument;
@@ -67,6 +69,13 @@ export function DocumentComposer({
     shipping: number;
     paymentInstructions: string;
   };
+  /** Saved customers — picking one fills in the rest of their details. */
+  customers?: { label: string; name: string; email: string; phone: string }[];
+  /** Catalogue pieces — searchable by name, SKU, carat, or metal. */
+  productOptions?: {
+    label: string; sku: string; name: string; description: string; category: string;
+    metal: string; carats: string; colorClarity: string; unitPrice: number;
+  }[];
 }) {
   const router = useRouter();
   const [kind, setKind] = useState<DocumentKind>(existing?.kind ?? defaultKind);
@@ -204,7 +213,23 @@ export function DocumentComposer({
         <div className={styles.grid3}>
           <label className={admin.field}>
             <span className={admin.label}>Customer / company name</span>
-            <input className={admin.input} value={customer.name} onChange={(event) => setCustomer({ ...customer, name: event.target.value })} required />
+            <input
+              className={admin.input}
+              list="composer-customers"
+              value={customer.name}
+              onChange={(event) => {
+                const value = event.target.value;
+                // Picking a saved customer fills e-mail and phone from the record.
+                const match = customers.find((option) => option.label === value || option.name === value);
+                if (match) setCustomer({ ...customer, name: match.name, email: match.email, phone: match.phone });
+                else setCustomer({ ...customer, name: value });
+              }}
+              placeholder="Start typing a saved customer…"
+              required
+            />
+            <datalist id="composer-customers">
+              {customers.map((option) => <option key={option.email} value={option.label} />)}
+            </datalist>
           </label>
           <label className={admin.field}>
             <span className={admin.label}>Email</span>
@@ -254,7 +279,30 @@ export function DocumentComposer({
                 </label>
                 <label className={admin.field} style={{ gridColumn: "span 2" }}>
                   <span className={admin.label}>Description</span>
-                  <input className={admin.input} value={item.description} onChange={(event) => updateItem(index, { description: event.target.value })} required />
+                  <input
+                    className={admin.input}
+                    list="composer-products"
+                    value={item.description}
+                    onChange={(event) => {
+                      const value = event.target.value;
+                      // Choosing a catalogue piece fills SKU, price, metal, and carats.
+                      const match = productOptions.find((option) => option.label === value);
+                      if (match) {
+                        updateItem(index, {
+                          description: match.name,
+                          code: match.sku,
+                          category: match.category,
+                          metal: match.metal,
+                          diamondCarats: match.carats,
+                          unitPrice: String(match.unitPrice),
+                        });
+                      } else {
+                        updateItem(index, { description: value });
+                      }
+                    }}
+                    placeholder="Search by name, SKU, carat, or metal…"
+                    required
+                  />
                 </label>
                 <label className={admin.field}>
                   <span className={admin.label}>SKU / code</span>
@@ -327,6 +375,9 @@ export function DocumentComposer({
           {busy ? "Saving…" : existing ? `Save ${existing.number}` : `Create ${kind === "memo" ? "memorandum" : "invoice"}`}
         </button>
       </div>
-    </form>
+          <datalist id="composer-products">
+        {productOptions.map((option) => <option key={option.sku + option.label} value={option.label} />)}
+      </datalist>
+</form>
   );
 }

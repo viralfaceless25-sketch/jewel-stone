@@ -21,6 +21,9 @@ export type AdminSettings = {
   bankAccountNumber: string;
   bankRoutingNumber: string;
   zelleId: string;
+  /** House defaults for a customer with no agreed terms of their own. */
+  defaultInvoiceTerms: string;
+  defaultMemoDays: number;
   updatedAt: string;
 };
 
@@ -43,6 +46,10 @@ export const defaultAdminSettings: AdminSettings = {
   bankAccountNumber: "2910099681",
   bankRoutingNumber: "021000021",
   zelleId: "5513413256",
+  // New customers pay up front and hold memo goods for a week; established
+  // accounts get their own terms on the customer record.
+  defaultInvoiceTerms: "Advance payment",
+  defaultMemoDays: 7,
   updatedAt: new Date(0).toISOString(),
 };
 
@@ -80,6 +87,8 @@ export async function saveAdminSettings(input: Partial<AdminSettings>) {
     bankAccountNumber: String(input.bankAccountNumber ?? current.bankAccountNumber).trim().slice(0, 40),
     bankRoutingNumber: String(input.bankRoutingNumber ?? current.bankRoutingNumber).trim().slice(0, 40),
     zelleId: String(input.zelleId ?? current.zelleId).trim().slice(0, 80),
+    defaultInvoiceTerms: clean(input.defaultInvoiceTerms, current.defaultInvoiceTerms, 80),
+    defaultMemoDays: Math.max(0, Math.min(365, Math.round(Number(input.defaultMemoDays ?? current.defaultMemoDays) || 0))),
     updatedAt: new Date().toISOString(),
   };
   await kvSet(key, next);

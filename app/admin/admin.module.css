@@ -491,3 +491,96 @@ a.tile:hover {
     flex-direction: column;
   }
 }
+
+/* ── KYC workspace ─────────────────────────────────────────────────────────── */
+.kycLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: 1.1rem;
+  align-items: start;
+}
+@media (max-width: 900px) { .kycLayout { grid-template-columns: 1fr; } }
+
+.kycList { display: grid; gap: .35rem; max-height: 460px; overflow-y: auto; margin-top: .7rem; }
+.kycRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .7rem;
+  width: 100%;
+  padding: .6rem .7rem;
+  border: 1px solid var(--js-line);
+  border-radius: 10px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .18s ease, background .18s ease;
+}
+.kycRow:hover { background: rgba(122, 98, 76, .05); }
+.kycRowActive { border-color: var(--js-gold-deep); background: rgba(122, 98, 76, .08); }
+.kycRowText { min-width: 0; display: grid; gap: .15rem; }
+.kycRowName {
+  font-size: .88rem;
+  color: var(--js-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.kycRowMail {
+  font-size: .72rem;
+  color: var(--js-platinum);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kycHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  padding-bottom: .9rem;
+  border-bottom: 1px solid var(--js-line);
+}
+.kycHeadMail { margin: 0 0 .35rem; font-family: var(--font-display); font-size: 1.2rem; color: var(--js-ink); }
+
+/* Document checklist — the owner should see at a glance what is still missing. */
+.kycChecklist { display: grid; gap: .5rem; margin: .9rem 0 0; padding: 0; list-style: none; }
+.kycCheck {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .55rem .7rem;
+  border: 1px solid var(--js-line);
+  border-radius: 10px;
+  font-size: .85rem;
+  color: var(--js-ink);
+}
+.kycCheckDone { border-color: rgba(63, 122, 74, .38); background: rgba(63, 122, 74, .07); }
+.kycCheckMark { font-size: .9rem; width: 1.1rem; text-align: center; }
+
+.kycUploads { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .9rem; margin-top: .9rem; }
+.kycFieldGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: .6rem; }
+.kycFieldWide { grid-column: 1 / -1; }
+.kycFieldset { border: 0; padding: 0; margin: 0 0 1.1rem; }
+
+/* Client login panel */
+.kycLoginBox {
+  margin-top: .8rem;
+  padding: .9rem 1rem;
+  border: 1px solid var(--js-line);
+  border-radius: 12px;
+  background: rgba(122, 98, 76, .04);
+}
+.kycPassword {
+  display: inline-block;
+  margin-top: .5rem;
+  padding: .45rem .8rem;
+  border-radius: 8px;
+  background: var(--js-ink);
+  color: #F6F3ED;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 1rem;
+  letter-spacing: .16em;
+}

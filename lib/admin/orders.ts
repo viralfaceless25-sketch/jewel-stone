@@ -163,6 +163,27 @@ export async function getCustomer(email: string) {
   return kvGet<Customer>(customerRecordKey(email));
 }
 
+/** Agreed trading terms for an account. Blank/undefined restores the default. */
+export async function updateCustomerTerms(
+  email: string,
+  patch: { paymentTerms?: string | null; memoDays?: number | null },
+) {
+  const customer = await getCustomer(email);
+  if (!customer) return null;
+  const next = { ...customer, updatedAt: new Date().toISOString() };
+  if (patch.paymentTerms !== undefined) {
+    const value = (patch.paymentTerms ?? "").trim().slice(0, 80);
+    if (value) next.paymentTerms = value;
+    else delete next.paymentTerms;
+  }
+  if (patch.memoDays !== undefined) {
+    if (patch.memoDays === null || Number.isNaN(Number(patch.memoDays))) delete next.memoDays;
+    else next.memoDays = Math.max(0, Math.min(365, Math.round(Number(patch.memoDays))));
+  }
+  await kvSet(customerRecordKey(email), next);
+  return next;
+}
+
 export async function updateCustomerNotes(email: string, notes: string) {
   const customer = await getCustomer(email);
   if (!customer) return null;

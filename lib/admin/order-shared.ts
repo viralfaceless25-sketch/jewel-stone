@@ -66,6 +66,10 @@ export type Customer = {
   totalSpent: number;
   orderIds: string[];
   notes: string;
+  /** Agreed terms for this account. Blank falls back to the house default
+      (advance payment for invoices, 7 days for memoranda). */
+  paymentTerms?: string;
+  memoDays?: number;
   updatedAt: string;
 };
 

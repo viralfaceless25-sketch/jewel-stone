@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { isAdminAuthenticated } from "@/lib/admin/auth";
 import { getAdminSettings } from "@/lib/admin/settings";
 import { DocumentComposer } from "@/components/admin/DocumentComposer";
+import { customerOptions, productOptions } from "@/lib/admin/document-lookups";
 import styles from "../../admin.module.css";
 
 export const dynamic = "force-dynamic";
@@ -9,7 +10,11 @@ export const dynamic = "force-dynamic";
 export default async function NewDocumentPage({ searchParams }: { searchParams: { kind?: string } }) {
   if (!isAdminAuthenticated()) redirect("/admin/login");
   const kind = searchParams.kind === "memo" ? "memo" : "invoice";
-  const settings = await getAdminSettings();
+  const [settings, customers, products] = await Promise.all([
+    getAdminSettings(),
+    customerOptions().catch(() => []),
+    productOptions().catch(() => []),
+  ]);
   return (
     <>
       <header className={styles.pageHead}>
@@ -19,6 +24,8 @@ export default async function NewDocumentPage({ searchParams }: { searchParams: 
         </div>
       </header>
       <DocumentComposer
+        customers={customers}
+        productOptions={products}
         defaultKind={kind}
         defaults={{
           taxRate: settings.defaultTaxRate,
