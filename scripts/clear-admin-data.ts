@@ -14,8 +14,12 @@
  * the children are orphaned forever.
  *
  * Deliberately left alone: admin settings (bank details the invoice needs),
- * products, stock overlays, invoice/memo counters, and customer portal logins.
- * See KEPT below.
+ * products, stock overlays, and customer portal logins. See KEPT below.
+ *
+ * Numbering counters (order, invoice, memo, service ticket) also survive by
+ * default, so the next order after a clear-out carries on from JS-00004 rather
+ * than reusing JS-00001. Pass --reset-counters to restart the numbering, which
+ * is only safe while no paperwork has been sent to anyone.
  */
 import { kvConfigured, kvDel, kvGet, kvSetMembers } from "@/lib/kv";
 import { customerKey } from "@/lib/admin/order-items";
@@ -29,6 +33,12 @@ type Plan = {
   keys: string[];
   /** Index sets to drop wholesale once their records are gone. */
   indexes: string[];
+  /**
+   * Numbering counters this section owns. Only cleared with --reset-counters,
+   * because restarting at 1 reissues numbers that may already be on paperwork
+   * a customer has seen.
+   */
+  counters?: string[];
   /** What to tell the owner, e.g. "12 orders (9 session pointers)". */
   summary: string;
 };
@@ -40,7 +50,6 @@ const KEPT = [
   ["jewelstone:admin-settings", "business details, bank account, routing, Zelle — the invoice needs these"],
   ["jewelstone:product:* / jewelstone:products", "admin-created products"],
   ["jewelstone:stock:* / jewelstone:stock-count:*", "real stock levels, including memo goods on hand"],
-  ["jewelstone:counter:inv / jewelstone:counter:memo", "document numbering — resetting risks reusing a number already sent"],
   ["jewelstone:account:* / jewelstone:accounts", "customer portal logins (see --with-logins)"],
 ];
 
@@ -56,6 +65,7 @@ async function plan_orders(): Promise<Plan> {
   return {
     keys: [...ids.map((id) => `jewelstone:order:${id}`), ...sessions],
     indexes: ["jewelstone:orders"],
+    counters: ["jewelstone:counter:order"],
     summary: `${ids.length} orders (${sessions.length} session pointers)`,
   };
 }
@@ -121,6 +131,7 @@ async function plan_documents(): Promise<Plan> {
   return {
     keys: numbers.map((number) => `jewelstone:document:${number}`),
     indexes: ["jewelstone:documents"],
+    counters: ["jewelstone:counter:inv", "jewelstone:counter:memo"],
     summary: `${numbers.length} invoices and memoranda`,
   };
 }
@@ -163,6 +174,7 @@ async function plan_operations(): Promise<Plan> {
       ...activity.map((id) => `jewelstone:activity:${id}`),
     ],
     indexes: ["jewelstone:payment-links", "jewelstone:service-tickets", "jewelstone:activity"],
+    counters: ["jewelstone:counter:service-ticket"],
     summary: `${links.length} payment links, ${tickets.length} service tickets, ${activity.length} activity entries`,
   };
 }
@@ -206,11 +218,12 @@ function parseArgs(argv: string[]) {
     sections: requested,
     confirmed: argv.includes("--yes") || argv.includes("--confirm"),
     withLogins: argv.includes("--with-logins"),
+    resetCounters: argv.includes("--reset-counters"),
   };
 }
 
 async function main() {
-  const { sections, confirmed, withLogins } = parseArgs(process.argv.slice(2));
+  const { sections, confirmed, withLogins, resetCounters } = parseArgs(process.argv.slice(2));
 
   const unknown = sections.filter((name) => !(name in SECTIONS));
   if (unknown.length) {
@@ -241,7 +254,17 @@ async function main() {
 
   const totalKeys = plans.reduce((sum, { plan }) => sum + plan.keys.length, 0);
   const totalIndexes = plans.reduce((sum, { plan }) => sum + plan.indexes.length, 0);
+  const allCounters = plans.flatMap(({ plan }) => plan.counters ?? []);
   console.log(`\n  ${totalKeys} keys and ${totalIndexes} index sets in scope.`);
+
+  if (allCounters.length) {
+    console.log(
+      resetCounters
+        ? `\nNumbering restarts at 1 (${allCounters.join(", ")}).`
+        : `\nNumbering continues from where it is. Pass --reset-counters to restart at 1` +
+          `\n  (${allCounters.join(", ")}) — only safe if no paperwork has gone out.`,
+    );
+  }
 
   console.log("\nKept (never deleted by this script):");
   for (const [key, why] of KEPT) console.log(`  ${key}\n    ${why}`);
@@ -269,9 +292,13 @@ async function main() {
     // Index sets go last, so an interrupted run leaves records still reachable
     // (and re-runnable) rather than orphaned.
     for (const index of plan.indexes) await kvDel(index);
+    if (resetCounters) for (const counter of plan.counters ?? []) await kvDel(counter);
     console.log(`  ${name.padEnd(12)} cleared`);
   }
-  console.log(`\nDeleted ${deleted} keys and ${totalIndexes} index sets.\n`);
+  console.log(
+    `\nDeleted ${deleted} keys and ${totalIndexes} index sets` +
+      `${resetCounters && allCounters.length ? `, and reset ${allCounters.length} counters` : ""}.\n`,
+  );
 
   if (!kvConfigured) {
     console.log("Local store only. Custom requests also keep a copy in");

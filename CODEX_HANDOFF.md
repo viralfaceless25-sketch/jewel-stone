@@ -87,10 +87,14 @@ hand-roll the normalisation, or you will orphan records.
 - `jewelstone:product:*` / `jewelstone:products` — admin-created products.
 - `jewelstone:stock:*` / `jewelstone:stock-count:*` — inventory overlays. These are
   real stock levels, including the memo-goods on-hand counts.
-- `jewelstone:counter:inv` / `jewelstone:counter:memo` — document numbering.
-  **Ask the owner before touching these.** Leaving them means the next real invoice
-  might be `INV-0014`; resetting to 0 restarts at `INV-0001` but risks colliding with
-  a number already sent to a customer. Default to leaving them alone unless told.
+- **Numbering counters.** There are four, not two:
+  `jewelstone:counter:order` (order ids, `JS-00001`),
+  `jewelstone:counter:inv` and `jewelstone:counter:memo` (document numbers, built by
+  `nextDocumentNumber` as `jewelstone:counter:${prefix.toLowerCase()}`), and
+  `jewelstone:counter:service-ticket`. They survive by default, so the next order
+  after a wipe carries on from `JS-00004` rather than reusing `JS-00001`.
+  `--reset-counters` restarts them, which is only safe while no paperwork has been
+  sent to anyone. The owner confirmed on 2026-07-27 that nothing had been shared.
 - `jewelstone:account:*`, `jewelstone:account-phone:*`, `jewelstone:accounts` —
   customer portal logins. Deleting a customer record without deleting the matching
   login leaves an account that can sign in to an empty portal. Confirm with the owner
@@ -130,7 +134,11 @@ npm run clear:admin -- --only=orders,promotions       # dry run, selected sectio
 npm run clear:admin -- --yes                          # delete, all sections
 npm run clear:admin -- --only=kyc --yes               # delete, one section
 npm run clear:admin -- --yes --with-logins            # also clear customer portal logins
+npm run clear:admin -- --yes --with-logins --reset-counters   # full fresh start
 ```
+
+The last form is what the owner asked for on 2026-07-27: wipe every record created
+through the admin panel and restart numbering at `JS-00001` / `INV-0001`.
 
 - Dry run is the default and prints the store it is pointed at, a per-section
   count, the total key count, and the full "kept" list. Nothing is written.
