@@ -108,7 +108,12 @@ export async function kvSetIfAbsent(
 
 export async function kvDel(key: string): Promise<void> {
   if (!kvConfigured) {
-    await writeLocal((data) => { delete data.values[key]; });
+    // Redis DEL removes a key whatever its type, so the local store has to drop
+    // sets as well as values or a deleted index would survive only in dev.
+    await writeLocal((data) => {
+      delete data.values[key];
+      delete data.sets[key];
+    });
     return;
   }
   await command(["DEL", key]);

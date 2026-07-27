@@ -44,7 +44,12 @@ index sets listed in section 1 — you cannot pattern-delete.
 
 ---
 
-## 1. TASK A — Clear the test data from the admin panel
+## 1. TASK A — Clear the test data from the admin panel — ✅ TOOL BUILT, NOT YET RUN
+
+**Status:** `scripts/clear-admin-data.ts` is written, tested, and committed.
+The owner still has to run it against the real store — see 1.4. Sections 1.1–1.3
+describe what it does and why; you should not need to rebuild any of it.
+
 
 The owner has been testing and wants the seeded/test records gone. Scope is the
 admin sidebar sections named in the request: **Orders, Customers, KYC, Inbox,
@@ -115,7 +120,49 @@ Write `scripts/clear-admin-data.mjs`. Requirements:
 5. **Print a summary** — "Deleted 14 orders, 6 customers, 3 KYC records (9 files),
    2 promotions…" — so the owner can confirm.
 
-Add a `package.json` script: `"clear:admin": "tsx scripts/clear-admin-data.ts"`.
+### 1.4 What was actually built
+
+`scripts/clear-admin-data.ts`, wired as `npm run clear:admin`. Behaviour:
+
+```bash
+npm run clear:admin                                   # dry run, all sections
+npm run clear:admin -- --only=orders,promotions       # dry run, selected sections
+npm run clear:admin -- --yes                          # delete, all sections
+npm run clear:admin -- --only=kyc --yes               # delete, one section
+npm run clear:admin -- --yes --with-logins            # also clear customer portal logins
+```
+
+- Dry run is the default and prints the store it is pointed at, a per-section
+  count, the total key count, and the full "kept" list. Nothing is written.
+- Child keys are resolved from parent records before deletion (order → Stripe
+  session pointer, KYC record → file payloads, custom request → both link tokens,
+  promo → per-customer counters derived from the redemption log, which is the only
+  place that mapping exists).
+- Index sets are deleted **after** their records, so an interrupted run leaves
+  records still reachable and the script re-runnable rather than orphaning them.
+- Unknown section names exit non-zero without touching anything.
+
+**Two things needed a fix to make it work, both committed:**
+
+1. `server-only` was added as a **devDependency**. Every `lib/**` module starts with
+   `import "server-only"`, which Next aliases away at build time but which is
+   unresolvable under plain Node — so the script could not import the real KV layer.
+   With the package present, running under `tsx --conditions=react-server` resolves it
+   to the empty stub and the script reuses `lib/kv.ts` instead of duplicating it.
+   The npm script already carries that flag; keep it if you add more CLI tooling.
+2. **Bug fixed in `lib/kv.ts`:** `kvDel` deleted only `data.values[key]` in the
+   local-file fallback, while Redis `DEL` removes a key of any type. Deleting an
+   index set therefore worked in production and silently no-opped in dev. It now
+   deletes from both `values` and `sets`. Only one other caller exists
+   (`lib/admin/orders.ts:89`, on a value key), so the change is safe.
+
+**Verification done:** a fixture store covering all seven sections plus the
+must-survive keys was seeded and run through the script. Dry run left all 32 values
+and 13 sets untouched; `--only=orders,promotions --yes` removed exactly the 8
+expected keys; a full `--yes` removed all 24 records and 11 index sets and left
+precisely admin-settings, both counters, the product, and both stock keys standing;
+`--with-logins` additionally cleared the account and its phone pointer.
+`tsc --noEmit` 0 errors, `npm test` 37/37.
 
 **Before running it against production data**, confirm with the owner which
 environment's `KV_REST_API_URL` is loaded. There is no undo.
@@ -415,10 +462,9 @@ open PRs on the repo.
 
 ## 8. Suggested order of work
 
-1. **Task B** (invoice B&W + tagline removal) — smallest, self-contained, one file.
-2. **Task C** (payment block) — same file, builds on the new palette.
-3. **Task A** (data clearing) — do it last and behind a dry-run, because it is the only
-   irreversible step. Confirm the target environment with the owner first.
+1. ~~**Task A** (data clearing)~~ — tool built and tested; the owner runs it. See 1.4.
+2. **Task B** (invoice B&W + tagline removal) — smallest remaining, one file.
+3. **Task C** (payment block) — same file, builds on the new palette.
 4. **Finding 4.1** — offer it to the owner; it is small and it is costing money.
 
 The owner has stated more changes are coming. Keep each task in its own commit so
