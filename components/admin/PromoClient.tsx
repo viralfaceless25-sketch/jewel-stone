@@ -256,7 +256,7 @@ export function PromoClient({ initialPromos }: { initialPromos: PromoCode[] }) {
               </label>
             </div>
             <div className={styles.actions} style={{ marginTop: ".9rem" }}>
-              <button type="submit" className={styles.btnPrimary} disabled={busy}>
+              <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={busy}>
                 {busy ? "Saving…" : editing ? "Save changes" : "Create code"}
               </button>
               {editing ? (
@@ -310,11 +310,11 @@ export function PromoClient({ initialPromos }: { initialPromos: PromoCode[] }) {
                         <td><span className={styles[status.tone]}>{status.label}</span></td>
                         <td>
                           <div className={styles.actions}>
-                            <button type="button" className={styles.btnSmall} onClick={() => editPromo(promo)}>Edit</button>
-                            <button type="button" className={styles.btnSmall} disabled={busy} onClick={() => void toggle(promo)}>
+                            <button type="button" className={`${styles.btn} ${styles.btnSmall}`} onClick={() => editPromo(promo)}>Edit</button>
+                            <button type="button" className={`${styles.btn} ${styles.btnSmall}`} disabled={busy} onClick={() => void toggle(promo)}>
                               {promo.active ? "Pause" : "Resume"}
                             </button>
-                            <button type="button" className={styles.btnSmall} disabled={busy} onClick={() => void remove(promo)}>Delete</button>
+                            <button type="button" className={`${styles.btn} ${styles.btnSmall}`} disabled={busy} onClick={() => void remove(promo)}>Delete</button>
                           </div>
                         </td>
                       </tr>

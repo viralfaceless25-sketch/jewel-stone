@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type FormEvent } from "react";
+import { useMemo, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import admin from "@/app/admin/admin.module.css";
 import records from "./records.module.css";
@@ -57,6 +57,7 @@ export function OperationsClient({
   activity: ActivityRecord[];
 }) {
   const router = useRouter();
+  const ticketFormRef = useRef<HTMLFormElement>(null);
   const [tab, setTab] = useState<"repairs" | "payments" | "activity">("repairs");
   const [ticket, setTicket] = useState<TicketForm>(blankTicket);
   const [selectedId, setSelectedId] = useState("");
@@ -91,6 +92,12 @@ export function OperationsClient({
     });
     setError("");
     setNotice("");
+    if (window.matchMedia("(max-width: 900px)").matches) {
+      window.setTimeout(
+        () => ticketFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+        60,
+      );
+    }
   }
 
   function newTicket() {
@@ -98,6 +105,12 @@ export function OperationsClient({
     setTicket({ ...blankTicket, intakeDate: today() });
     setError("");
     setNotice("");
+    if (window.matchMedia("(max-width: 900px)").matches) {
+      window.setTimeout(
+        () => ticketFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+        60,
+      );
+    }
   }
 
   async function saveTicket(event: FormEvent) {
@@ -179,7 +192,7 @@ export function OperationsClient({
                 </button>
               )) : <div className={records.empty}>No repair or service tickets yet.</div>}
             </div>
-            <form className={records.detail} onSubmit={saveTicket}>
+            <form ref={ticketFormRef} className={records.detail} onSubmit={saveTicket}>
               <h2>{selectedId || "New service ticket"}</h2>
               <div className={records.form} style={{ borderTop: 0, paddingTop: 0 }}>
                 <label className={admin.field}><span className={admin.label}>Customer</span><input className={admin.input} value={ticket.customerName} onChange={(event) => setTicket({ ...ticket, customerName: event.target.value })} required /></label>
@@ -187,7 +200,7 @@ export function OperationsClient({
                 <label className={admin.field}><span className={admin.label}>Phone</span><input className={admin.input} value={ticket.phone} onChange={(event) => setTicket({ ...ticket, phone: event.target.value })} /></label>
                 <label className={admin.field}><span className={admin.label}>Item received</span><input className={admin.input} value={ticket.item} onChange={(event) => setTicket({ ...ticket, item: event.target.value })} required /></label>
                 <label className={admin.field}><span className={admin.label}>Service needed</span><textarea className={admin.textarea} value={ticket.service} onChange={(event) => setTicket({ ...ticket, service: event.target.value })} required /></label>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".7rem" }}>
+                <div className={records.pairedFields}>
                   <label className={admin.field}><span className={admin.label}>Received</span><input className={admin.input} type="date" value={ticket.intakeDate} onChange={(event) => setTicket({ ...ticket, intakeDate: event.target.value })} /></label>
                   <label className={admin.field}><span className={admin.label}>Due</span><input className={admin.input} type="date" value={ticket.dueDate} onChange={(event) => setTicket({ ...ticket, dueDate: event.target.value })} /></label>
                 </div>

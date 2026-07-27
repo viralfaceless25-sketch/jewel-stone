@@ -26,8 +26,8 @@ export function DiamondsClient({ diamonds }: { diamonds: Diamond[] }) {
   const [query, setQuery] = useState("");
   const [shape, setShape] = useState("");
   const [lab, setLab] = useState("");
-  const shapes = useMemo(() => [...new Set(diamonds.map((item) => item.shape))].sort(), [diamonds]);
-  const labs = useMemo(() => [...new Set(diamonds.map((item) => item.lab))].sort(), [diamonds]);
+  const shapes = useMemo(() => [...new Set(diamonds.map((item) => item.shape).filter((value) => value.trim()))].sort(), [diamonds]);
+  const labs = useMemo(() => [...new Set(diamonds.map((item) => item.lab).filter((value) => value.trim()))].sort(), [diamonds]);
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return diamonds.filter((item) => {

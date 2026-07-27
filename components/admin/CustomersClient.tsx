@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatMoney, type Customer, type Order } from "@/lib/admin/order-shared";
 import admin from "@/app/admin/admin.module.css";
@@ -10,8 +10,15 @@ function csvCell(value: unknown) {
   return `"${String(value ?? "").replace(/"/g, '""')}"`;
 }
 
+function displayDate(value: string) {
+  if (!value) return "No purchases yet";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "No purchases yet" : date.toLocaleDateString();
+}
+
 export function CustomersClient({ customers, orders }: { customers: Customer[]; orders: Order[] }) {
   const router = useRouter();
+  const detailRef = useRef<HTMLElement>(null);
   const [query, setQuery] = useState("");
   const [selectedEmail, setSelectedEmail] = useState(customers[0]?.email ?? "");
   const selected = customers.find((customer) => customer.email === selectedEmail);
@@ -30,6 +37,12 @@ export function CustomersClient({ customers, orders }: { customers: Customer[]; 
     setSelectedEmail(customer.email);
     setNotes(customer.notes);
     setError("");
+    if (window.matchMedia("(max-width: 900px)").matches) {
+      window.setTimeout(
+        () => detailRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+        60,
+      );
+    }
   }
 
   async function saveNotes() {
@@ -87,12 +100,12 @@ export function CustomersClient({ customers, orders }: { customers: Customer[]; 
                 <strong>{customer.name || customer.email}</strong>
                 <strong>{formatMoney(customer.totalSpent)}</strong>
                 <span>{customer.email} · {customer.phone}</span>
-                <small>{customer.orderCount} order{customer.orderCount === 1 ? "" : "s"} · last purchase {new Date(customer.lastPurchase).toLocaleDateString()}</small>
+                <small>{customer.orderCount} order{customer.orderCount === 1 ? "" : "s"} · {customer.orderCount ? `last purchase ${displayDate(customer.lastPurchase)}` : displayDate(customer.lastPurchase)}</small>
               </button>
             ))}
           </div>
           {selected ? (
-            <aside className={styles.detail}>
+            <aside ref={detailRef} className={styles.detail}>
               <h2>{selected.name || selected.email}</h2>
               <dl className={styles.facts}>
                 <div><dt>Contact</dt><dd><a href={`mailto:${selected.email}`}>{selected.email}</a><br />{selected.phone}</dd></div>
@@ -113,4 +126,3 @@ export function CustomersClient({ customers, orders }: { customers: Customer[]; 
     </>
   );
 }
-

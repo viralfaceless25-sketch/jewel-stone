@@ -150,6 +150,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem;
+  min-width: 0;
 }
 
 .btn {
@@ -202,6 +203,7 @@
 }
 
 .panel {
+  min-width: 0;
   border: 1px solid var(--adm-line);
   border-radius: 14px;
   background: var(--adm-paper);
@@ -266,6 +268,7 @@ a.tile:hover {
 .field {
   display: grid;
   gap: 0.35rem;
+  min-width: 0;
 }
 
 .label {
@@ -280,6 +283,8 @@ a.tile:hover {
 .select,
 .textarea {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-height: 44px;
   padding: 0.65rem 0.75rem;
   border: 1px solid var(--adm-line-strong);
@@ -346,6 +351,7 @@ a.tile:hover {
   composes: tokens;
   min-height: 100dvh;
   display: grid;
+  grid-template-columns: minmax(0, 420px);
   place-items: center;
   padding: 1.25rem;
   background: var(--adm-bg);
@@ -354,7 +360,8 @@ a.tile:hover {
 }
 
 .authCard {
-  width: min(100%, 420px);
+  width: 100%;
+  min-width: 0;
   padding: 2.15rem;
   border: 1px solid var(--adm-line);
   border-radius: 17px;
@@ -392,7 +399,12 @@ a.tile:hover {
 }
 
 .tableWrap {
+  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-color: var(--adm-gold) transparent;
 }
 
 .table {
@@ -452,6 +464,11 @@ a.tile:hover {
   }
 
   .brand {
+    grid-column: 1;
+    grid-row: 1;
+    display: grid;
+    align-content: center;
+    min-height: 44px;
     padding: 0.25rem 0.4rem;
     white-space: nowrap;
   }
@@ -464,7 +481,9 @@ a.tile:hover {
 
   .nav {
     grid-column: 1 / -1;
+    grid-row: 2;
     display: flex;
+    scroll-snap-type: x proximity;
     overflow-x: auto;
     padding-bottom: 0.12rem;
     scrollbar-width: none;
@@ -473,12 +492,16 @@ a.tile:hover {
   .nav::-webkit-scrollbar { display: none; }
 
   .navLink {
-    min-height: 38px;
+    scroll-snap-align: center;
+    min-height: 44px;
     padding: 0.5rem 0.65rem;
     white-space: nowrap;
   }
 
   .sidebarFoot {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
     margin: 0;
   }
 
@@ -489,6 +512,106 @@ a.tile:hover {
   .pageHead {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    gap: 0.45rem;
+    padding: 0.6rem 0.75rem 0.5rem;
+  }
+
+  .brand {
+    padding: 0.15rem 0.2rem;
+  }
+
+  .brandMark {
+    font-size: 1.08rem;
+    letter-spacing: 0.06em;
+  }
+
+  .sidebarFoot .btn {
+    min-height: 44px;
+    padding: 0.42rem 0.72rem;
+  }
+
+  .nav {
+    width: 100%;
+    padding: 0 0 0.12rem;
+  }
+
+  .navLink {
+    min-height: 44px;
+    padding: 0.44rem 0.62rem;
+    font-size: 0.82rem;
+  }
+
+  .main {
+    padding: 1.15rem 0.8rem calc(4.5rem + env(safe-area-inset-bottom));
+  }
+
+  .pageHead {
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .pageHead > .btn {
+    width: 100%;
+  }
+
+  .pageTitle {
+    font-size: clamp(1.75rem, 10vw, 2.1rem);
+  }
+
+  .pageSub {
+    font-size: 0.86rem;
+  }
+
+  .panelPad {
+    padding: 1rem;
+  }
+
+  .tileGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+
+  .tile {
+    min-width: 0;
+    min-height: 116px;
+    padding: 0.9rem;
+  }
+
+  .tileValue {
+    margin-top: 0.45rem;
+    font-size: 1.55rem;
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+  }
+
+  .tileHint {
+    margin-top: 0.35rem;
+    font-size: 0.7rem;
+  }
+
+  .actions > .btn,
+  .actions > .btnPrimary,
+  .actions > .btnDanger {
+    flex: 1 1 125px;
+  }
+
+  .authScreen {
+    align-items: center;
+    padding: 0.9rem;
+  }
+
+  .authCard {
+    padding: 1.55rem;
+    border-radius: 15px;
+  }
+
+  .table {
+    min-width: 640px;
   }
 }
 
@@ -560,8 +683,8 @@ a.tile:hover {
 .kycCheckDone { border-color: rgba(63, 122, 74, .38); background: rgba(63, 122, 74, .07); }
 .kycCheckMark { font-size: .9rem; width: 1.1rem; text-align: center; }
 
-.kycUploads { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .9rem; margin-top: .9rem; }
-.kycFieldGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: .6rem; }
+.kycUploads { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr)); gap: .9rem; margin-top: .9rem; }
+.kycFieldGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr)); gap: .6rem; }
 .kycFieldWide { grid-column: 1 / -1; }
 .kycFieldset { border: 0; padding: 0; margin: 0 0 1.1rem; }
 
@@ -639,11 +762,13 @@ a.tile:hover {
   padding: 1.2rem;
   background: rgba(23, 19, 15, .45);
   backdrop-filter: blur(3px);
+  overscroll-behavior: contain;
 }
 .modalCard {
   width: min(100%, 760px);
   max-height: min(88vh, 900px);
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 1.4rem 1.5rem 1.6rem;
   border: 1px solid var(--js-line);
   border-radius: 16px;
@@ -659,12 +784,70 @@ a.tile:hover {
 }
 .modalTitle { margin: 0; font-family: var(--font-display); font-size: 1.3rem; color: var(--js-ink); }
 .modalClose {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
   border: 0;
   background: none;
   font-size: 1.3rem;
   line-height: 1;
   color: var(--js-platinum);
   cursor: pointer;
-  padding: .3rem .5rem;
+  padding: 0;
 }
 .modalClose:hover { color: var(--js-ink); }
+
+@media (max-width: 600px) {
+  .kycToolbar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .kycToolbar input[type="search"],
+  .kycSearch {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+
+  .kycToolbar > .btn,
+  .kycToolbar > .btnPrimary {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .kycToolbar > :last-child {
+    grid-column: 1 / -1;
+  }
+
+  .kycCard {
+    align-items: flex-start;
+    padding: 0.9rem;
+  }
+
+  .kycCardId,
+  .kycCardRight {
+    width: 100%;
+  }
+
+  .kycCardRight {
+    justify-content: space-between;
+    gap: 0.45rem 0.7rem;
+  }
+
+  .modalOverlay {
+    align-items: stretch;
+    padding: 0.5rem;
+  }
+
+  .modalCard {
+    max-height: calc(100dvh - 1rem);
+    padding: 1.1rem 1rem 1.25rem;
+    border-radius: 14px;
+  }
+
+  .modalHead {
+    align-items: flex-start;
+  }
+}

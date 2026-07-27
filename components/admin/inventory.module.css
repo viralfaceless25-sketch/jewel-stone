@@ -18,6 +18,11 @@
   grid-template-columns: 48px minmax(180px, 1fr);
   align-items: center;
   gap: 0.7rem;
+  min-width: 0;
+}
+
+.rowName > div:last-child {
+  min-width: 0;
 }
 
 .thumb {
@@ -37,6 +42,10 @@
 
 .rowName strong,
 .rowName small { display: block; }
+.rowName strong,
+.rowName small {
+  overflow-wrap: anywhere;
+}
 .rowName small { margin-top: 0.2rem; color: #998d80; }
 
 .numberInput {
@@ -65,12 +74,14 @@
   place-items: center;
   padding: 1rem;
   background: rgba(20, 17, 14, 0.55);
+  overscroll-behavior: contain;
 }
 
 .dialog {
   width: min(100%, 760px);
   max-height: min(90dvh, 900px);
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 1.25rem;
   border-radius: 16px;
   background: #fffdf9;
@@ -138,7 +149,137 @@
 }
 
 @media (max-width: 700px) {
+  .toolbar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .toolbar > .search,
+  .toolbar > select {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .toolbar > button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .toolbar > button:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .inventoryTable,
+  .inventoryTable tbody,
+  .inventoryTable tr,
+  .inventoryTable td {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .inventoryTable {
+    min-width: 0;
+  }
+
+  .inventoryTable thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .inventoryTable tbody {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .inventoryTable tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem 0.85rem;
+    padding: 0.9rem;
+    border: 1px solid rgba(24, 21, 18, 0.13);
+    border-radius: 12px;
+    background: #fffdf9;
+  }
+
+  .inventoryTable td {
+    display: grid;
+    align-content: start;
+    gap: 0.3rem;
+    padding: 0;
+    border: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .inventoryTable td::before {
+    content: attr(data-label);
+    color: #998d80;
+    font-size: 0.6rem;
+    font-weight: 650;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .inventoryTable td:first-child,
+  .inventoryTable td:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .inventoryTable td:first-child::before,
+  .inventoryTable td:last-child::before {
+    display: none;
+  }
+
+  .rowName {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .numberInput {
+    width: 100%;
+  }
+
+  .switch {
+    min-height: 44px;
+  }
+
+  .inventoryTable td:last-child > * {
+    width: 100%;
+  }
+
+  .dialogBackdrop {
+    align-items: stretch;
+    padding: 0.5rem;
+  }
+
+  .dialog {
+    max-height: calc(100dvh - 1rem);
+    padding: 1rem;
+    border-radius: 14px;
+  }
+
+  .dialogHead {
+    align-items: flex-start;
+  }
+
+  .dialogActions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .dialogActions > * {
+    width: 100%;
+  }
+
   .formGrid { grid-template-columns: 1fr; }
   .span2 { grid-column: auto; }
-}
 
+  .photoGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

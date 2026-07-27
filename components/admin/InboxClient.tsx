@@ -18,6 +18,11 @@ export function InboxClient({
   const router = useRouter();
   const [tab, setTab] = useState<"custom" | "appointments" | "inquiries">("custom");
   const [busy, setBusy] = useState("");
+  const emptyMessage = tab === "custom"
+    ? (!customRequests.length ? "No custom requests yet." : "")
+    : tab === "appointments"
+      ? (!appointments.length ? "No appointment requests yet." : "")
+      : (!inquiries.length ? "No customer messages yet." : "");
 
   async function update(type: "appointment" | "inquiry", id: string, status: string) {
     setBusy(id);
@@ -38,7 +43,7 @@ export function InboxClient({
         <button className={`${admin.btn} ${tab === "inquiries" ? admin.btnPrimary : ""}`} type="button" onClick={() => setTab("inquiries")}>Messages ({inquiries.length})</button>
       </div>
       <section className={admin.panel}>
-        <div className={admin.tableWrap}>
+        {emptyMessage ? <div className={admin.empty}>{emptyMessage}</div> : <div className={admin.tableWrap}>
           {tab === "custom" ? (
             <table className={admin.table}>
               <thead><tr><th>Date</th><th>Customer</th><th>Design</th><th>Status</th><th /></tr></thead>
@@ -77,9 +82,8 @@ export function InboxClient({
               ))}</tbody>
             </table>
           )}
-        </div>
+        </div>}
       </section>
     </>
   );
 }
-

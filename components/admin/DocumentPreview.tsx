@@ -52,22 +52,24 @@ export function DocumentPreview({ document }: { document: BusinessDocument }) {
         </div>
       </div>
 
-      <table className={styles.previewTable}>
-        <thead>
-          <tr><th>#</th><th>Item details</th><th>Qty</th><th>Unit</th><th>Amount</th></tr>
-        </thead>
-        <tbody>
-          {document.lineItems.map((item, index) => (
-            <tr key={`${item.code ?? item.description}-${index}`}>
-              <td>{index + 1}</td>
-              <td><strong>{item.description}</strong><small>{details(item)}</small></td>
-              <td>{item.quantity}</td>
-              <td>{formatUsd(item.unitPrice)}</td>
-              <td>{formatUsd(lineTotal(item))}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className={styles.previewTableWrap}>
+        <table className={styles.previewTable}>
+          <thead>
+            <tr><th>#</th><th>Item details</th><th>Qty</th><th>Unit</th><th>Amount</th></tr>
+          </thead>
+          <tbody>
+            {document.lineItems.map((item, index) => (
+              <tr key={`${item.code ?? item.description}-${index}`}>
+                <td>{index + 1}</td>
+                <td><strong>{item.description}</strong><small>{details(item)}</small></td>
+                <td>{item.quantity}</td>
+                <td>{formatUsd(item.unitPrice)}</td>
+                <td>{formatUsd(lineTotal(item))}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <table className={styles.totals} style={{ marginTop: "1rem" }}>
         <tbody>

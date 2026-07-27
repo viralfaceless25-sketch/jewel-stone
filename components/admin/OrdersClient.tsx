@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ORDER_STATUSES,
@@ -20,6 +20,7 @@ function csvCell(value: unknown) {
 
 export function OrdersClient({ orders }: { orders: Order[] }) {
   const router = useRouter();
+  const detailRef = useRef<HTMLElement>(null);
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(orders[0]?.id ?? "");
   const selected = orders.find((order) => order.id === selectedId);
@@ -51,6 +52,12 @@ export function OrdersClient({ orders }: { orders: Order[] }) {
     setTrackingNumber(order.trackingNumber ?? "");
     setTrackingUrl(order.trackingUrl ?? "");
     setError("");
+    if (window.matchMedia("(max-width: 900px)").matches) {
+      window.setTimeout(
+        () => detailRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+        60,
+      );
+    }
   }
 
   async function save() {
@@ -133,7 +140,7 @@ export function OrdersClient({ orders }: { orders: Order[] }) {
             ))}
           </div>
           {selected ? (
-            <aside className={styles.detail}>
+            <aside ref={detailRef} className={styles.detail}>
               <h2>{selected.id}</h2>
               <dl className={styles.facts}>
                 <div><dt>Customer</dt><dd>{selected.customer.name}<br />{selected.customer.email}<br />{selected.customer.phone}</dd></div>
@@ -160,4 +167,3 @@ export function OrdersClient({ orders }: { orders: Order[] }) {
     </>
   );
 }
-

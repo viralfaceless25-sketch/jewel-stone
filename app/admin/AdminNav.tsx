@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Boxes,
   CircleDollarSign,
@@ -37,6 +37,27 @@ export function AdminNav() {
   const pathname = usePathname() ?? "/admin";
   const router = useRouter();
   const [busy, setBusy] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  const activeRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    const nav = navRef.current;
+    const active = activeRef.current;
+    if (!nav || !active || window.matchMedia("(min-width: 901px)").matches) return;
+    const frame = window.requestAnimationFrame(() => {
+      const navBox = nav.getBoundingClientRect();
+      const activeBox = active.getBoundingClientRect();
+      nav.scrollTo({
+        left:
+          nav.scrollLeft +
+          activeBox.left -
+          navBox.left -
+          (nav.clientWidth - active.clientWidth) / 2,
+        behavior: "smooth",
+      });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [pathname]);
 
   async function signOut() {
     if (busy) return;
@@ -52,12 +73,13 @@ export function AdminNav() {
         <span className={styles.brandMark}>Jewel Stone</span>
         <span className={styles.brandSub}>Owner panel</span>
       </Link>
-      <nav className={styles.nav} aria-label="Admin sections">
+      <nav ref={navRef} className={styles.nav} aria-label="Admin sections">
         {links.map(({ href, label, Icon }) => {
           const active = href === "/admin" ? pathname === href : pathname.startsWith(href);
           return (
             <Link
               key={href}
+              ref={active ? activeRef : undefined}
               href={href}
               className={`${styles.navLink} ${active ? styles.navLinkActive : ""}`}
               aria-current={active ? "page" : undefined}

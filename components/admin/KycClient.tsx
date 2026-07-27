@@ -110,6 +110,15 @@ export function KycClient({
   const filledFormRef = useRef<HTMLInputElement>(null);
   const detailRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (!modal.open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [modal.open]);
+
   const byEmail = useMemo(() => {
     const map = new Map<string, KycRecord>();
     for (const item of records) map.set(item.email.toLowerCase(), item);
@@ -353,7 +362,7 @@ export function KycClient({
         />
         <button
           type="button"
-          className={styles.btnPrimary}
+          className={`${styles.btn} ${styles.btnPrimary}`}
           onClick={() => { setModal({ ...MODAL_CLOSED, open: true, mode: "manual" }); setError(""); }}
         >
           + Add new
@@ -435,11 +444,11 @@ export function KycClient({
 
               {/* Approve / disapprove */}
               <div className={styles.actions} style={{ marginTop: "1rem" }}>
-                <button type="button" className={styles.btnPrimary} disabled={busy || approved || blockers.length > 0}
+                <button type="button" className={`${styles.btn} ${styles.btnPrimary}`} disabled={busy || approved || blockers.length > 0}
                   onClick={() => void patch(selected, { status: "approved" }, "KYC approved.")}>
                   {approved ? "Approved ✓" : "Approve KYC"}
                 </button>
-                <button type="button" className={styles.btnDanger} disabled={busy || record.status === "rejected"}
+                <button type="button" className={`${styles.btn} ${styles.btnDanger}`} disabled={busy || record.status === "rejected"}
                   onClick={() => void patch(selected, { status: "rejected" }, "KYC disapproved.")}>
                   Disapprove
                 </button>
@@ -465,7 +474,7 @@ export function KycClient({
                           <button type="button" className={styles.btn} disabled={busy} onClick={() => void issueLogin()}>
                             Issue new password
                           </button>
-                          <button type="button" className={account.disabled ? styles.btn : styles.btnDanger} disabled={busy}
+                          <button type="button" className={`${styles.btn} ${account.disabled ? "" : styles.btnDanger}`} disabled={busy}
                             onClick={() => void toggleLogin(!account.disabled)}>
                             {account.disabled ? "Re-enable login" : "Disable login"}
                           </button>
@@ -477,7 +486,7 @@ export function KycClient({
                           KYC approved — create this customer&apos;s website login. They sign in at
                           {" "}<strong>thejewelstone.com/account</strong> with their e-mail or mobile.
                         </p>
-                        <button type="button" className={styles.btnPrimary} style={{ marginTop: ".7rem" }} disabled={busy}
+                        <button type="button" className={`${styles.btn} ${styles.btnPrimary}`} style={{ marginTop: ".7rem" }} disabled={busy}
                           onClick={() => void issueLogin()}>
                           Create client login
                         </button>
@@ -548,7 +557,7 @@ export function KycClient({
                           <td><a href={`/api/admin/kyc/files/${file.id}`} target="_blank" rel="noreferrer">{file.fileName}</a></td>
                           <td>{dateLabel(file.uploadedAt)}</td>
                           <td>
-                            <button type="button" className={styles.btnSmall} disabled={busy} onClick={() => void removeFile(file.id)}>
+                            <button type="button" className={`${styles.btn} ${styles.btnSmall}`} disabled={busy} onClick={() => void removeFile(file.id)}>
                               Remove
                             </button>
                           </td>
@@ -596,7 +605,7 @@ export function KycClient({
                   <textarea id="kyc-notes" name="notes" className={styles.textarea} rows={3}
                     defaultValue={record.notes} key={`${selected}-notes-${record.updatedAt}`} />
                 </div>
-                <button type="submit" className={styles.btnPrimary} disabled={busy}>
+                <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={busy}>
                   {busy ? "Saving…" : "Save details"}
                 </button>
               </form>
@@ -653,7 +662,7 @@ export function KycClient({
                 </p>
               ) : null}
               <div className={styles.actions} style={{ marginTop: "1rem" }}>
-                <button type="submit" className={styles.btnPrimary} disabled={busy}>
+                <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={busy}>
                   {busy ? "Saving…" : "Save KYC record"}
                 </button>
                 <button type="button" className={styles.btn} onClick={() => setModal(MODAL_CLOSED)}>Cancel</button>

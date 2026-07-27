@@ -191,6 +191,14 @@
   font-size: 0.78rem;
 }
 
+.previewTableWrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
 .previewTable th {
   padding: 0.55rem;
   border-bottom: 1px solid #a57a35;
@@ -238,6 +246,16 @@
 }
 
 @media (max-width: 760px) {
+  .section,
+  .lineCard {
+    padding: 0.9rem;
+  }
+
+  .sectionHead,
+  .lineHead {
+    align-items: flex-start;
+  }
+
   .grid2,
   .grid3,
   .grid4 {
@@ -253,5 +271,34 @@
   .previewTitle {
     text-align: left;
   }
-}
 
+  .preview {
+    padding: 1rem;
+    box-shadow: none;
+  }
+
+  .previewHeader {
+    gap: 0.8rem;
+  }
+
+  .previewBrand {
+    font-size: 1.45rem;
+  }
+
+  .previewTable {
+    min-width: 520px;
+  }
+
+  .submitBar {
+    justify-content: stretch;
+    padding: 0.7rem;
+  }
+
+  .submitBar > * {
+    width: 100%;
+  }
+
+  .docActions > * {
+    flex: 1 1 10rem;
+  }
+}

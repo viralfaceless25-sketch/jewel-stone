@@ -86,6 +86,14 @@ export function InventoryClient({ initialRows }: { initialRows: InventoryRow[] }
   const [notice, setNotice] = useState("");
 
   useEffect(() => setRows(initialRows), [initialRows]);
+  useEffect(() => {
+    if (!dialog) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [dialog]);
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -346,23 +354,23 @@ export function InventoryClient({ initialRows }: { initialRows: InventoryRow[] }
 
       <section className={admin.panel}>
         <div className={admin.tableWrap}>
-          <table className={admin.table}>
+          <table className={`${admin.table} ${styles.inventoryTable}`}>
             <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>On hand</th><th>Website</th><th>Images</th><th /></tr></thead>
             <tbody>
               {filtered.map((row) => (
                 <tr key={row.slug}>
-                  <td>
+                  <td data-label="Product">
                     <div className={styles.rowName}>
                       <div className={styles.thumb}><NextImage src={row.image} alt="" fill sizes="48px" unoptimized /></div>
                       <div><strong>{row.name}</strong><small>{row.sku} · {row.source === "admin" ? "Admin" : "Spreadsheet"}</small></div>
                     </div>
                   </td>
-                  <td>{row.category}</td>
-                  <td><input className={`${admin.input} ${styles.numberInput}`} type="number" min="1" defaultValue={row.price} onBlur={(event) => { const price = Math.round(Number(event.target.value)); if (price > 0 && price !== row.price) saveRow(row, { price }); }} /></td>
-                  <td><input className={`${admin.input} ${styles.numberInput}`} type="number" min="0" step="1" defaultValue={row.stock} onBlur={(event) => { const stock = Math.max(0, Math.round(Number(event.target.value))); if (stock !== row.stock) saveRow(row, { stock }); }} /></td>
-                  <td><label className={styles.switch}><input type="checkbox" checked={row.visible} onChange={(event) => saveRow(row, { visible: event.target.checked })} disabled={busy === row.slug} />{row.visible ? "Shown" : "Hidden"}</label></td>
-                  <td>{row.missingImages ? <span className={`${admin.badge} ${admin.badgeWarn}`}>Missing</span> : `${row.imageCount}`}</td>
-                  <td>{row.source === "admin" ? <button className={`${admin.btn} ${admin.btnSmall}`} type="button" onClick={() => openEditor(row)} disabled={busy === row.slug}>Edit & photos</button> : <a className={`${admin.btn} ${admin.btnSmall}`} href={`/products/${row.slug}`} target="_blank">View</a>}</td>
+                  <td data-label="Category">{row.category}</td>
+                  <td data-label="Price"><input aria-label={`${row.name} price`} className={`${admin.input} ${styles.numberInput}`} type="number" min="1" defaultValue={row.price} onBlur={(event) => { const price = Math.round(Number(event.target.value)); if (price > 0 && price !== row.price) saveRow(row, { price }); }} /></td>
+                  <td data-label="On hand"><input aria-label={`${row.name} on hand`} className={`${admin.input} ${styles.numberInput}`} type="number" min="0" step="1" defaultValue={row.stock} onBlur={(event) => { const stock = Math.max(0, Math.round(Number(event.target.value))); if (stock !== row.stock) saveRow(row, { stock }); }} /></td>
+                  <td data-label="Website"><label className={styles.switch}><input type="checkbox" checked={row.visible} onChange={(event) => saveRow(row, { visible: event.target.checked })} disabled={busy === row.slug} />{row.visible ? "Shown" : "Hidden"}</label></td>
+                  <td data-label="Images">{row.missingImages ? <span className={`${admin.badge} ${admin.badgeWarn}`}>Missing</span> : `${row.imageCount}`}</td>
+                  <td data-label="Actions">{row.source === "admin" ? <button className={`${admin.btn} ${admin.btnSmall}`} type="button" onClick={() => openEditor(row)} disabled={busy === row.slug}>Edit & photos</button> : <a className={`${admin.btn} ${admin.btnSmall}`} href={`/products/${row.slug}`} target="_blank">View</a>}</td>
                 </tr>
               ))}
             </tbody>
