@@ -75,6 +75,8 @@ export function DocumentComposer({
   productOptions?: {
     label: string; sku: string; name: string; description: string; category: string;
     metal: string; carats: string; colorClarity: string; unitPrice: number;
+    metalWeight?: string; grossWeight?: string; certificate?: string;
+    source?: "catalog" | "admin" | "memo";
   }[];
 }) {
   const router = useRouter();
@@ -285,8 +287,16 @@ export function DocumentComposer({
                     value={item.description}
                     onChange={(event) => {
                       const value = event.target.value;
-                      // Choosing a catalogue piece fills SKU, price, metal, and carats.
-                      const match = productOptions.find((option) => option.label === value);
+                      // Match the whole option, or just the SKU the owner typed —
+                      // the label carries "SKU · name · carat · metal" so the
+                      // leading token is enough to identify the piece.
+                      const typed = value.trim();
+                      const leadingCode = typed.split("·")[0].trim().toUpperCase();
+                      const match =
+                        productOptions.find((option) => option.label === typed) ??
+                        (leadingCode
+                          ? productOptions.find((option) => option.sku.toUpperCase() === leadingCode)
+                          : undefined);
                       if (match) {
                         updateItem(index, {
                           description: match.name,
@@ -295,12 +305,16 @@ export function DocumentComposer({
                           metal: match.metal,
                           diamondCarats: match.carats,
                           unitPrice: String(match.unitPrice),
+                          // Memo goods carry the supplier's weights and certificate.
+                          ...(match.metalWeight ? { metalWeight: match.metalWeight } : {}),
+                          ...(match.grossWeight ? { grossWeight: match.grossWeight } : {}),
+                          ...(match.certificate ? { certificateNumber: match.certificate } : {}),
                         });
                       } else {
                         updateItem(index, { description: value });
                       }
                     }}
-                    placeholder="Search by name, SKU, carat, or metal…"
+                    placeholder="Search catalogue or memo stock — name, SKU, carat, metal…"
                     required
                   />
                 </label>
