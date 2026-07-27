@@ -64,6 +64,26 @@ function statusTone(status: KycStatus) {
   return styles.badgeWarn;
 }
 
+function dateLabel(value?: string) {
+  if (!value) return "";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "" : date.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
+}
+
+type ModalState = {
+  open: boolean;
+  /** manual = blank form; review = pre-filled from an uploaded PDF. */
+  mode: "manual" | "review";
+  email: string;
+  business: Partial<KycBusiness>;
+  notes: string;
+  /** The uploaded form, attached to the record when the modal is saved. */
+  file: File | null;
+  fieldsFound: number;
+};
+
+const MODAL_CLOSED: ModalState = { open: false, mode: "manual", email: "", business: {}, notes: "", file: null, fieldsFound: 0 };
+
 export function KycClient({
   customers,
   initialRecords,
@@ -75,16 +95,20 @@ export function KycClient({
 }) {
   const [records, setRecords] = useState<KycRecord[]>(initialRecords);
   const [accounts, setAccounts] = useState<AccountLite[]>(initialAccounts);
+  const [selected, setSelected] = useState<string>("");
   const [record, setRecord] = useState<KycRecord | null>(null);
   const [blockers, setBlockers] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
-  const [manualEmail, setManualEmail] = useState("");
   const [issuedPassword, setIssuedPassword] = useState("");
+  const [modal, setModal] = useState<ModalState>(MODAL_CLOSED);
+  const [extracting, setExtracting] = useState(false);
   const formFileRef = useRef<HTMLInputElement>(null);
   const idFileRef = useRef<HTMLInputElement>(null);
+  const filledFormRef = useRef<HTMLInputElement>(null);
+  const detailRef = useRef<HTMLDivElement>(null);
 
   const byEmail = useMemo(() => {
     const map = new Map<string, KycRecord>();
@@ -99,35 +123,36 @@ export function KycClient({
       email: customer.email,
       phone: customer.phone,
       status: byEmail.get(customer.email.toLowerCase())?.status ?? ("not_started" as KycStatus),
+      updatedAt: byEmail.get(customer.email.toLowerCase())?.updatedAt ?? "",
+      files: byEmail.get(customer.email.toLowerCase())?.files.length ?? 0,
     }));
     for (const item of records) {
       if (!merged.some((row) => row.email.toLowerCase() === item.email.toLowerCase())) {
         merged.push({
-          name: item.business.businessName || item.email,
+          name: item.business.businessName || item.business.ownerName || item.email,
           email: item.email,
           phone: item.business.ownerMobile || "",
           status: item.status,
+          updatedAt: item.updatedAt,
+          files: item.files.length,
         });
       }
     }
-    return merged;
+    return merged.sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || ""));
   }, [customers, records, byEmail]);
 
   const rows = useMemo(() => {
     const term = search.trim().toLowerCase();
     if (!term) return allRows;
     return allRows.filter((row) =>
-      row.name.toLowerCase().includes(term) || row.email.toLowerCase().includes(term));
+      row.name.toLowerCase().includes(term) ||
+      row.email.toLowerCase().includes(term) ||
+      row.phone.toLowerCase().includes(term));
   }, [allRows, search]);
-
-  const [selected, setSelected] = useState<string>("");
-  // Open the first record automatically so the panel is never an empty box.
-  useEffect(() => {
-    if (!selected && allRows.length) setSelected(allRows[0].email);
-  }, [allRows, selected]);
 
   const selectedRow = allRows.find((row) => row.email.toLowerCase() === selected.toLowerCase());
   const account = accounts.find((item) => item.email.toLowerCase() === selected.toLowerCase());
+  const approved = record?.status === "approved";
 
   const load = useCallback(async (email: string) => {
     if (!email) { setRecord(null); return; }
@@ -147,6 +172,12 @@ export function KycClient({
 
   useEffect(() => { void load(selected); }, [selected, load]);
 
+  function openCard(email: string) {
+    setSelected(email);
+    setNotice("");
+    window.setTimeout(() => detailRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
+  }
+
   function absorb(result: { record: KycRecord; blockers?: string[] }) {
     setRecord(result.record);
     setBlockers(result.blockers ?? []);
@@ -156,11 +187,10 @@ export function KycClient({
     });
   }
 
-  async function patch(body: Record<string, unknown>, successMessage: string) {
-    if (!selected) return;
+  async function patch(email: string, body: Record<string, unknown>, successMessage: string) {
     setBusy(true); setError(""); setNotice("");
     try {
-      const response = await fetch(`/api/admin/kyc/${encodeURIComponent(selected)}`, {
+      const response = await fetch(`/api/admin/kyc/${encodeURIComponent(email)}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -169,28 +199,31 @@ export function KycClient({
       if (!response.ok) { setBlockers(result.blockers ?? []); throw new Error(result.error || "Could not save."); }
       absorb(result);
       setNotice(successMessage);
+      return true;
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : "Could not save.");
+      return false;
     } finally {
       setBusy(false);
     }
   }
 
-  async function upload(kind: "kyc_form" | "id_document", file: File, label: string) {
-    if (!selected) return;
+  async function uploadDocument(email: string, kind: "kyc_form" | "id_document", file: File, label: string) {
     setBusy(true); setError(""); setNotice("");
     try {
       const body = new FormData();
       body.set("file", file);
       body.set("kind", kind);
       body.set("label", label);
-      const response = await fetch(`/api/admin/kyc/${encodeURIComponent(selected)}/files`, { method: "POST", body });
+      const response = await fetch(`/api/admin/kyc/${encodeURIComponent(email)}/files`, { method: "POST", body });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Upload failed.");
       absorb(result);
       setNotice(`${label} uploaded.`);
+      return true;
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : "Upload failed.");
+      return false;
     } finally {
       setBusy(false);
     }
@@ -210,6 +243,49 @@ export function KycClient({
     } finally {
       setBusy(false);
     }
+  }
+
+  /** "Upload filled form" — read the PDF, open the review modal pre-filled. */
+  async function extractFilledForm(file: File) {
+    setExtracting(true); setError(""); setNotice("");
+    try {
+      const body = new FormData();
+      body.set("file", file);
+      const response = await fetch("/api/admin/kyc/extract", { method: "POST", body });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Could not read the form.");
+      setModal({
+        open: true,
+        mode: "review",
+        email: result.guessedEmail ?? "",
+        business: result.business ?? {},
+        notes: "",
+        file,
+        fieldsFound: result.fieldsFound ?? 0,
+      });
+    } catch (extractError) {
+      setError(extractError instanceof Error ? extractError.message : "Could not read the form.");
+    } finally {
+      setExtracting(false);
+    }
+  }
+
+  /** Saving the modal writes the details, attaches the form, opens the card. */
+  async function saveModal(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const email = String(data.get("kycEmail") ?? "").trim();
+    if (!email.includes("@")) { setError("A customer e-mail is required."); return; }
+    const business: Record<string, string> = {};
+    for (const group of FIELD_GROUPS) {
+      for (const field of group.fields) business[field.key] = String(data.get(`m-${field.key}`) ?? "");
+    }
+    const saved = await patch(email, { business, notes: String(data.get("m-notes") ?? "") },
+      modal.mode === "review" ? "Form read and details saved." : "KYC record created.");
+    if (!saved) return;
+    if (modal.file) await uploadDocument(email, "kyc_form", modal.file, "Signed KYC form");
+    setModal(MODAL_CLOSED);
+    openCard(email);
   }
 
   /** Issues (or reissues) a client login; the password is shown once. */
@@ -265,88 +341,160 @@ export function KycClient({
   const hasForm = (record?.files.some((file) => file.kind === "kyc_form")) ?? false;
 
   return (
-    <div className={styles.kycLayout}>
-      {/* ── Customer picker ── */}
-      <section className={styles.panel}>
-        <div className={styles.panelPad}>
-          <h2 className={styles.sectionTitle}>Customers</h2>
-          <input
-            className={styles.input}
-            placeholder="Search name or e-mail"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-          />
-          <div className={styles.kycList}>
-            {rows.map((row) => (
-              <button
-                key={row.email}
-                type="button"
-                onClick={() => setSelected(row.email)}
-                className={`${styles.kycRow} ${row.email.toLowerCase() === selected.toLowerCase() ? styles.kycRowActive : ""}`}
-              >
-                <span className={styles.kycRowText}>
-                  <span className={styles.kycRowName}>{row.name || row.email}</span>
-                  <span className={styles.kycRowMail}>{row.email}</span>
-                </span>
-                <span className={statusTone(row.status)}>{KYC_STATUS_LABELS[row.status]}</span>
-              </button>
-            ))}
-            {!rows.length ? <p className={styles.empty}>No customers match.</p> : null}
-          </div>
+    <div style={{ display: "grid", gap: "1.1rem" }}>
+      {/* ── Toolbar: universal search · add new · upload filled form ── */}
+      <div className={styles.kycToolbar}>
+        <input
+          type="search"
+          className={styles.kycSearch}
+          placeholder="Search customers — name, e-mail, or phone"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+        />
+        <button
+          type="button"
+          className={styles.btnPrimary}
+          onClick={() => { setModal({ ...MODAL_CLOSED, open: true, mode: "manual" }); setError(""); }}
+        >
+          + Add new
+        </button>
+        <button
+          type="button"
+          className={styles.btn}
+          disabled={extracting}
+          onClick={() => filledFormRef.current?.click()}
+        >
+          {extracting ? "Reading form…" : "Upload filled KYC form"}
+        </button>
+        <input
+          ref={filledFormRef}
+          type="file"
+          accept="application/pdf"
+          style={{ display: "none" }}
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+            if (file) void extractFilledForm(file);
+            if (filledFormRef.current) filledFormRef.current.value = "";
+          }}
+        />
+        <a className={styles.btn} href="/api/admin/kyc/form" target="_blank" rel="noreferrer">
+          Blank form PDF
+        </a>
+      </div>
 
-          <div className={styles.field} style={{ marginTop: "1rem" }}>
-            <label className={styles.label} htmlFor="kyc-manual">Start KYC for another e-mail</label>
-            <input
-              id="kyc-manual"
-              className={styles.input}
-              type="email"
-              placeholder="buyer@company.com"
-              value={manualEmail}
-              onChange={(event) => setManualEmail(event.target.value)}
-            />
-            <button
-              type="button"
-              className={styles.btn}
-              style={{ marginTop: ".45rem" }}
-              disabled={!manualEmail.includes("@")}
-              onClick={() => { setSelected(manualEmail.trim()); setManualEmail(""); }}
-            >
-              Open record
-            </button>
-          </div>
-        </div>
-      </section>
+      {notice && !modal.open ? <p className={`${styles.notice} ${styles.noticeGood}`} style={{ margin: 0 }}>{notice}</p> : null}
+      {error && !modal.open ? <p className={`${styles.notice} ${styles.noticeError}`} style={{ margin: 0 }}>{error}</p> : null}
 
-      {/* ── Record ── */}
-      <section className={styles.panel}>
-        <div className={styles.panelPad}>
-          {!selected ? (
-            <p className={styles.empty}>Add a customer or enter an e-mail to begin a KYC record.</p>
-          ) : (
-            <>
+      {/* ── Customer cards ── */}
+      <div className={styles.kycCards}>
+        {rows.map((row) => (
+          <button
+            key={row.email}
+            type="button"
+            className={`${styles.kycCard} ${row.email.toLowerCase() === selected.toLowerCase() ? styles.kycCardActive : ""}`}
+            onClick={() => openCard(row.email)}
+          >
+            <span className={styles.kycCardId}>
+              <span className={styles.kycCardName}>{row.name || row.email}</span>
+              <span className={styles.kycCardMeta}>{row.email}{row.phone ? ` · ${row.phone}` : ""}</span>
+            </span>
+            <span className={styles.kycCardRight}>
+              {row.files ? <span className={styles.kycCardStat}>{row.files} document{row.files === 1 ? "" : "s"}</span> : null}
+              {row.updatedAt ? <span className={styles.kycCardStat}>{dateLabel(row.updatedAt)}</span> : null}
+              <span className={statusTone(row.status)}>{KYC_STATUS_LABELS[row.status]}</span>
+            </span>
+          </button>
+        ))}
+        {!rows.length ? <p className={styles.empty}>No customers match — add one with “+ Add new”.</p> : null}
+      </div>
+
+      {/* ── Detail card ── */}
+      <div ref={detailRef}>
+        {selected && record ? (
+          <section className={styles.panel}>
+            <div className={styles.panelPad}>
               <header className={styles.kycHead}>
                 <div>
                   <p className={styles.kycHeadMail}>{selectedRow?.name || selected}</p>
-                  <span className={statusTone(record?.status ?? "not_started")}>
-                    {KYC_STATUS_LABELS[record?.status ?? "not_started"]}
-                  </span>
+                  <span className={statusTone(record.status)}>{KYC_STATUS_LABELS[record.status]}</span>
+                  {record.approvedAt && approved ? (
+                    <span className={styles.kycCardStat} style={{ marginLeft: ".6rem" }}>approved {dateLabel(record.approvedAt)}</span>
+                  ) : null}
                 </div>
                 <div className={styles.actions}>
                   <a className={styles.btn} href={`/api/admin/kyc/form?email=${encodeURIComponent(selected)}`} target="_blank" rel="noreferrer">
                     Download form
                   </a>
                   <button type="button" className={styles.btn} disabled={busy}
-                    onClick={() => void patch({ status: "sent" }, "Marked as sent to the customer.")}>
+                    onClick={() => void patch(selected, { status: "sent" }, "Marked as sent to the customer.")}>
                     Mark sent
                   </button>
+                  <button type="button" className={styles.modalClose} aria-label="Close" onClick={() => setSelected("")}>×</button>
                 </div>
               </header>
 
-              {notice ? <p className={`${styles.notice} ${styles.noticeGood}`}>{notice}</p> : null}
-              {error ? <p className={`${styles.notice} ${styles.noticeError}`}>{error}</p> : null}
+              {/* Approve / disapprove */}
+              <div className={styles.actions} style={{ marginTop: "1rem" }}>
+                <button type="button" className={styles.btnPrimary} disabled={busy || approved || blockers.length > 0}
+                  onClick={() => void patch(selected, { status: "approved" }, "KYC approved.")}>
+                  {approved ? "Approved ✓" : "Approve KYC"}
+                </button>
+                <button type="button" className={styles.btnDanger} disabled={busy || record.status === "rejected"}
+                  onClick={() => void patch(selected, { status: "rejected" }, "KYC disapproved.")}>
+                  Disapprove
+                </button>
+              </div>
+              {blockers.length && !approved ? (
+                <p className={`${styles.notice} ${styles.noticeWarn}`}>{blockers.join(" ")}</p>
+              ) : null}
 
-              {/* Checklist */}
-              <h3 className={styles.sectionTitle} style={{ marginTop: "1.1rem" }}>Required paperwork</h3>
+              {/* Client login — appears only once the KYC is approved */}
+              {approved ? (
+                <>
+                  <h3 className={styles.sectionTitle} style={{ marginTop: "1.2rem" }}>Client login</h3>
+                  <div className={styles.kycLoginBox}>
+                    {account ? (
+                      <>
+                        <p style={{ margin: 0, fontSize: ".88rem" }}>
+                          Login active for <strong>{account.email}</strong>
+                          {account.phone ? <> · mobile {account.phone}</> : null}
+                          {account.lastLoginAt ? <> · last signed in {dateLabel(account.lastLoginAt)}</> : <> · not signed in yet</>}
+                          {account.disabled ? <> · <strong>disabled</strong></> : null}
+                        </p>
+                        <div className={styles.actions} style={{ marginTop: ".7rem" }}>
+                          <button type="button" className={styles.btn} disabled={busy} onClick={() => void issueLogin()}>
+                            Issue new password
+                          </button>
+                          <button type="button" className={account.disabled ? styles.btn : styles.btnDanger} disabled={busy}
+                            onClick={() => void toggleLogin(!account.disabled)}>
+                            {account.disabled ? "Re-enable login" : "Disable login"}
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <p style={{ margin: 0, fontSize: ".88rem" }}>
+                          KYC approved — create this customer&apos;s website login. They sign in at
+                          {" "}<strong>thejewelstone.com/account</strong> with their e-mail or mobile.
+                        </p>
+                        <button type="button" className={styles.btnPrimary} style={{ marginTop: ".7rem" }} disabled={busy}
+                          onClick={() => void issueLogin()}>
+                          Create client login
+                        </button>
+                      </>
+                    )}
+                    {issuedPassword ? (
+                      <div style={{ marginTop: ".8rem" }}>
+                        <p className={styles.label} style={{ margin: 0 }}>One-time password — shown once, pass it on now</p>
+                        <span className={styles.kycPassword}>{issuedPassword}</span>
+                      </div>
+                    ) : null}
+                  </div>
+                </>
+              ) : null}
+
+              {/* Paperwork */}
+              <h3 className={styles.sectionTitle} style={{ marginTop: "1.2rem" }}>Required paperwork</h3>
               <ul className={styles.kycChecklist}>
                 <li className={`${styles.kycCheck} ${hasForm ? styles.kycCheckDone : ""}`}>
                   <span className={styles.kycCheckMark}>{hasForm ? "✓" : "○"}</span>
@@ -362,7 +510,6 @@ export function KycClient({
                 </li>
               </ul>
 
-              {/* Uploads */}
               <div className={styles.kycUploads}>
                 <div className={styles.field}>
                   <label className={styles.label} htmlFor="kyc-form-file">Upload signed form</label>
@@ -370,7 +517,7 @@ export function KycClient({
                     accept="application/pdf,image/*" disabled={busy}
                     onChange={(event) => {
                       const file = event.target.files?.[0];
-                      if (file) void upload("kyc_form", file, "Signed KYC form");
+                      if (file) void uploadDocument(selected, "kyc_form", file, "Signed KYC form");
                       if (formFileRef.current) formFileRef.current.value = "";
                     }} />
                 </div>
@@ -384,13 +531,13 @@ export function KycClient({
                     onChange={(event) => {
                       const file = event.target.files?.[0];
                       const select = document.getElementById("kyc-id-type") as HTMLSelectElement | null;
-                      if (file) void upload("id_document", file, select?.value ?? "Identity document");
+                      if (file) void uploadDocument(selected, "id_document", file, select?.value ?? "Identity document");
                       if (idFileRef.current) idFileRef.current.value = "";
                     }} />
                 </div>
               </div>
 
-              {record?.files.length ? (
+              {record.files.length ? (
                 <div className={styles.tableWrap} style={{ marginTop: ".9rem" }}>
                   <table className={styles.table}>
                     <thead><tr><th>Document</th><th>File</th><th>Uploaded</th><th /></tr></thead>
@@ -399,7 +546,7 @@ export function KycClient({
                         <tr key={file.id}>
                           <td>{file.label}</td>
                           <td><a href={`/api/admin/kyc/files/${file.id}`} target="_blank" rel="noreferrer">{file.fileName}</a></td>
-                          <td>{new Date(file.uploadedAt).toLocaleDateString()}</td>
+                          <td>{dateLabel(file.uploadedAt)}</td>
                           <td>
                             <button type="button" className={styles.btnSmall} disabled={busy} onClick={() => void removeFile(file.id)}>
                               Remove
@@ -412,67 +559,8 @@ export function KycClient({
                 </div>
               ) : null}
 
-              {/* Approval */}
-              <h3 className={styles.sectionTitle} style={{ marginTop: "1.3rem" }}>Approval</h3>
-              {blockers.length ? (
-                <p className={`${styles.notice} ${styles.noticeWarn}`}>{blockers.join(" ")}</p>
-              ) : (
-                <p className={`${styles.notice} ${styles.noticeGood}`}>All required paperwork is on file.</p>
-              )}
-              <div className={styles.actions}>
-                <button type="button" className={styles.btnPrimary} disabled={busy || blockers.length > 0}
-                  onClick={() => void patch({ status: "approved" }, "KYC approved.")}>
-                  Approve KYC
-                </button>
-                <button type="button" className={styles.btnDanger} disabled={busy}
-                  onClick={() => void patch({ status: "rejected" }, "KYC rejected.")}>
-                  Reject
-                </button>
-              </div>
-
-              {/* Client login */}
-              <h3 className={styles.sectionTitle} style={{ marginTop: "1.4rem" }}>Client login</h3>
-              <div className={styles.kycLoginBox}>
-                {account ? (
-                  <>
-                    <p style={{ margin: 0, fontSize: ".88rem" }}>
-                      Account active for <strong>{account.email}</strong>
-                      {account.phone ? <> · mobile {account.phone}</> : null}
-                      {account.lastLoginAt ? <> · last signed in {new Date(account.lastLoginAt).toLocaleDateString()}</> : <> · not signed in yet</>}
-                      {account.disabled ? <> · <strong>disabled</strong></> : null}
-                    </p>
-                    <div className={styles.actions} style={{ marginTop: ".7rem" }}>
-                      <button type="button" className={styles.btn} disabled={busy} onClick={() => void issueLogin()}>
-                        Issue new password
-                      </button>
-                      <button type="button" className={account.disabled ? styles.btn : styles.btnDanger} disabled={busy}
-                        onClick={() => void toggleLogin(!account.disabled)}>
-                        {account.disabled ? "Re-enable login" : "Disable login"}
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <p style={{ margin: 0, fontSize: ".88rem" }}>
-                      No login yet. Create one so this customer can sign in at
-                      {" "}<strong>/account</strong> to see their orders, invoices, and memoranda.
-                    </p>
-                    <button type="button" className={styles.btnPrimary} style={{ marginTop: ".7rem" }} disabled={busy}
-                      onClick={() => void issueLogin()}>
-                      Create client login
-                    </button>
-                  </>
-                )}
-                {issuedPassword ? (
-                  <div style={{ marginTop: ".8rem" }}>
-                    <p className={styles.label} style={{ margin: 0 }}>One-time password — shown once, pass it on now</p>
-                    <span className={styles.kycPassword}>{issuedPassword}</span>
-                  </div>
-                ) : null}
-              </div>
-
-              {/* Transcribed details */}
-              <h3 className={styles.sectionTitle} style={{ marginTop: "1.4rem" }}>Details from the form</h3>
+              {/* Details */}
+              <h3 className={styles.sectionTitle} style={{ marginTop: "1.3rem" }}>Details from the form</h3>
               <form
                 onSubmit={(event) => {
                   event.preventDefault();
@@ -481,7 +569,7 @@ export function KycClient({
                   for (const group of FIELD_GROUPS) {
                     for (const field of group.fields) business[field.key] = String(data.get(field.key) ?? "");
                   }
-                  void patch({ business, notes: String(data.get("notes") ?? "") }, "Details saved.");
+                  void patch(selected, { business, notes: String(data.get("notes") ?? "") }, "Details saved.");
                 }}
               >
                 {FIELD_GROUPS.map((group) => (
@@ -495,8 +583,8 @@ export function KycClient({
                             id={`kyc-${field.key}`}
                             className={styles.input}
                             name={field.key}
-                            defaultValue={record?.business[field.key] ?? ""}
-                            key={`${selected}-${field.key}-${record?.updatedAt ?? ""}`}
+                            defaultValue={record.business[field.key] ?? ""}
+                            key={`${selected}-${field.key}-${record.updatedAt}`}
                           />
                         </div>
                       ))}
@@ -506,16 +594,74 @@ export function KycClient({
                 <div className={styles.field}>
                   <label className={styles.label} htmlFor="kyc-notes">Private notes</label>
                   <textarea id="kyc-notes" name="notes" className={styles.textarea} rows={3}
-                    defaultValue={record?.notes ?? ""} key={`${selected}-notes-${record?.updatedAt ?? ""}`} />
+                    defaultValue={record.notes} key={`${selected}-notes-${record.updatedAt}`} />
                 </div>
                 <button type="submit" className={styles.btnPrimary} disabled={busy}>
                   {busy ? "Saving…" : "Save details"}
                 </button>
               </form>
-            </>
-          )}
+            </div>
+          </section>
+        ) : null}
+      </div>
+
+      {/* ── Add-new / review modal ── */}
+      {modal.open ? (
+        <div className={styles.modalOverlay} role="dialog" aria-modal="true" aria-label="KYC form">
+          <div className={styles.modalCard}>
+            <div className={styles.modalHead}>
+              <h2 className={styles.modalTitle}>
+                {modal.mode === "review" ? "Review the uploaded form" : "New KYC — manual entry"}
+              </h2>
+              <button type="button" className={styles.modalClose} aria-label="Close" onClick={() => setModal(MODAL_CLOSED)}>×</button>
+            </div>
+            {modal.mode === "review" ? (
+              <p className={`${styles.notice} ${modal.fieldsFound ? styles.noticeGood : styles.noticeWarn}`}>
+                {modal.fieldsFound
+                  ? `Read ${modal.fieldsFound} field${modal.fieldsFound === 1 ? "" : "s"} from the PDF — check them and fill in the gaps.`
+                  : "Nothing could be read automatically (scans and photos have no text layer) — the form will still be attached; enter the details below."}
+              </p>
+            ) : null}
+            {error ? <p className={`${styles.notice} ${styles.noticeError}`}>{error}</p> : null}
+            <form onSubmit={saveModal}>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="kyc-modal-email">Customer e-mail (account key) *</label>
+                <input id="kyc-modal-email" className={styles.input} name="kycEmail" type="email"
+                  defaultValue={modal.email} placeholder="buyer@company.com" required />
+              </div>
+              {FIELD_GROUPS.map((group) => (
+                <fieldset key={group.title} className={styles.kycFieldset} style={{ marginTop: ".9rem" }}>
+                  <legend className={styles.label}>{group.title}</legend>
+                  <div className={styles.kycFieldGrid}>
+                    {group.fields.map((field) => (
+                      <div key={field.key} className={`${styles.field} ${field.wide ? styles.kycFieldWide : ""}`}>
+                        <label className={styles.label} htmlFor={`m-${field.key}`}>{field.label}</label>
+                        <input id={`m-${field.key}`} className={styles.input} name={`m-${field.key}`}
+                          defaultValue={modal.business[field.key] ?? ""} />
+                      </div>
+                    ))}
+                  </div>
+                </fieldset>
+              ))}
+              <div className={styles.field} style={{ marginTop: ".6rem" }}>
+                <label className={styles.label} htmlFor="m-notes">Private notes</label>
+                <textarea id="m-notes" name="m-notes" className={styles.textarea} rows={2} defaultValue={modal.notes} />
+              </div>
+              {modal.file ? (
+                <p className={styles.tileHint} style={{ marginTop: ".6rem" }}>
+                  “{modal.file.name}” will be attached as the signed KYC form.
+                </p>
+              ) : null}
+              <div className={styles.actions} style={{ marginTop: "1rem" }}>
+                <button type="submit" className={styles.btnPrimary} disabled={busy}>
+                  {busy ? "Saving…" : "Save KYC record"}
+                </button>
+                <button type="button" className={styles.btn} onClick={() => setModal(MODAL_CLOSED)}>Cancel</button>
+              </div>
+            </form>
+          </div>
         </div>
-      </section>
+      ) : null}
     </div>
   );
 }

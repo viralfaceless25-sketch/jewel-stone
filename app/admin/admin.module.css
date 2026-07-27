@@ -584,3 +584,87 @@ a.tile:hover {
   font-size: 1rem;
   letter-spacing: .16em;
 }
+
+/* ── KYC dashboard (cards + modal) ─────────────────────────────────────────── */
+.kycToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  align-items: center;
+}
+.kycToolbar input[type="search"],
+.kycSearch {
+  flex: 1;
+  min-width: 220px;
+  padding: .72rem .9rem;
+  border: 1px solid var(--js-line);
+  border-radius: 12px;
+  background: #fff;
+  font-family: var(--font-body);
+  font-size: .92rem;
+  color: var(--js-ink);
+}
+.kycSearch:focus { outline: none; border-color: var(--js-gold-deep); }
+
+.kycCards { display: grid; gap: .7rem; margin-top: 1rem; }
+.kycCard {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .9rem;
+  width: 100%;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--js-line);
+  border-radius: 14px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.kycCard:hover { border-color: var(--js-gold-deep); box-shadow: 0 10px 28px -18px rgba(35,27,21,.35); transform: translateY(-1px); }
+.kycCardActive { border-color: var(--js-gold-deep); box-shadow: 0 12px 30px -18px rgba(35,27,21,.4); }
+.kycCardId { display: grid; gap: .18rem; min-width: 0; }
+.kycCardName { font-family: var(--font-display); font-size: 1.08rem; color: var(--js-ink); }
+.kycCardMeta { font-size: .78rem; color: var(--js-platinum); overflow: hidden; text-overflow: ellipsis; }
+.kycCardRight { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; }
+.kycCardStat { font-size: .74rem; color: var(--js-ink-soft); }
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 1.2rem;
+  background: rgba(23, 19, 15, .45);
+  backdrop-filter: blur(3px);
+}
+.modalCard {
+  width: min(100%, 760px);
+  max-height: min(88vh, 900px);
+  overflow-y: auto;
+  padding: 1.4rem 1.5rem 1.6rem;
+  border: 1px solid var(--js-line);
+  border-radius: 16px;
+  background: var(--js-porcelain, #faf8f5);
+  box-shadow: 0 40px 90px -40px rgba(23, 19, 15, .5);
+}
+.modalHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.modalTitle { margin: 0; font-family: var(--font-display); font-size: 1.3rem; color: var(--js-ink); }
+.modalClose {
+  border: 0;
+  background: none;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--js-platinum);
+  cursor: pointer;
+  padding: .3rem .5rem;
+}
+.modalClose:hover { color: var(--js-ink); }

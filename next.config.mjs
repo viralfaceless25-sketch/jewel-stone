@@ -3,6 +3,11 @@ const nextConfig = {
   // NOTE: static "export" removed so Stripe API routes (/api/checkout, /api/webhook)
   // work. Deploy on Vercel (or any Node host). Set Stripe env vars in .env.local.
   reactStrictMode: true,
+  experimental: {
+    // pdf-parse/pdfjs break when webpack bundles them server-side
+    // ("Object.defineProperty called on non-object") — load them natively.
+    serverComponentsExternalPackages: ["pdf-parse", "pdfjs-dist"],
+  },
   images: {
     // `unoptimized` was required by the old static export; that export is gone
     // (see note above), so optimisation is back on. Without it every <Image>

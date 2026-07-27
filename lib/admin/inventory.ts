@@ -269,3 +269,87 @@ export async function nextDocumentNumber(
   const safePrefix = displayPrefix.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 10) || prefix;
   return `${safePrefix}-${String(value).padStart(4, "0")}`;
 }
+
+// ── Purchased (memo) inventory ───────────────────────────────────────────────
+// Goods received on memo from suppliers. Admin-only: they are never merged into
+// publicCatalog, so nothing here can ever reach the website. Stock rides the
+// same overlay as everything else (default 1 — each memo piece is one of one).
+
+import {
+  purchaseMemos,
+  purchasedRetail,
+  purchasedSlug,
+  type PurchaseMemo,
+  type PurchasedItem,
+} from "@/data/purchased-inventory";
+
+export type PurchasedRow = {
+  slug: string;
+  code: string;
+  name: string;
+  category: string;
+  metal: string;
+  metalWeightGm: number;
+  diamondCarats: number;
+  grossWeightGm: number;
+  certificate?: string;
+  memoAmount: number;
+  retail: number;
+  stock: number;
+  memoNumber: string;
+  vendor: string;
+  dueDate: string;
+};
+
+export type PurchasedMemoSummary = {
+  memoNumber: string;
+  vendor: string;
+  vendorContact: string;
+  date: string;
+  dueDate: string;
+  termsDays: number;
+  totalAmount: number;
+  itemCount: number;
+};
+
+export async function listPurchasedInventory(): Promise<{
+  memos: PurchasedMemoSummary[];
+  rows: PurchasedRow[];
+}> {
+  const entries: { memo: PurchaseMemo; item: PurchasedItem }[] = purchaseMemos.flatMap(
+    (memo) => memo.items.map((item) => ({ memo, item })),
+  );
+  const slugs = entries.map(({ memo, item }) => purchasedSlug(memo, item));
+  const overlays = await getOverlays(slugs).catch(() => new Map<string, StockOverlay>());
+
+  const rows: PurchasedRow[] = entries.map(({ memo, item }, index) => ({
+    slug: slugs[index],
+    code: item.code,
+    name: item.name,
+    category: item.category,
+    metal: item.metal,
+    metalWeightGm: item.metalWeightGm,
+    diamondCarats: item.diamondCarats,
+    grossWeightGm: item.grossWeightGm,
+    ...(item.certificate ? { certificate: item.certificate } : {}),
+    memoAmount: item.memoAmount,
+    retail: purchasedRetail(item),
+    stock: overlays.get(slugs[index])?.stock ?? DEFAULT_STOCK,
+    memoNumber: memo.memoNumber,
+    vendor: memo.vendor,
+    dueDate: memo.dueDate,
+  }));
+
+  const memos: PurchasedMemoSummary[] = purchaseMemos.map((memo) => ({
+    memoNumber: memo.memoNumber,
+    vendor: memo.vendor,
+    vendorContact: memo.vendorContact,
+    date: memo.date,
+    dueDate: memo.dueDate,
+    termsDays: memo.termsDays,
+    totalAmount: memo.totalAmount,
+    itemCount: memo.items.length,
+  }));
+
+  return { memos, rows };
+}

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { isAdminAuthenticated } from "@/lib/admin/auth";
-import { listInventory } from "@/lib/admin/inventory";
+import { listInventory, listPurchasedInventory } from "@/lib/admin/inventory";
+import { PurchasedInventory } from "@/components/admin/PurchasedInventory";
 import { InventoryClient } from "@/components/admin/InventoryClient";
 import { StatTile, TileGrid } from "../StatTile";
 import styles from "../admin.module.css";
@@ -9,7 +10,10 @@ export const dynamic = "force-dynamic";
 
 export default async function InventoryPage() {
   if (!isAdminAuthenticated()) redirect("/admin/login");
-  const rows = await listInventory();
+  const [rows, purchased] = await Promise.all([
+    listInventory(),
+    listPurchasedInventory().catch(() => ({ memos: [], rows: [] })),
+  ]);
   const soldOut = rows.filter((row) => row.stock <= 0).length;
   const hidden = rows.filter((row) => !row.visible).length;
   const missingImages = rows.filter((row) => row.missingImages).length;
@@ -28,6 +32,9 @@ export default async function InventoryPage() {
         <StatTile label="Missing images" value={missingImages} tone={missingImages ? "bad" : "good"} />
       </TileGrid>
       <section style={{ marginTop: "1.2rem" }}><InventoryClient initialRows={rows} /></section>
+      <section style={{ marginTop: "1.2rem" }}>
+        <PurchasedInventory memos={purchased.memos} initialRows={purchased.rows} />
+      </section>
     </>
   );
 }
