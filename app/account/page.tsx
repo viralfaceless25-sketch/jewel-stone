@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AccountPage() {
-  const email = currentCustomerEmail();
+  const email = await currentCustomerEmail();
   if (!email) redirect("/account/login");
 
   const [customer, orders, allDocuments, kyc, terms] = await Promise.all([

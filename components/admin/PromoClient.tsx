@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import {
-  PROMO_KINDS,
+  ACTIVE_PROMO_KINDS,
   PROMO_SCOPES,
   formatUsd,
   promoLabel,
@@ -42,6 +42,7 @@ const BLANK = {
 
 function statusOf(promo: PromoCode) {
   const today = new Date().toISOString().slice(0, 10);
+  if (promo.kind === "free_shipping") return { label: "Retired", tone: "badgeBad" as const };
   if (!promo.active) return { label: "Paused", tone: "badge" as const };
   if (promo.expiresAt && today > promo.expiresAt) return { label: "Expired", tone: "badgeBad" as const };
   if (promo.startsAt && today < promo.startsAt) return { label: "Scheduled", tone: "badgeWarn" as const };
@@ -75,8 +76,13 @@ export function PromoClient({ initialPromos }: { initialPromos: PromoCode[] }) {
     setEditing(promo.code);
     setForm({
       code: promo.code,
-      kind: promo.kind,
-      value: promo.kind === "fixed" ? String(promo.value / 100) : String(promo.value),
+      kind: promo.kind === "free_shipping" ? "percent" : promo.kind,
+      value:
+        promo.kind === "free_shipping"
+          ? "10"
+          : promo.kind === "fixed"
+            ? String(promo.value / 100)
+            : String(promo.value),
       startsAt: promo.startsAt ?? "",
       expiresAt: promo.expiresAt ?? "",
       minSubtotal: promo.minSubtotal ? String(promo.minSubtotal / 100) : "",
@@ -182,7 +188,7 @@ export function PromoClient({ initialPromos }: { initialPromos: PromoCode[] }) {
                 <span className={styles.label}>Discount type</span>
                 <select className={styles.select} value={form.kind}
                   onChange={(event) => field("kind", event.target.value as PromoKind)}>
-                  {PROMO_KINDS.map((kind) => <option key={kind} value={kind}>{KIND_LABELS[kind]}</option>)}
+                  {ACTIVE_PROMO_KINDS.map((kind) => <option key={kind} value={kind}>{KIND_LABELS[kind]}</option>)}
                 </select>
               </label>
               {form.kind !== "free_shipping" ? (

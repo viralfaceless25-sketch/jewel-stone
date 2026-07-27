@@ -12,8 +12,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function AccountLoginPage() {
-  if (currentCustomerEmail()) redirect("/account");
+export default async function AccountLoginPage() {
+  if (await currentCustomerEmail()) redirect("/account");
   return (
     <main className={pages.page}>
       <section className={pages.hero}>

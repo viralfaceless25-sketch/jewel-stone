@@ -26,19 +26,29 @@ export function CheckoutClient({ paymentsEnabled, allowSignatureCheckout = false
   const [promo, setPromo] = useState<{ code: string; amountOff: number; label: string } | null>(null);
   const [promoBusy, setPromoBusy] = useState(false);
   const [promoError, setPromoError] = useState("");
+  const [checkoutEmail, setCheckoutEmail] = useState("");
   const discount = promo ? promo.amountOff / 100 : 0;
   const payable = Math.max(0, total - discount);
 
   async function applyPromo() {
     const code = promoInput.trim();
     if (!code) return;
+    const email = checkoutEmail.trim().toLowerCase();
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      setPromoError("Enter your e-mail before applying a promotion code.");
+      return;
+    }
     setPromoBusy(true);
     setPromoError("");
     try {
       const response = await fetch("/api/promo/validate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code, items: items.map((item) => ({ slug: item.slug, qty: item.qty })) }),
+        body: JSON.stringify({
+          code,
+          email,
+          items: items.map((item) => ({ slug: item.slug, qty: item.qty })),
+        }),
       });
       const result = await response.json();
       if (!result.ok) {
@@ -75,7 +85,11 @@ export function CheckoutClient({ paymentsEnabled, allowSignatureCheckout = false
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items, ...(promo ? { promoCode: promo.code } : {}) }),
+        body: JSON.stringify({
+          items,
+          email: checkoutEmail.trim().toLowerCase(),
+          ...(promo ? { promoCode: promo.code } : {}),
+        }),
       });
       const data = await response.json();
 
@@ -181,6 +195,17 @@ export function CheckoutClient({ paymentsEnabled, allowSignatureCheckout = false
             <strong>Hosted by Stripe</strong>
             <span>Encrypted payment · address collection · receipt confirmation</span>
           </div>
+          <label>
+            E-mail
+            <input
+              required
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={checkoutEmail}
+              onChange={(event) => setCheckoutEmail(event.target.value)}
+            />
+          </label>
           {error ? <p className={styles.error} role="alert">{error}</p> : null}
           <button type="submit" className={styles.submit} disabled={sending}>
             {sending ? "Opening Stripe…" : `Continue to secure payment · $${payable.toLocaleString("en-US")}`}
@@ -203,7 +228,17 @@ export function CheckoutClient({ paymentsEnabled, allowSignatureCheckout = false
               <label>First name<input required name="firstName" autoComplete="given-name" /></label>
               <label>Last name<input required name="lastName" autoComplete="family-name" /></label>
             </div>
-            <label>Email<input required name="email" type="email" autoComplete="email" /></label>
+            <label>
+              Email
+              <input
+                required
+                name="email"
+                type="email"
+                autoComplete="email"
+                value={checkoutEmail}
+                onChange={(event) => setCheckoutEmail(event.target.value)}
+              />
+            </label>
             <label>Phone<input required name="phone" type="tel" autoComplete="tel" /></label>
           </fieldset>
 

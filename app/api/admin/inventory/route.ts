@@ -60,9 +60,17 @@ export async function PATCH(request: Request) {
 
   const slug = typeof body.slug === "string" ? body.slug : "";
   if (!slug) return Response.json({ error: "Missing product." }, { status: 400 });
-  const stock = body.stock === undefined ? undefined : Math.max(0, Math.round(Number(body.stock)));
+  const rawStock = body.stock === undefined ? undefined : Number(body.stock);
+  const rawPrice = body.price === undefined ? undefined : Number(body.price);
+  if (rawStock !== undefined && !Number.isFinite(rawStock)) {
+    return Response.json({ error: "Stock must be a number." }, { status: 400 });
+  }
+  if (rawPrice !== undefined && !Number.isFinite(rawPrice)) {
+    return Response.json({ error: "Price must be a number." }, { status: 400 });
+  }
+  const stock = rawStock === undefined ? undefined : Math.max(0, Math.round(rawStock));
   const visible = typeof body.visible === "boolean" ? body.visible : undefined;
-  const price = body.price === undefined ? undefined : Math.max(0, Math.round(Number(body.price)));
+  const price = rawPrice === undefined ? undefined : Math.max(0, Math.round(rawPrice));
   if (visible) {
     const adminProduct = await getAdminProduct(slug);
     if (adminProduct && !adminProduct.images.length) {

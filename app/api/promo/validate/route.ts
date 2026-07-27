@@ -3,6 +3,7 @@ import { deriveDiamondWorld } from "@/lib/commerce/diamond-worlds";
 import { customerRedemptionCount, getPromo } from "@/lib/admin/promo-codes";
 import { evaluatePromo, type PromoCartItem } from "@/lib/admin/promo-shared";
 import { getCustomer } from "@/lib/admin/orders";
+import { currentCustomerEmail } from "@/lib/account/customer-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -47,10 +48,20 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, reason: "Your bag is empty." }, { status: 400 });
   }
 
-  const email = typeof body.email === "string" && body.email.includes("@") ? body.email.trim() : undefined;
+  const sessionEmail = await currentCustomerEmail();
+  const submittedEmail =
+    typeof body.email === "string" && /^\S+@\S+\.\S+$/.test(body.email.trim())
+      ? body.email.trim().toLowerCase()
+      : undefined;
   const promo = await getPromo(code).catch(() => null);
+  const requiresVerifiedCustomer = Boolean(
+    promo?.firstOrderOnly || typeof promo?.perCustomerLimit === "number",
+  );
+  const email = sessionEmail ?? (requiresVerifiedCustomer ? undefined : submittedEmail);
   const [customerRedemptions, customer] = await Promise.all([
-    promo ? customerRedemptionCount(promo.code, email).catch(() => 0) : Promise.resolve(0),
+    promo && email
+      ? customerRedemptionCount(promo.code, email).catch(() => undefined)
+      : Promise.resolve(undefined),
     email ? getCustomer(email).catch(() => null) : Promise.resolve(null),
   ]);
 

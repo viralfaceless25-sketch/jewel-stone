@@ -4,6 +4,7 @@
 
 export const PROMO_KINDS = ["percent", "fixed", "free_shipping"] as const;
 export type PromoKind = (typeof PROMO_KINDS)[number];
+export const ACTIVE_PROMO_KINDS = ["percent", "fixed"] as const satisfies readonly PromoKind[];
 
 export const PROMO_SCOPES = ["all", "category", "world", "skus"] as const;
 export type PromoScope = (typeof PROMO_SCOPES)[number];
@@ -92,6 +93,9 @@ export function evaluatePromo(
 ): PromoEvaluation {
   if (!promo) return { ok: false, reason: "That code isn't recognised." };
   if (!promo.active) return { ok: false, reason: "That code is no longer active." };
+  if (promo.kind === "free_shipping") {
+    return { ok: false, reason: "Free-shipping codes are retired because shipping is already complimentary." };
+  }
 
   const today = context.today ?? new Date().toISOString().slice(0, 10);
   if (promo.startsAt && today < promo.startsAt) {
@@ -103,13 +107,18 @@ export function evaluatePromo(
   if (typeof promo.maxRedemptions === "number" && promo.redemptions >= promo.maxRedemptions) {
     return { ok: false, reason: "That code has been fully redeemed." };
   }
-  if (
-    typeof promo.perCustomerLimit === "number" &&
-    (context.customerRedemptions ?? 0) >= promo.perCustomerLimit
-  ) {
-    return { ok: false, reason: "You've already used that code." };
+  if (typeof promo.perCustomerLimit === "number") {
+    if (context.customerRedemptions === undefined) {
+      return { ok: false, reason: "Sign in to use that code." };
+    }
+    if (context.customerRedemptions >= promo.perCustomerLimit) {
+      return { ok: false, reason: "You've already used that code." };
+    }
   }
-  if (promo.firstOrderOnly && context.isFirstOrder === false) {
+  if (promo.firstOrderOnly && context.isFirstOrder === undefined) {
+    return { ok: false, reason: "Sign in to use that code." };
+  }
+  if (promo.firstOrderOnly && !context.isFirstOrder) {
     return { ok: false, reason: "That code is for first orders only." };
   }
 
@@ -121,10 +130,6 @@ export function evaluatePromo(
   const applicable = eligibleItems(promo, items);
   if (!applicable.length) {
     return { ok: false, reason: "That code doesn't apply to anything in your bag." };
-  }
-
-  if (promo.kind === "free_shipping") {
-    return { ok: true, code: promo.code, kind: promo.kind, amountOff: 0, freeShipping: true, label: "Free shipping" };
   }
 
   const applicableSubtotal = subtotalOf(applicable);

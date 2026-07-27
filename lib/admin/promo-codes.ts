@@ -1,6 +1,16 @@
 import "server-only";
 
-import { kvGet, kvGetMany, kvIncrBy, kvSet, kvSetAdd, kvSetMembers, kvSetRemove } from "@/lib/kv";
+import {
+  kvDel,
+  kvGet,
+  kvGetMany,
+  kvIncrBy,
+  kvSet,
+  kvSetAdd,
+  kvSetIfAbsent,
+  kvSetMembers,
+  kvSetRemove,
+} from "@/lib/kv";
 import { customerKey } from "./order-items";
 import { normalizeCode, type PromoCode, type PromoKind, type PromoScope } from "./promo-shared";
 
@@ -11,6 +21,7 @@ export * from "./promo-shared";
 
 const PROMO_INDEX = "jewelstone:promos";
 const promoKey = (code: string) => `jewelstone:promo:${normalizeCode(code)}`;
+const promoCountKey = (code: string) => `jewelstone:promo-count:${normalizeCode(code)}`;
 // Per-customer redemption counter, so "one per customer" can be enforced.
 const customerCountKey = (code: string, email: string) =>
   `jewelstone:promo-use:${normalizeCode(code)}:${customerKey(email)}`;
@@ -27,14 +38,22 @@ const redemptionKey = (code: string) => `jewelstone:promo-log:${normalizeCode(co
 
 export async function getPromo(code: string): Promise<PromoCode | null> {
   if (!code.trim()) return null;
-  return kvGet<PromoCode>(promoKey(code));
+  const [promo, count] = await Promise.all([
+    kvGet<PromoCode>(promoKey(code)),
+    kvGet<number>(promoCountKey(code)),
+  ]);
+  return promo ? { ...promo, redemptions: count ?? promo.redemptions } : null;
 }
 
 export async function listPromos(): Promise<PromoCode[]> {
   const codes = await kvSetMembers(PROMO_INDEX);
   if (!codes.length) return [];
-  const rows = await kvGetMany<PromoCode>(codes.map((code) => `jewelstone:promo:${code}`));
+  const [rows, counts] = await Promise.all([
+    kvGetMany<PromoCode>(codes.map((code) => `jewelstone:promo:${code}`)),
+    kvGetMany<number>(codes.map(promoCountKey)),
+  ]);
   return rows
+    .map((row, index) => row ? { ...row, redemptions: counts[index] ?? row.redemptions } : null)
     .filter((row): row is PromoCode => row !== null)
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 }
@@ -72,6 +91,9 @@ export async function savePromo(draft: PromoDraft): Promise<PromoCode> {
   if (!/^[A-Z0-9._-]{3,40}$/.test(code)) {
     throw new PromoError("Use 3-40 letters, numbers, dot, dash, or underscore.");
   }
+  if (draft.kind === "free_shipping") {
+    throw new PromoError("Free-shipping codes are retired because shipping is already complimentary.");
+  }
   if (draft.kind === "percent" && (draft.value < 1 || draft.value > 100)) {
     throw new PromoError("A percentage must be between 1 and 100.");
   }
@@ -87,7 +109,7 @@ export async function savePromo(draft: PromoDraft): Promise<PromoCode> {
   const next: PromoCode = {
     code,
     kind: draft.kind,
-    value: draft.kind === "free_shipping" ? 0 : Math.round(draft.value),
+    value: Math.round(draft.value),
     active: draft.active ?? existing?.active ?? true,
     ...(draft.startsAt ? { startsAt: draft.startsAt } : {}),
     ...(draft.expiresAt ? { expiresAt: draft.expiresAt } : {}),
@@ -104,6 +126,7 @@ export async function savePromo(draft: PromoDraft): Promise<PromoCode> {
     updatedAt: now,
   };
   await kvSet(promoKey(code), next);
+  await kvSetIfAbsent(promoCountKey(code), next.redemptions);
   await kvSetAdd(PROMO_INDEX, code);
   return next;
 }
@@ -117,7 +140,16 @@ export async function setPromoActive(code: string, active: boolean) {
 }
 
 export async function deletePromo(code: string) {
-  await kvSet(promoKey(code), null);
+  const normal = normalizeCode(code);
+  const log = await listRedemptions(normal);
+  await Promise.all([
+    kvDel(promoKey(normal)),
+    kvDel(promoCountKey(normal)),
+    kvDel(redemptionKey(normal)),
+    ...log
+      .filter((entry) => entry.email)
+      .map((entry) => kvDel(customerCountKey(normal, entry.email))),
+  ]);
   await kvSetRemove(PROMO_INDEX, normalizeCode(code));
 }
 
@@ -135,8 +167,8 @@ export async function recordRedemption(entry: PromoRedemption) {
   const promo = await getPromo(code);
   if (!promo) return null;
 
-  const redemptions = Math.max(0, promo.redemptions + 1);
-  await kvSet(promoKey(code), { ...promo, redemptions, updatedAt: new Date().toISOString() });
+  await kvSetIfAbsent(promoCountKey(code), promo.redemptions);
+  const redemptions = await kvIncrBy(promoCountKey(code), 1);
   if (entry.email) await kvIncrBy(customerCountKey(code, entry.email), 1);
 
   const log = (await kvGet<PromoRedemption[]>(redemptionKey(code))) ?? [];

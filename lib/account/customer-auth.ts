@@ -1,9 +1,13 @@
 import "server-only";
 
-import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
+import { randomBytes, randomInt, scryptSync, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { kvGet, kvSet, kvSetAdd, kvSetMembers, kvSetRemove, kvGetMany } from "@/lib/kv";
 import { customerKey } from "@/lib/admin/order-items";
+import {
+  createCustomerSessionToken,
+  parseCustomerSessionToken,
+} from "./customer-session";
 
 // Trade-customer logins. The owner creates an account from the admin panel using
 // the e-mail or mobile the customer gave on their KYC form, hands over the
@@ -27,6 +31,8 @@ export type CustomerAccount = {
   /** Set when the owner issues a temporary password the customer must change. */
   mustChangePassword: boolean;
   disabled: boolean;
+  /** Incrementing this revokes every session minted before the change. */
+  tokenVersion: number;
   createdAt: string;
   updatedAt: string;
   lastLoginAt?: string;
@@ -51,7 +57,8 @@ function safeEqual(a: string, b: string) {
 
 /** Readable one-time password the owner can pass on by phone. */
 export function generatePassword() {
-  return randomBytes(6).toString("base64url").replace(/[^A-Za-z0-9]/g, "").slice(0, 8).toUpperCase();
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  return Array.from({ length: 12 }, () => alphabet[randomInt(alphabet.length)]).join("");
 }
 
 export async function getAccount(identifier: string): Promise<CustomerAccount | null> {
@@ -74,12 +81,21 @@ export async function listAccounts(): Promise<CustomerAccount[]> {
 }
 
 async function persist(account: CustomerAccount) {
-  const next = { ...account, updatedAt: new Date().toISOString() };
+  const next = {
+    ...account,
+    tokenVersion: accountVersion(account),
+    updatedAt: new Date().toISOString(),
+  };
   await kvSet(accountKey(next.email), next);
   await kvSetAdd(ACCOUNT_INDEX, customerKey(next.email));
   const digits = normalizePhone(next.phone);
   if (digits) await kvSet(phonePointerKey(digits), next.email);
   return next;
+}
+
+function accountVersion(account: Partial<CustomerAccount> | null | undefined) {
+  const version = Number(account?.tokenVersion);
+  return Number.isInteger(version) && version > 0 ? version : 1;
 }
 
 /**
@@ -102,6 +118,7 @@ export async function createAccount(input: { email: string; phone?: string; name
     passwordSalt: salt,
     mustChangePassword: true,
     disabled: false,
+    tokenVersion: existing ? accountVersion(existing) + 1 : 1,
     createdAt: existing?.createdAt ?? now,
     updatedAt: now,
     ...(existing?.lastLoginAt ? { lastLoginAt: existing.lastLoginAt } : {}),
@@ -112,7 +129,7 @@ export async function createAccount(input: { email: string; phone?: string; name
 export async function setAccountDisabled(email: string, disabled: boolean) {
   const account = await kvGet<CustomerAccount>(accountKey(email.trim().toLowerCase()));
   if (!account) return null;
-  return persist({ ...account, disabled });
+  return persist({ ...account, disabled, tokenVersion: accountVersion(account) + 1 });
 }
 
 export async function deleteAccount(email: string) {
@@ -136,6 +153,7 @@ export async function changePassword(email: string, password: string) {
     passwordHash: hash(password, salt),
     passwordSalt: salt,
     mustChangePassword: false,
+    tokenVersion: accountVersion(account) + 1,
   });
 }
 
@@ -143,8 +161,7 @@ export async function verifyCredentials(identifier: string, password: string) {
   const account = await getAccount(identifier.trim().toLowerCase());
   if (!account || account.disabled) return null;
   if (!safeEqual(hash(password, account.passwordSalt), account.passwordHash)) return null;
-  await persist({ ...account, lastLoginAt: new Date().toISOString() });
-  return account;
+  return persist({ ...account, lastLoginAt: new Date().toISOString() });
 }
 
 // ── Session cookie ───────────────────────────────────────────────────────────
@@ -152,26 +169,30 @@ function sessionSecret() {
   return process.env.ADMIN_SESSION_SECRET ?? process.env.ADMIN_PASSWORD ?? null;
 }
 
-export function createCustomerSession(email: string) {
+export function createCustomerSession(email: string, tokenVersion: number) {
   const key = sessionSecret();
   if (!key) return null;
-  const payload = `${email}|${Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000}`;
-  const signature = createHmac("sha256", key).update(payload).digest("base64url");
-  return `${Buffer.from(payload).toString("base64url")}.${signature}`;
+  return createCustomerSessionToken(
+    email,
+    tokenVersion,
+    key,
+    Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000,
+  );
 }
 
 /** Returns the signed-in customer's e-mail, or null. */
-export function readCustomerSession(token: string | undefined) {
-  const key = sessionSecret();
-  if (!key || !token) return null;
-  const [encoded, signature] = token.split(".");
-  if (!encoded || !signature) return null;
-  const payload = Buffer.from(encoded, "base64url").toString();
-  const expected = createHmac("sha256", key).update(payload).digest("base64url");
-  if (!safeEqual(signature, expected)) return null;
-  const [email, expiresAt] = payload.split("|");
-  if (!email || !expiresAt || Number(expiresAt) < Date.now()) return null;
-  return email;
+export async function readCustomerSession(token: string | undefined) {
+  const claims = parseCustomerSessionToken(token, sessionSecret());
+  if (!claims) return null;
+  const account = await getAccount(claims.email);
+  if (
+    !account ||
+    account.disabled ||
+    accountVersion(account) !== claims.tokenVersion
+  ) {
+    return null;
+  }
+  return account.email;
 }
 
 export function customerCookieOptions() {
@@ -184,13 +205,13 @@ export function customerCookieOptions() {
   };
 }
 
-export function currentCustomerEmail() {
+export async function currentCustomerEmail() {
   return readCustomerSession(cookies().get(CUSTOMER_COOKIE)?.value);
 }
 
 /** Guard for customer-facing API routes. */
-export function requireCustomerApi() {
-  const email = currentCustomerEmail();
+export async function requireCustomerApi() {
+  const email = await currentCustomerEmail();
   if (!email) return { email: null, denied: Response.json({ error: "Please sign in." }, { status: 401 }) };
   return { email, denied: null };
 }

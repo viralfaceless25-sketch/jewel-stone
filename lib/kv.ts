@@ -127,6 +127,58 @@ export async function kvIncrBy(key: string, amount: number): Promise<number> {
   return Number(await command(["INCRBY", key, amount]));
 }
 
+/**
+ * Consume one attempt from a fixed-window limit. Redis handles the increment
+ * and expiry atomically so serverless instances cannot each grant a fresh limit.
+ */
+export async function kvConsumeLimit(
+  key: string,
+  limit: number,
+  windowSeconds: number,
+): Promise<{ allowed: boolean; count: number; retryAfter: number }> {
+  const maximum = Math.max(1, Math.round(limit));
+  const window = Math.max(1, Math.round(windowSeconds));
+  if (!kvConfigured) {
+    type LimitState = { count: number; resetAt: number };
+    let count = 1;
+    let retryAfter = window;
+    await writeLocal((data) => {
+      const now = Date.now();
+      let current: LimitState | null = null;
+      try {
+        current = JSON.parse(data.values[key] ?? "null") as LimitState | null;
+      } catch {
+        current = null;
+      }
+      if (
+        !current ||
+        !Number.isFinite(current.count) ||
+        !Number.isFinite(current.resetAt) ||
+        current.resetAt <= now
+      ) {
+        current = { count: 1, resetAt: now + window * 1000 };
+      } else {
+        current.count += 1;
+      }
+      count = current.count;
+      retryAfter = Math.max(1, Math.ceil((current.resetAt - now) / 1000));
+      data.values[key] = JSON.stringify(current);
+    });
+    return { allowed: count <= maximum, count, retryAfter };
+  }
+
+  const script = [
+    "local count = redis.call('INCR', KEYS[1])",
+    "if count == 1 then redis.call('EXPIRE', KEYS[1], ARGV[1]) end",
+    "local ttl = redis.call('TTL', KEYS[1])",
+    "return { count, ttl }",
+  ].join("\n");
+  const result = await command(["EVAL", script, 1, key, window]) as [number, number];
+  const count = Number(result?.[0] ?? maximum + 1);
+  const retryAfter = Math.max(1, Number(result?.[1] ?? window));
+  return { allowed: count <= maximum, count, retryAfter };
+}
+
 export async function kvSetAdd(key: string, member: string): Promise<void> {
   if (!kvConfigured) {
     await writeLocal((data) => {

@@ -8,6 +8,7 @@ import { customerRedemptionCount, getPromo } from "@/lib/admin/promo-codes";
 import { evaluatePromo } from "@/lib/admin/promo-shared";
 import { getCustomer } from "@/lib/admin/orders";
 import { KvError } from "@/lib/kv";
+import { currentCustomerEmail } from "@/lib/account/customer-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -77,6 +78,12 @@ export async function POST(req: Request) {
       process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL,
     );
     const orderReference = randomUUID();
+    const sessionEmail = await currentCustomerEmail();
+    const submittedEmail =
+      typeof body.email === "string" && /^\S+@\S+\.\S+$/.test(body.email.trim())
+        ? body.email.trim().toLowerCase()
+        : undefined;
+    const customerEmail = sessionEmail ?? submittedEmail;
 
     // A validated promotion code becomes a one-shot Stripe coupon on this
     // session. It is re-checked here so a tampered client can't invent a discount.
@@ -85,10 +92,18 @@ export async function POST(req: Request) {
     const requestedCode = typeof body.promoCode === "string" ? body.promoCode.trim() : "";
     if (requestedCode) {
       const promo = await getPromo(requestedCode).catch(() => null);
-      const email = typeof body.email === "string" && body.email.includes("@") ? body.email.trim() : undefined;
+      const requiresVerifiedCustomer = Boolean(
+        promo?.firstOrderOnly || typeof promo?.perCustomerLimit === "number",
+      );
+      const promoCustomerEmail =
+        sessionEmail ?? (requiresVerifiedCustomer ? undefined : submittedEmail);
       const [customerRedemptions, customer] = await Promise.all([
-        promo ? customerRedemptionCount(promo.code, email).catch(() => 0) : Promise.resolve(0),
-        email ? getCustomer(email).catch(() => null) : Promise.resolve(null),
+        promo && promoCustomerEmail
+          ? customerRedemptionCount(promo.code, promoCustomerEmail).catch(() => undefined)
+          : Promise.resolve(undefined),
+        promoCustomerEmail
+          ? getCustomer(promoCustomerEmail).catch(() => null)
+          : Promise.resolve(null),
       ]);
       const evaluation = evaluatePromo(
         promo,
@@ -102,7 +117,7 @@ export async function POST(req: Request) {
         })),
         {
           customerRedemptions,
-          isFirstOrder: email ? !customer || customer.orderCount === 0 : undefined,
+          isFirstOrder: promoCustomerEmail ? !customer || customer.orderCount === 0 : undefined,
         },
       );
       if (!evaluation.ok) {
@@ -115,6 +130,7 @@ export async function POST(req: Request) {
           duration: "once",
           name: `${evaluation.code} — ${evaluation.label}`,
           max_redemptions: 1,
+          redeem_by: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
         });
         discounts = [{ coupon: coupon.id }];
       }
@@ -126,6 +142,7 @@ export async function POST(req: Request) {
       payment_method_types: ["card"],
       client_reference_id: orderReference,
       customer_creation: "always",
+      ...(customerEmail ? { customer_email: customerEmail } : {}),
       billing_address_collection: "required",
       phone_number_collection: { enabled: true },
       line_items: items.map((i) => ({
