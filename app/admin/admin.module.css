@@ -352,6 +352,7 @@ a.tile:hover {
   min-height: 100dvh;
   display: grid;
   grid-template-columns: minmax(0, 420px);
+  justify-content: center;
   place-items: center;
   padding: 1.25rem;
   background: var(--adm-bg);
