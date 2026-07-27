@@ -297,3 +297,44 @@ npx vercel env ls production
 ---
 
 **Bottom line:** the storefront is finished, live, and behaving correctly. The admin panel's data foundation is built and on `main`; the UI and back-office features are not. Start at §7.4.
+
+---
+
+## 10 · Current completion update — 2026-07-27
+
+This section supersedes the older admin-panel status above.
+
+- Owner panel is complete and password-only. Every admin page and API is
+  server-guarded; successful access uses a signed HTTP-only cookie. Owner and
+  customer login attempts now use shared KV rate limits.
+- Customer sessions carry an account token version. Disabling an account,
+  reissuing credentials, changing a password, or deleting an account revokes
+  older sessions.
+- Invoice and memorandum PDFs use a distinct monochrome Jewel Stone design.
+  Invoice-only bank/Zelle details appear in a labelled `HOW TO PAY` box in the
+  lower-page footer; notes, payment instructions, and terms stay clearly visible
+  below deliberate white space after totals. Memoranda never print payment
+  details. `Shine With You` is not printed in either PDF.
+- Promotion identity rules fail closed. Per-customer and first-order codes
+  require a signed-in customer; redemption totals use an atomic KV counter.
+  Newly created Stripe coupons expire after 24 hours. Legacy free-shipping
+  codes are retired because storefront shipping is already complimentary.
+- Invalid nonnumeric inventory PATCH values return `400` instead of persisting
+  `NaN`.
+- Reusable `npm run clear:admin` dry-run/confirmed cleanup tooling preserves
+  settings, products, stock, login accounts, and numbering counters by default.
+- Production test/demo data was cleared after a dry-run review: 3 orders,
+  3 customers, 2 KYC records/3 files, 2 inquiries, 1 appointment,
+  2 custom requests, 8 documents, 2 promotions/1 redemption, and 31 activity
+  entries. A second production read returned zero remaining records in those
+  sections. Customer portal accounts were preserved.
+- Verification: 45 tests pass; TypeScript passes; ESLint passes; optimized
+  140-page production build passes; single-page invoice/memo and three-page
+  invoice PDFs visually inspected.
+
+Remaining technical risk:
+
+- `npm audit --omit=dev` reports two high-severity advisories through the
+  Next.js 14 dependency tree. npm's available fix upgrades to Next.js 16, a
+  breaking framework migration. Do that as a dedicated, fully regression-tested
+  upgrade; never run `npm audit fix --force` blindly.

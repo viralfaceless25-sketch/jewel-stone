@@ -20,15 +20,15 @@ const MARGIN = 42;
 const CONTENT_WIDTH = PAGE_WIDTH - MARGIN * 2;
 
 const color = {
-  paper: rgb(0.992, 0.984, 0.965),
-  ink: rgb(0.105, 0.09, 0.075),
-  soft: rgb(0.40, 0.36, 0.32),
-  muted: rgb(0.58, 0.53, 0.47),
-  line: rgb(0.84, 0.80, 0.74),
-  gold: rgb(0.63, 0.45, 0.20),
-  goldPale: rgb(0.95, 0.90, 0.81),
+  paper: rgb(1, 1, 1),
+  ink: rgb(0.07, 0.07, 0.07),
+  soft: rgb(0.35, 0.35, 0.35),
+  muted: rgb(0.55, 0.55, 0.55),
+  line: rgb(0.80, 0.80, 0.80),
+  gold: rgb(0.15, 0.15, 0.15),
+  goldPale: rgb(0.93, 0.93, 0.93),
   white: rgb(1, 1, 1),
-  red: rgb(0.58, 0.16, 0.14),
+  red: rgb(0.25, 0.25, 0.25),
 };
 
 function safeText(value: string) {
@@ -168,7 +168,7 @@ export async function renderDocumentPdf(document: BusinessDocument) {
   function addPage(continuation = false) {
     page = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
     page.drawRectangle({ x: 0, y: 0, width: PAGE_WIDTH, height: PAGE_HEIGHT, color: color.paper });
-    page.drawRectangle({ x: 0, y: PAGE_HEIGHT - 8, width: PAGE_WIDTH, height: 8, color: color.gold });
+    page.drawRectangle({ x: 0, y: PAGE_HEIGHT - 3, width: PAGE_WIDTH, height: 3, color: color.gold });
 
     if (continuation) {
       page.drawText(safeText(issuer.displayName.toUpperCase()), {
@@ -209,17 +209,10 @@ export async function renderDocumentPdf(document: BusinessDocument) {
       }
       page.drawText(safeText(issuer.displayName.toUpperCase()), {
         x: 80,
-        y: 728,
+        y: 720,
         font: displayBold,
         size: 21,
         color: color.ink,
-      });
-      page.drawText(safeText(issuer.tagline.toUpperCase()), {
-        x: 80,
-        y: 712,
-        font: bold,
-        size: 6.5,
-        color: color.gold,
       });
 
       const heading = document.kind === "memo" ? "MEMORANDUM" : "INVOICE";
@@ -326,6 +319,77 @@ export async function renderDocumentPdf(document: BusinessDocument) {
     y -= 24;
   }
 
+  function drawPaymentBlock(rows: Array<[string, string]>) {
+    if (!rows.length) return;
+    const x = MARGIN;
+    const width = 304;
+    const headerHeight = 22;
+    const rowHeight = 14;
+    const referenceHeight = 29;
+    const height = headerHeight + rows.length * rowHeight + referenceHeight;
+    if (y - height < 92) addPage(true);
+
+    const bottom = y - height;
+    page.drawRectangle({
+      x,
+      y: bottom,
+      width,
+      height,
+      color: color.white,
+      borderColor: color.line,
+      borderWidth: 0.8,
+    });
+    page.drawRectangle({
+      x,
+      y: y - headerHeight,
+      width,
+      height: headerHeight,
+      color: color.goldPale,
+    });
+    page.drawText("HOW TO PAY", {
+      x: x + 10,
+      y: y - 14,
+      font: bold,
+      size: 6.8,
+      color: color.gold,
+    });
+
+    let rowY = y - headerHeight - 11;
+    for (const [label, value] of rows) {
+      page.drawText(safeText(label.toUpperCase()), {
+        x: x + 10,
+        y: rowY,
+        font: bold,
+        size: 6.2,
+        color: color.muted,
+      });
+      page.drawText(safeText(value), {
+        x: x + 104,
+        y: rowY - 0.5,
+        font: regular,
+        size: 8,
+        color: color.ink,
+      });
+      rowY -= rowHeight;
+    }
+
+    const separatorY = bottom + referenceHeight;
+    page.drawLine({
+      start: { x: x + 10, y: separatorY },
+      end: { x: x + width - 10, y: separatorY },
+      thickness: 0.6,
+      color: color.line,
+    });
+    page.drawText(`REFERENCE ${safeText(document.number)} WITH YOUR PAYMENT`, {
+      x: x + 10,
+      y: bottom + 11,
+      font: bold,
+      size: 6.6,
+      color: color.ink,
+    });
+    y = bottom - 13;
+  }
+
   addPage(false);
   drawTableHeader();
 
@@ -420,33 +484,53 @@ export async function renderDocumentPdf(document: BusinessDocument) {
   const terms =
     document.kind === "memo"
       ? `Goods listed on this memorandum are delivered for examination and approval only and remain the property of ${issuer.legalName}. No sale or transfer of title occurs until ${issuer.displayName} confirms the sale and issues an invoice. Goods are held at the recipient's risk against loss or damage and must be returned by the stated return date or immediately on request.`
-      : `Payment is subject to the terms shown above. Please reference ${document.number} with payment. Item descriptions, weights, and diamond information should be read together with any accompanying laboratory certificates or product records.`;
+      : "Payment is subject to the terms shown above. Item descriptions, weights, and diamond information should be read together with any accompanying laboratory certificates or product records.";
   const payment = document.kind === "invoice" ? document.paymentInstructions.trim() : "";
-  // Three ways to settle, shown on every document so the customer never has to ask.
-  const methods = [
-    settings?.bankAccountNumber
-      ? `Bank transfer - account ${settings.bankAccountNumber}${settings.bankName ? ` (${settings.bankName})` : ""}`
-      : "",
-    settings?.bankRoutingNumber ? `Routing number - ${settings.bankRoutingNumber}` : "",
-    settings?.zelleId ? `Zelle - ${settings.zelleId}` : "",
-  ].filter(Boolean);
-  const methodsLine = methods.length
-    ? `${methods.join("   |   ")}. Please reference ${document.number} with your payment.`
-    : "";
+  const paymentRows: Array<[string, string]> = document.kind === "invoice"
+    ? [
+        ...(settings?.bankName ? [["Bank", settings.bankName] as [string, string]] : []),
+        ...(settings?.bankAccountNumber
+          ? [["Account number", settings.bankAccountNumber] as [string, string]]
+          : []),
+        ...(settings?.bankRoutingNumber
+          ? [["Routing number", settings.bankRoutingNumber] as [string, string]]
+          : []),
+        ...(settings?.zelleId ? [["Zelle", settings.zelleId] as [string, string]] : []),
+      ]
+    : [];
   const blockLines = [
     ...(notes ? [{ title: "NOTES", value: notes }] : []),
     ...(payment ? [{ title: "PAYMENT INSTRUCTIONS", value: payment }] : []),
-    ...(methodsLine ? [{ title: "HOW TO PAY", value: methodsLine }] : []),
     { title: document.kind === "memo" ? "MEMORANDUM TERMS" : "TERMS", value: terms },
   ];
+  const measuredBlocks = blockLines.map((block) => ({
+    ...block,
+    lines: wrapText(regular, block.value, 7.2, CONTENT_WIDTH),
+  }));
+  const paymentBlockHeight = paymentRows.length
+    ? 22 + paymentRows.length * 14 + 29 + 13
+    : 0;
+  const supportingContentHeight =
+    paymentBlockHeight +
+    measuredBlocks.reduce((height, block) => height + 22 + block.lines.length * 9, 0);
+  const supportingContentBottom = 126;
 
-  for (const block of blockLines) {
-    const lines = wrapText(regular, block.value, 7.2, CONTENT_WIDTH);
-    const height = 18 + lines.length * 9;
+  // Keep supporting information in a consistent lower-page footer zone. When
+  // line items are short, the deliberate white space after Amount Due makes
+  // totals easier to scan instead of letting optional notes creep upward.
+  if (supportingContentHeight <= 500) {
+    const supportingContentTop = supportingContentBottom + supportingContentHeight;
+    if (y < supportingContentTop + 12) addPage(true);
+    y = supportingContentTop;
+  }
+
+  drawPaymentBlock(paymentRows);
+  for (const block of measuredBlocks) {
+    const height = 18 + block.lines.length * 9;
     if (y - height < 92) addPage(true);
     page.drawText(block.title, { x: MARGIN, y, font: bold, size: 6.5, color: color.gold });
     y -= 13;
-    y = drawLines(page, lines, {
+    y = drawLines(page, block.lines, {
       x: MARGIN,
       y,
       font: regular,

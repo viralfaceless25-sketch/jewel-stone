@@ -16,7 +16,7 @@ export type AdminSettings = {
   invoicePrefix: string;
   memoPrefix: string;
   defaultPaymentInstructions: string;
-  /** Printed on invoices and memoranda so customers can settle three ways. */
+  /** Printed on invoices so customers can settle without requesting details. */
   bankName: string;
   bankAccountNumber: string;
   bankRoutingNumber: string;
@@ -94,4 +94,3 @@ export async function saveAdminSettings(input: Partial<AdminSettings>) {
   await kvSet(key, next);
   return next;
 }
-

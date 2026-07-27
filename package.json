@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "lint": "next lint",
-    "test": "tsx --test tests/*.test.ts"
+    "test": "tsx --test tests/*.test.ts",
+    "clear:admin": "node --conditions=react-server --import tsx scripts/clear-admin-data.ts",
+    "preview:documents": "node --conditions=react-server --import tsx scripts/render-document-previews.ts"
   },
   "dependencies": {
     "@fontsource-variable/figtree": "^5.3.0",
@@ -31,6 +33,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "read-excel-file": "^9.3.4",
+    "server-only": "^0.0.1",
     "sharp": "^0.35.3",
     "stripe": "^22.3.1",
     "three": "^0.171.0",
