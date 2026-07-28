@@ -1,4 +1,5 @@
-import { writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
 import { brand } from "../data/site";
 import type { BusinessDocument } from "../lib/admin/documents";
 import { renderDocumentPdf } from "../lib/admin/document-pdf";
@@ -20,11 +21,26 @@ const customer: BusinessDocument["customer"] = {
   address: "120 Fifth Avenue\nNew York, NY 10011",
   shippingAddress: "120 Fifth Avenue\nNew York, NY 10011",
 };
+const longAddressCustomer: BusinessDocument["customer"] = {
+  name: "Ole's Jewelry Avenue",
+  email: "accounts@olesjewelry.example",
+  phone: "+1 786 306 0620",
+  address: "Ole's Jewelry Avenue\n8789 SW 72nd Street\nMiami, Florida 33173\nUnited States",
+  shippingAddress: "Ole's Jewelry Avenue\n8789 SW 72nd Street\nMiami, Florida 33173\nUnited States",
+};
+const paymentSettings = {
+  bankName: "Sample Commercial Bank",
+  bankAccountNumber: "0000 0000 0000",
+  bankRoutingNumber: "000 000 000",
+  zelleId: "payments@example.com",
+};
+const outputDirectory = path.join(process.cwd(), "output", "pdf");
 
 function document(
   kind: BusinessDocument["kind"],
   number: string,
   lineItems: BusinessDocument["lineItems"],
+  documentCustomer = customer,
 ): BusinessDocument {
   const subtotal = lineItems.reduce(
     (total, item) => total + item.quantity * item.unitPrice,
@@ -42,7 +58,7 @@ function document(
     issueDate: "2026-07-27",
     dueDate: kind === "memo" ? "2026-08-03" : "2026-07-27",
     terms: kind === "memo" ? "Return within 7 days" : "Advance payment",
-    customer,
+    customer: documentCustomer,
     lineItems,
     subtotal,
     taxRate,
@@ -89,17 +105,20 @@ const longItems: BusinessDocument["lineItems"] = Array.from({ length: 28 }, (_, 
 }));
 
 async function main() {
-  const [invoice, memo, multipage] = await Promise.all([
-    renderDocumentPdf(document("invoice", "INV-0101", invoiceItems)),
-    renderDocumentPdf(document("memo", "MEMO-0101", memoItems)),
-    renderDocumentPdf(document("invoice", "INV-0102", longItems)),
+  const [invoice, memo, longAddress, multipage] = await Promise.all([
+    renderDocumentPdf(document("invoice", "INV-0101", invoiceItems), { paymentSettings }),
+    renderDocumentPdf(document("memo", "MEMO-0101", memoItems), { paymentSettings }),
+    renderDocumentPdf(document("invoice", "INV-0102", invoiceItems.slice(0, 1), longAddressCustomer), { paymentSettings }),
+    renderDocumentPdf(document("invoice", "INV-0103", longItems), { paymentSettings }),
   ]);
+  await mkdir(outputDirectory, { recursive: true });
   await Promise.all([
-    writeFile("/tmp/Jewel-Stone-Invoice-BW-Preview.pdf", invoice),
-    writeFile("/tmp/Jewel-Stone-Memo-BW-Preview.pdf", memo),
-    writeFile("/tmp/Jewel-Stone-Invoice-BW-Multipage.pdf", multipage),
+    writeFile(path.join(outputDirectory, "Jewel-Stone-Invoice-Preview.pdf"), invoice),
+    writeFile(path.join(outputDirectory, "Jewel-Stone-Memo-Preview.pdf"), memo),
+    writeFile(path.join(outputDirectory, "Jewel-Stone-Invoice-Long-Address-Preview.pdf"), longAddress),
+    writeFile(path.join(outputDirectory, "Jewel-Stone-Invoice-Multipage-Preview.pdf"), multipage),
   ]);
-  console.log("Rendered invoice, memo, and multi-page invoice previews in /tmp.");
+  console.log(`Rendered invoice, memo, long-address, and multi-page previews in ${outputDirectory}.`);
 }
 
 main().catch((error) => {

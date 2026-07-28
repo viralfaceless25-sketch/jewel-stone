@@ -25,6 +25,7 @@ __pycache__/
 /generated-missing-product-images/
 /generated-missing-product-images-v2/
 /generated-missing-product-images*.zip
+/output/
 
 # Confidential source spreadsheets — dealer pricing, cert numbers. Never push.
 /LGD Stock*.xlsx
