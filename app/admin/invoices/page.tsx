@@ -45,13 +45,13 @@ export default async function DocumentsPage() {
               <tbody>
                 {documents.map((document) => (
                   <tr key={document.number}>
-                    <td><strong>{document.number}</strong></td>
-                    <td>{document.customer.name}<br /><small>{document.customer.email}</small></td>
-                    <td>{formatDocumentDate(document.issueDate)}</td>
-                    <td>{document.kind === "memo" ? "Memorandum" : "Invoice"}</td>
-                    <td><span className={`${styles.badge} ${document.status === "paid" || document.status === "returned" ? styles.badgeGood : document.status === "void" ? styles.badgeBad : styles.badgeWarn}`}>{statusLabel(document.status)}</span></td>
-                    <td>{formatUsd(document.total)}</td>
-                    <td><Link className={`${styles.btn} ${styles.btnSmall}`} href={`/admin/invoices/${encodeURIComponent(document.number)}`}>Open</Link></td>
+                    <td data-label="Number"><strong>{document.number}</strong></td>
+                    <td data-label="Customer">{document.customer.name}<br /><small>{document.customer.email}</small></td>
+                    <td data-label="Issued">{formatDocumentDate(document.issueDate)}</td>
+                    <td data-label="Type">{document.kind === "memo" ? "Memorandum" : "Invoice"}</td>
+                    <td data-label="Status"><span className={`${styles.badge} ${document.status === "paid" || document.status === "returned" ? styles.badgeGood : document.status === "void" ? styles.badgeBad : styles.badgeWarn}`}>{statusLabel(document.status)}</span></td>
+                    <td data-label="Total">{formatUsd(document.total)}</td>
+                    <td data-label="Action"><Link className={`${styles.btn} ${styles.btnSmall}`} href={`/admin/invoices/${encodeURIComponent(document.number)}`}>Open</Link></td>
                   </tr>
                 ))}
               </tbody>

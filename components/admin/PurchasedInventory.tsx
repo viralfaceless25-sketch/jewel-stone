@@ -112,16 +112,16 @@ export function PurchasedInventory({
             <tbody>
               {filtered.map((row) => (
                 <tr key={row.slug} style={row.stock <= 0 ? { opacity: .55 } : undefined}>
-                  <td><strong>{row.code}</strong></td>
-                  <td>{row.name}</td>
-                  <td>{row.category}</td>
-                  <td>{row.metal}</td>
-                  <td>{row.diamondCarats.toFixed(2)}</td>
-                  <td>{row.grossWeightGm.toFixed(2)} g</td>
-                  <td>{row.certificate ?? "—"}</td>
-                  <td>{usd(row.memoAmount)}</td>
-                  <td><strong>{usd(row.retail)}</strong></td>
-                  <td>
+                  <td data-label="Code"><strong>{row.code}</strong></td>
+                  <td data-label="Item">{row.name}</td>
+                  <td data-label="Category">{row.category}</td>
+                  <td data-label="Metal">{row.metal}</td>
+                  <td data-label="Dia. ct">{row.diamondCarats.toFixed(2)}</td>
+                  <td data-label="Gross wt">{row.grossWeightGm.toFixed(2)} g</td>
+                  <td data-label="Certificate">{row.certificate ?? "—"}</td>
+                  <td data-label="Memo cost">{usd(row.memoAmount)}</td>
+                  <td data-label="Retail (+10%)"><strong>{usd(row.retail)}</strong></td>
+                  <td data-label="On hand">
                     <input
                       className={styles.input}
                       style={{ width: 64 }}

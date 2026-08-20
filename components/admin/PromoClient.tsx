@@ -290,25 +290,25 @@ export function PromoClient({ initialPromos }: { initialPromos: PromoCode[] }) {
                     const status = statusOf(promo);
                     return (
                       <tr key={promo.code}>
-                        <td><strong>{promo.code}</strong>{promo.notes ? <><br /><small>{promo.notes}</small></> : null}</td>
-                        <td>
+                        <td data-label="Code"><strong>{promo.code}</strong>{promo.notes ? <><br /><small>{promo.notes}</small></> : null}</td>
+                        <td data-label="Discount">
                           {promoLabel(promo)}
                           {promo.minSubtotal ? <><br /><small>min {formatUsd(promo.minSubtotal)}</small></> : null}
                           {promo.firstOrderOnly ? <><br /><small>first order only</small></> : null}
                         </td>
-                        <td>
+                        <td data-label="Applies to">
                           {SCOPE_LABELS[promo.scope]}
                           {promo.scopeValues.length ? <><br /><small>{promo.scopeValues.join(", ")}</small></> : null}
                         </td>
-                        <td>
+                        <td data-label="Window">
                           {promo.startsAt || "—"} → {promo.expiresAt || "—"}
                         </td>
-                        <td>
+                        <td data-label="Used">
                           {promo.redemptions}{typeof promo.maxRedemptions === "number" ? ` / ${promo.maxRedemptions}` : ""}
                           {typeof promo.perCustomerLimit === "number" ? <><br /><small>{promo.perCustomerLimit} per customer</small></> : null}
                         </td>
-                        <td><span className={styles[status.tone]}>{status.label}</span></td>
-                        <td>
+                        <td data-label="Status"><span className={styles[status.tone]}>{status.label}</span></td>
+                        <td data-label="Action">
                           <div className={styles.actions}>
                             <button type="button" className={`${styles.btn} ${styles.btnSmall}`} onClick={() => editPromo(promo)}>Edit</button>
                             <button type="button" className={`${styles.btn} ${styles.btnSmall}`} disabled={busy} onClick={() => void toggle(promo)}>

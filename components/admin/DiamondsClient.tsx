@@ -72,14 +72,14 @@ export function DiamondsClient({ diamonds }: { diamonds: Diamond[] }) {
             <thead><tr><th>Certificate / ID</th><th>Shape</th><th>Carat</th><th>Color</th><th>Clarity</th><th>Cut / polish / symmetry</th><th>Lab</th><th>Price</th></tr></thead>
             <tbody>{filtered.map((item) => (
               <tr key={item.id}>
-                <td><strong>{item.id}</strong></td>
-                <td>{item.shape}</td>
-                <td>{item.carat.toFixed(2)}</td>
-                <td>{item.color}</td>
-                <td>{item.clarity}</td>
-                <td>{[item.cut, item.polish, item.symmetry].filter(Boolean).join(" / ") || "—"}</td>
-                <td>{item.lab}</td>
-                <td>${item.price.toLocaleString("en-US")}</td>
+                <td data-label="Certificate / ID"><strong>{item.id}</strong></td>
+                <td data-label="Shape">{item.shape}</td>
+                <td data-label="Carat">{item.carat.toFixed(2)}</td>
+                <td data-label="Color">{item.color}</td>
+                <td data-label="Clarity">{item.clarity}</td>
+                <td data-label="Cut / polish / symmetry">{[item.cut, item.polish, item.symmetry].filter(Boolean).join(" / ") || "—"}</td>
+                <td data-label="Lab">{item.lab}</td>
+                <td data-label="Price">${item.price.toLocaleString("en-US")}</td>
               </tr>
             ))}</tbody>
           </table>

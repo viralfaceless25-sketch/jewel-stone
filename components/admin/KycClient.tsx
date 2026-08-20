@@ -573,10 +573,10 @@ export function KycClient({
                     <tbody>
                       {record.files.map((file) => (
                         <tr key={file.id}>
-                          <td>{file.label}</td>
-                          <td><a href={`/api/admin/kyc/files/${file.id}`} target="_blank" rel="noreferrer">{file.fileName}</a></td>
-                          <td>{dateLabel(file.uploadedAt)}</td>
-                          <td>
+                          <td data-label="Document">{file.label}</td>
+                          <td data-label="File"><a href={`/api/admin/kyc/files/${file.id}`} target="_blank" rel="noreferrer">{file.fileName}</a></td>
+                          <td data-label="Uploaded">{dateLabel(file.uploadedAt)}</td>
+                          <td data-label="Action">
                             <button type="button" className={`${styles.btn} ${styles.btnSmall}`} disabled={busy} onClick={() => void removeFile(file.id)}>
                               Remove
                             </button>

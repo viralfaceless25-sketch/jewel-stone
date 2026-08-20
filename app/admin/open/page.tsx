@@ -55,16 +55,16 @@ export default async function OpenItemsPage() {
                   const overdue = isDocumentOverdue(document.dueDate, document.status);
                   return (
                     <tr key={document.number}>
-                      <td><strong>{document.number}</strong></td>
-                      <td>{document.customer.name}<br /><small>{document.customer.email}</small></td>
-                      <td>{document.lineItems.map((item) => item.description).join(", ") || "-"}</td>
-                      <td>{formatDocumentDate(document.issueDate)}</td>
-                      <td>
+                      <td data-label="Number"><strong>{document.number}</strong></td>
+                      <td data-label="Customer">{document.customer.name}<br /><small>{document.customer.email}</small></td>
+                      <td data-label="Contents">{document.lineItems.map((item) => item.description).join(", ") || "-"}</td>
+                      <td data-label="Issued">{formatDocumentDate(document.issueDate)}</td>
+                      <td data-label="Due back">
                         <span className={`${styles.badge} ${overdue ? styles.badgeBad : styles.badgeWarn}`}>
                           {document.dueDate ? formatDocumentDate(document.dueDate) : "-"}{overdue ? " · overdue" : ""}
                         </span>
                       </td>
-                      <td><Link className={`${styles.btn} ${styles.btnSmall}`} href={`/admin/invoices/${encodeURIComponent(document.number)}`}>Open</Link></td>
+                      <td data-label="Action"><Link className={`${styles.btn} ${styles.btnSmall}`} href={`/admin/invoices/${encodeURIComponent(document.number)}`}>Open</Link></td>
                     </tr>
                   );
                 })}
@@ -88,16 +88,16 @@ export default async function OpenItemsPage() {
                   const overdue = isDocumentOverdue(document.dueDate, document.status);
                   return (
                     <tr key={document.number}>
-                      <td><strong>{document.number}</strong></td>
-                      <td>{document.customer.name}<br /><small>{document.customer.email}</small></td>
-                      <td>{formatDocumentDate(document.issueDate)}</td>
-                      <td>
+                      <td data-label="Number"><strong>{document.number}</strong></td>
+                      <td data-label="Customer">{document.customer.name}<br /><small>{document.customer.email}</small></td>
+                      <td data-label="Issued">{formatDocumentDate(document.issueDate)}</td>
+                      <td data-label="Due">
                         <span className={`${styles.badge} ${overdue ? styles.badgeBad : styles.badgeWarn}`}>
                           {document.dueDate ? formatDocumentDate(document.dueDate) : "-"}{overdue ? " · overdue" : ""}
                         </span>
                       </td>
-                      <td>{formatUsd(document.total)}</td>
-                      <td><Link className={`${styles.btn} ${styles.btnSmall}`} href={`/admin/invoices/${encodeURIComponent(document.number)}`}>Open</Link></td>
+                      <td data-label="Amount">{formatUsd(document.total)}</td>
+                      <td data-label="Action"><Link className={`${styles.btn} ${styles.btnSmall}`} href={`/admin/invoices/${encodeURIComponent(document.number)}`}>Open</Link></td>
                     </tr>
                   );
                 })}

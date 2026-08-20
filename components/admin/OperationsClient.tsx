@@ -246,7 +246,7 @@ export function OperationsClient({
             <table className={admin.table}>
               <thead><tr><th>Date</th><th>Action</th><th>Record</th><th>Detail</th></tr></thead>
               <tbody>{activity.map((item) => (
-                <tr key={item.id}><td>{new Date(item.createdAt).toLocaleString()}</td><td>{item.action}</td><td><strong>{item.subject}</strong></td><td>{item.detail}</td></tr>
+                <tr key={item.id}><td data-label="Date">{new Date(item.createdAt).toLocaleString()}</td><td data-label="Action">{item.action}</td><td data-label="Record"><strong>{item.subject}</strong></td><td data-label="Detail">{item.detail}</td></tr>
               ))}</tbody>
             </table>
             {!activity.length ? <div className={admin.empty}>New admin changes will appear here.</div> : null}
