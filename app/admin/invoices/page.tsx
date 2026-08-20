@@ -3,16 +3,11 @@ import { redirect } from "next/navigation";
 import { isAdminAuthenticated } from "@/lib/admin/auth";
 import { listDocuments } from "@/lib/admin/documents";
 import { formatDocumentDate, formatUsd, statusLabel } from "@/lib/admin/document-math";
-import { isDocumentOverdue } from "@/lib/admin/terms";
 import { StatTile, TileGrid } from "../StatTile";
 import { DocumentsExportButton } from "@/components/admin/DocumentsExportButton";
 import styles from "../admin.module.css";
 
 export const dynamic = "force-dynamic";
-
-function byDueDate(a: { dueDate?: string }, b: { dueDate?: string }) {
-  return (a.dueDate ?? "9999-99-99").localeCompare(b.dueDate ?? "9999-99-99");
-}
 
 export default async function DocumentsPage() {
   if (!isAdminAuthenticated()) redirect("/admin/login");
@@ -20,9 +15,6 @@ export default async function DocumentsPage() {
   const invoices = documents.filter((document) => document.kind === "invoice");
   const memos = documents.filter((document) => document.kind === "memo");
   const open = documents.filter((document) => document.status === "draft" || document.status === "sent");
-  const openMemos = memos.filter((document) => document.status === "sent").sort(byDueDate);
-  const openInvoices = invoices.filter((document) => document.status === "sent").sort(byDueDate);
-  const openInvoiceTotal = openInvoices.reduce((sum, document) => sum + document.total, 0);
 
   return (
     <>
@@ -42,74 +34,7 @@ export default async function DocumentsPage() {
         <StatTile label="Invoices" value={invoices.length} tone="gold" />
         <StatTile label="Memos" value={memos.length} />
         <StatTile label="Open documents" value={open.length} tone={open.length ? "warn" : "good"} />
-        <StatTile label="Open invoice total" value={formatUsd(openInvoiceTotal)} tone={openInvoiceTotal ? "warn" : "good"} />
       </TileGrid>
-
-      <section className={styles.panel} style={{ marginTop: "1.2rem" }}>
-        <h2 className={styles.sectionTitle}>Open memos</h2>
-        <p className={styles.pageSub} style={{ margin: "0 0 .8rem" }}>Goods out on approval, not yet returned or invoiced.</p>
-        {openMemos.length ? (
-          <div className={styles.tableWrap}>
-            <table className={styles.table}>
-              <thead><tr><th>Number</th><th>Customer</th><th>Contents</th><th>Issued</th><th>Due back</th><th /></tr></thead>
-              <tbody>
-                {openMemos.map((document) => {
-                  const overdue = isDocumentOverdue(document.dueDate, document.status);
-                  return (
-                    <tr key={document.number}>
-                      <td><strong>{document.number}</strong></td>
-                      <td>{document.customer.name}<br /><small>{document.customer.email}</small></td>
-                      <td>{document.lineItems.map((item) => item.description).join(", ") || "-"}</td>
-                      <td>{formatDocumentDate(document.issueDate)}</td>
-                      <td>
-                        <span className={`${styles.badge} ${overdue ? styles.badgeBad : styles.badgeWarn}`}>
-                          {document.dueDate ? formatDocumentDate(document.dueDate) : "-"}{overdue ? " · overdue" : ""}
-                        </span>
-                      </td>
-                      <td><Link className={`${styles.btn} ${styles.btnSmall}`} href={`/admin/invoices/${encodeURIComponent(document.number)}`}>Open</Link></td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div className={styles.empty}>No memos currently out.</div>
-        )}
-      </section>
-
-      <section className={styles.panel} style={{ marginTop: "1.2rem" }}>
-        <h2 className={styles.sectionTitle}>Open invoices</h2>
-        <p className={styles.pageSub} style={{ margin: "0 0 .8rem" }}>Sent, unpaid — due date follows the customer&rsquo;s payment terms.</p>
-        {openInvoices.length ? (
-          <div className={styles.tableWrap}>
-            <table className={styles.table}>
-              <thead><tr><th>Number</th><th>Customer</th><th>Issued</th><th>Due</th><th>Amount</th><th /></tr></thead>
-              <tbody>
-                {openInvoices.map((document) => {
-                  const overdue = isDocumentOverdue(document.dueDate, document.status);
-                  return (
-                    <tr key={document.number}>
-                      <td><strong>{document.number}</strong></td>
-                      <td>{document.customer.name}<br /><small>{document.customer.email}</small></td>
-                      <td>{formatDocumentDate(document.issueDate)}</td>
-                      <td>
-                        <span className={`${styles.badge} ${overdue ? styles.badgeBad : styles.badgeWarn}`}>
-                          {document.dueDate ? formatDocumentDate(document.dueDate) : "-"}{overdue ? " · overdue" : ""}
-                        </span>
-                      </td>
-                      <td>{formatUsd(document.total)}</td>
-                      <td><Link className={`${styles.btn} ${styles.btnSmall}`} href={`/admin/invoices/${encodeURIComponent(document.number)}`}>Open</Link></td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div className={styles.empty}>No invoices currently due.</div>
-        )}
-      </section>
 
       <section className={styles.panel} style={{ marginTop: "1.2rem" }}>
         <h2 className={styles.sectionTitle}>All documents</h2>

@@ -1,7 +1,7 @@
 import "server-only";
 
 import { randomUUID } from "node:crypto";
-import { kvGet, kvGetMany, kvSet, kvSetAdd, kvSetMembers } from "@/lib/kv";
+import { kvDel, kvGet, kvGetMany, kvSet, kvSetAdd, kvSetMembers, kvSetRemove } from "@/lib/kv";
 
 export type InquiryRecord = {
   id: string;
@@ -97,5 +97,15 @@ export async function updateAppointmentStatus(id: string, status: AppointmentRec
   const next = { ...current, status, updatedAt: new Date().toISOString() };
   await kvSet(appointmentKey(id), next);
   return next;
+}
+
+export async function deleteInquiry(id: string) {
+  await kvDel(inquiryKey(id));
+  await kvSetRemove(inquiryIndex, id);
+}
+
+export async function deleteAppointment(id: string) {
+  await kvDel(appointmentKey(id));
+  await kvSetRemove(appointmentIndex, id);
 }
 

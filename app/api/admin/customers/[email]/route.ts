@@ -1,8 +1,10 @@
 import { requireAdminApi } from "@/lib/admin/auth";
 import {
+  deleteCustomer,
   getCustomer,
   listOrdersForCustomer,
   updateCustomerNotes,
+  updateCustomerProfile,
   updateCustomerTerms,
 } from "@/lib/admin/orders";
 import { resolveTerms } from "@/lib/admin/terms";
@@ -31,7 +33,23 @@ export async function PATCH(request: Request, { params }: Context) {
     paymentTerms?: unknown;
     memoDays?: unknown;
     invoiceDueDays?: unknown;
+    name?: unknown;
+    phone?: unknown;
+    address?: unknown;
   };
+
+  // Company profile — name, phone, address. Email is the record's key
+  // throughout the system, so it isn't editable here.
+  if (body.name !== undefined || body.phone !== undefined || body.address !== undefined) {
+    const updated = await updateCustomerProfile(email, {
+      ...(typeof body.name === "string" ? { name: body.name } : {}),
+      ...(typeof body.phone === "string" ? { phone: body.phone } : {}),
+      ...(typeof body.address === "string" ? { address: body.address } : {}),
+    });
+    return updated
+      ? Response.json({ customer: updated })
+      : Response.json({ error: "Customer not found." }, { status: 404 });
+  }
 
   // Trading terms for this account — blank values fall back to the house default.
   if (body.paymentTerms !== undefined || body.memoDays !== undefined || body.invoiceDueDays !== undefined) {
@@ -66,4 +84,14 @@ export async function PATCH(request: Request, { params }: Context) {
   return customer
     ? Response.json({ customer })
     : Response.json({ error: "Customer not found." }, { status: 404 });
+}
+
+export async function DELETE(_request: Request, { params }: Context) {
+  const denied = requireAdminApi();
+  if (denied) return denied;
+  const email = decodeURIComponent(params.email);
+  const customer = await getCustomer(email);
+  if (!customer) return Response.json({ error: "Customer not found." }, { status: 404 });
+  await deleteCustomer(email);
+  return Response.json({ ok: true });
 }

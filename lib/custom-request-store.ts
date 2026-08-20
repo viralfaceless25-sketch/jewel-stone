@@ -3,7 +3,7 @@ import "server-only";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { CustomRequestRecord } from "@/lib/custom-request-types";
-import { kvGetMany, kvSet, kvSetAdd, kvSetMembers } from "@/lib/kv";
+import { kvDel, kvGet, kvGetMany, kvSet, kvSetAdd, kvSetMembers, kvSetRemove } from "@/lib/kv";
 
 type LocalCollection = Record<string, CustomRequestRecord>;
 
@@ -130,4 +130,27 @@ export async function listCustomRequests() {
   return rows
     .filter((row): row is CustomRequestRecord => Boolean(row))
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+/** Removes the record and both its public/owner link tokens so neither
+    resolves afterwards. */
+export async function deleteCustomRequest(id: string) {
+  const record = await kvGet<CustomRequestRecord>(recordKey(id));
+  if (!record) return false;
+  await kvDel(recordKey(id));
+  await kvDel(publicKey(record.publicToken));
+  await kvDel(ownerKey(record.ownerToken));
+  await kvSetRemove("jewelstone:custom-requests", id);
+  if (!requireProductionStore()) {
+    localWriteQueue = localWriteQueue.catch(() => undefined).then(async () => {
+      const collection = await readLocalCollection();
+      delete collection[id];
+      await mkdir(path.dirname(LOCAL_STORE), { recursive: true });
+      const temporary = `${LOCAL_STORE}.${process.pid}.${Date.now()}.tmp`;
+      await writeFile(temporary, `${JSON.stringify(collection, null, 2)}\n`, { mode: 0o600 });
+      await rename(temporary, LOCAL_STORE);
+    });
+    await localWriteQueue;
+  }
+  return true;
 }

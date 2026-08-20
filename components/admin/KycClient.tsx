@@ -217,6 +217,22 @@ export function KycClient({
     }
   }
 
+  async function deleteRecord(email: string) {
+    if (!window.confirm(`Delete the KYC record for ${email}? This removes all uploaded documents and cannot be undone.`)) return;
+    setBusy(true); setError(""); setNotice("");
+    try {
+      const response = await fetch(`/api/admin/kyc/${encodeURIComponent(email)}`, { method: "DELETE" });
+      if (!response.ok) throw new Error("Could not delete KYC record.");
+      setRecords((current) => current.filter((item) => item.email.toLowerCase() !== email.toLowerCase()));
+      setSelected("");
+      setRecord(null);
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : "Could not delete KYC record.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function uploadDocument(email: string, kind: "kyc_form" | "id_document", file: File, label: string) {
     setBusy(true); setError(""); setNotice("");
     try {
@@ -451,6 +467,10 @@ export function KycClient({
                 <button type="button" className={`${styles.btn} ${styles.btnDanger}`} disabled={busy || record.status === "rejected"}
                   onClick={() => void patch(selected, { status: "rejected" }, "KYC disapproved.")}>
                   Disapprove
+                </button>
+                <button type="button" className={`${styles.btn} ${styles.btnDanger}`} disabled={busy}
+                  onClick={() => void deleteRecord(selected)}>
+                  Delete record
                 </button>
               </div>
               {blockers.length && !approved ? (

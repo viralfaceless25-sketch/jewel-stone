@@ -10,6 +10,7 @@ import {
   kvSetAdd,
   kvSetIfAbsent,
   kvSetMembers,
+  kvSetRemove,
 } from "@/lib/kv";
 import { customerKey } from "./order-items";
 import type {
@@ -222,12 +223,40 @@ export async function updateCustomerTerms(
   return next;
 }
 
+/** Contact/company profile fields — name, phone, address. Email is the
+    record's key throughout the system (orders, KYC, documents all reference
+    it), so it isn't editable here. */
+export async function updateCustomerProfile(
+  email: string,
+  patch: { name?: string; phone?: string; address?: string },
+) {
+  const customer = await getCustomer(email);
+  if (!customer) return null;
+  const next = {
+    ...customer,
+    ...(patch.name !== undefined ? { name: patch.name.trim().slice(0, 160) } : {}),
+    ...(patch.phone !== undefined ? { phone: patch.phone.trim().slice(0, 60) } : {}),
+    ...(patch.address !== undefined ? { address: patch.address.trim().slice(0, 500) } : {}),
+    updatedAt: new Date().toISOString(),
+  };
+  await kvSet(customerRecordKey(email), next);
+  return next;
+}
+
 export async function updateCustomerNotes(email: string, notes: string) {
   const customer = await getCustomer(email);
   if (!customer) return null;
   const next = { ...customer, notes: notes.trim().slice(0, 5000), updatedAt: new Date().toISOString() };
   await kvSet(customerRecordKey(email), next);
   return next;
+}
+
+/** Removes the customer profile (contact, notes, terms). Their orders stay on
+    record — this only clears the rolled-up CRM entry, not the sales history
+    or any portal login, which are separate keys. */
+export async function deleteCustomer(email: string) {
+  await kvDel(customerRecordKey(email));
+  await kvSetRemove(customerIndex, customerKey(email));
 }
 
 export async function listOrdersForCustomer(email: string) {

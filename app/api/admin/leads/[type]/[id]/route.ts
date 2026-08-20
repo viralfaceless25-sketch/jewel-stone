@@ -1,6 +1,11 @@
 import { requireAdminApi } from "@/lib/admin/auth";
 import { recordActivity } from "@/lib/admin/activity";
-import { updateAppointmentStatus, updateInquiryStatus } from "@/lib/admin/leads";
+import {
+  deleteAppointment,
+  deleteInquiry,
+  updateAppointmentStatus,
+  updateInquiryStatus,
+} from "@/lib/admin/leads";
 
 export async function PATCH(
   request: Request,
@@ -20,4 +25,23 @@ export async function PATCH(
     return Response.json({ record });
   }
   return Response.json({ error: "Invalid status." }, { status: 400 });
+}
+
+export async function DELETE(
+  _request: Request,
+  { params }: { params: { type: string; id: string } },
+) {
+  const denied = requireAdminApi();
+  if (denied) return denied;
+  if (params.type === "inquiry") {
+    await deleteInquiry(params.id);
+    await recordActivity("Deleted inquiry", params.id, "");
+    return Response.json({ ok: true });
+  }
+  if (params.type === "appointment") {
+    await deleteAppointment(params.id);
+    await recordActivity("Deleted appointment", params.id, "");
+    return Response.json({ ok: true });
+  }
+  return Response.json({ error: "Unknown record type." }, { status: 400 });
 }

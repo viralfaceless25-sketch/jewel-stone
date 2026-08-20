@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatMoney, type Customer, type Order } from "@/lib/admin/order-shared";
+import { KYC_STATUS_LABELS, type KycStatus } from "@/lib/admin/kyc-shared";
 import admin from "@/app/admin/admin.module.css";
 import styles from "./records.module.css";
 
@@ -16,20 +17,36 @@ function displayDate(value: string) {
   return Number.isNaN(date.getTime()) ? "No purchases yet" : date.toLocaleDateString();
 }
 
-export function CustomersClient({ customers, orders }: { customers: Customer[]; orders: Order[] }) {
+export function CustomersClient({
+  customers,
+  orders,
+  kycByEmail,
+}: {
+  customers: Customer[];
+  orders: Order[];
+  kycByEmail: Record<string, KycStatus>;
+}) {
   const router = useRouter();
   const detailRef = useRef<HTMLElement>(null);
   const [query, setQuery] = useState("");
   const [selectedEmail, setSelectedEmail] = useState(customers[0]?.email ?? "");
   const selected = customers.find((customer) => customer.email === selectedEmail);
   const history = selected ? orders.filter((order) => order.customer.email.toLowerCase() === selected.email.toLowerCase()) : [];
+  const kycStatus = selected ? kycByEmail[selected.email.toLowerCase()] : undefined;
   const [notes, setNotes] = useState(selected?.notes ?? "");
+  const [name, setName] = useState(selected?.name ?? "");
+  const [phone, setPhone] = useState(selected?.phone ?? "");
+  const [address, setAddress] = useState(selected?.address ?? "");
   const [paymentTerms, setPaymentTerms] = useState(selected?.paymentTerms ?? "");
   const [memoDays, setMemoDays] = useState(selected?.memoDays?.toString() ?? "");
   const [invoiceDueDays, setInvoiceDueDays] = useState(selected?.invoiceDueDays?.toString() ?? "");
   const [busy, setBusy] = useState(false);
+  const [profileBusy, setProfileBusy] = useState(false);
   const [termsBusy, setTermsBusy] = useState(false);
+  const [deleteBusy, setDeleteBusy] = useState(false);
+  const [kycBusy, setKycBusy] = useState(false);
   const [error, setError] = useState("");
+  const [profileError, setProfileError] = useState("");
   const [termsError, setTermsError] = useState("");
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -41,16 +58,72 @@ export function CustomersClient({ customers, orders }: { customers: Customer[]; 
   function choose(customer: Customer) {
     setSelectedEmail(customer.email);
     setNotes(customer.notes);
+    setName(customer.name);
+    setPhone(customer.phone);
+    setAddress(customer.address ?? "");
     setPaymentTerms(customer.paymentTerms ?? "");
     setMemoDays(customer.memoDays?.toString() ?? "");
     setInvoiceDueDays(customer.invoiceDueDays?.toString() ?? "");
     setError("");
+    setProfileError("");
     setTermsError("");
     if (window.matchMedia("(max-width: 900px)").matches) {
       window.setTimeout(
         () => detailRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
         60,
       );
+    }
+  }
+
+  async function saveProfile() {
+    if (!selected) return;
+    setProfileBusy(true);
+    setProfileError("");
+    try {
+      const response = await fetch(`/api/admin/customers/${encodeURIComponent(selected.email)}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone, address }),
+      });
+      if (!response.ok) throw new Error("Could not save company details.");
+      router.refresh();
+    } catch (caught) {
+      setProfileError(caught instanceof Error ? caught.message : "Could not save company details.");
+    } finally {
+      setProfileBusy(false);
+    }
+  }
+
+  async function deleteCustomer() {
+    if (!selected) return;
+    if (!window.confirm(`Delete the customer record for ${selected.name || selected.email}? Notes and trading terms are removed. Their order history is not affected. This cannot be undone.`)) return;
+    setDeleteBusy(true);
+    setError("");
+    try {
+      const response = await fetch(`/api/admin/customers/${encodeURIComponent(selected.email)}`, { method: "DELETE" });
+      if (!response.ok) throw new Error("Could not delete customer.");
+      setSelectedEmail(customers.find((customer) => customer.email !== selected.email)?.email ?? "");
+      router.refresh();
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Could not delete customer.");
+    } finally {
+      setDeleteBusy(false);
+    }
+  }
+
+  async function deleteKycRecord() {
+    if (!selected) return;
+    if (!window.confirm(`Delete the KYC record for ${selected.name || selected.email}? All uploaded documents are removed. This cannot be undone.`)) return;
+    setKycBusy(true);
+    try {
+      const response = await fetch(`/api/admin/kyc/${encodeURIComponent(selected.email)}`, { method: "DELETE" });
+      if (!response.ok) throw new Error("Could not delete KYC record.");
+      router.refresh();
+    } catch {
+      // Surfaced via the shared error banner below.
+      setError("Could not delete KYC record.");
+    } finally {
+      setKycBusy(false);
     }
   }
 
@@ -140,12 +213,37 @@ export function CustomersClient({ customers, orders }: { customers: Customer[]; 
             <aside ref={detailRef} className={styles.detail}>
               <h2>{selected.name || selected.email}</h2>
               <dl className={styles.facts}>
-                <div><dt>Contact</dt><dd><a href={`mailto:${selected.email}`}>{selected.email}</a><br />{selected.phone}</dd></div>
+                <div><dt>Email</dt><dd><a href={`mailto:${selected.email}`}>{selected.email}</a></dd></div>
                 <div><dt>History</dt><dd>{selected.orderCount} orders · {formatMoney(selected.totalSpent)} lifetime</dd></div>
               </dl>
               <ul className={styles.items}>
                 {history.map((order) => <li key={order.id}><span>{order.id}<br /><small>{new Date(order.createdAt).toLocaleDateString()}</small></span><strong>{formatMoney(order.amountTotal, order.currency)}</strong></li>)}
               </ul>
+
+              <div className={styles.form}>
+                <span className={admin.label}>Company profile</span>
+                <label className={admin.field}><span className={admin.label}>Company / contact name</span><input className={admin.input} value={name} onChange={(event) => setName(event.target.value)} /></label>
+                <label className={admin.field}><span className={admin.label}>Phone</span><input className={admin.input} value={phone} onChange={(event) => setPhone(event.target.value)} /></label>
+                <label className={admin.field}><span className={admin.label}>Address</span><textarea className={admin.textarea} value={address} onChange={(event) => setAddress(event.target.value)} placeholder="Mailing / company address" /></label>
+                {profileError ? <p className={`${admin.notice} ${admin.noticeError}`}>{profileError}</p> : null}
+                <button className={admin.btn} type="button" onClick={saveProfile} disabled={profileBusy}>{profileBusy ? "Saving…" : "Save profile"}</button>
+              </div>
+
+              <div className={styles.form}>
+                <span className={admin.label}>KYC</span>
+                <p className={admin.pageSub} style={{ margin: 0 }}>
+                  Status: <strong>{kycStatus ? KYC_STATUS_LABELS[kycStatus] : "Not started"}</strong>
+                </p>
+                <div style={{ display: "flex", gap: ".6rem", flexWrap: "wrap" }}>
+                  <a className={admin.btn} href="/admin/kyc">View / update in KYC</a>
+                  {kycStatus ? (
+                    <button className={`${admin.btn} ${admin.btnDanger}`} type="button" onClick={deleteKycRecord} disabled={kycBusy}>
+                      {kycBusy ? "Deleting…" : "Delete KYC record"}
+                    </button>
+                  ) : null}
+                </div>
+              </div>
+
               <div className={styles.form}>
                 <span className={admin.label}>Trading terms</span>
                 <label className={admin.field}><span className={admin.label}>Payment terms (blank = house default)</span><input className={admin.input} value={paymentTerms} onChange={(event) => setPaymentTerms(event.target.value)} placeholder="Net 30" /></label>
@@ -154,6 +252,7 @@ export function CustomersClient({ customers, orders }: { customers: Customer[]; 
                 {termsError ? <p className={`${admin.notice} ${admin.noticeError}`}>{termsError}</p> : null}
                 <button className={admin.btn} type="button" onClick={saveTerms} disabled={termsBusy}>{termsBusy ? "Saving…" : "Save terms"}</button>
               </div>
+
               <div className={styles.form}>
                 <span className={admin.label}>Account statement</span>
                 <div style={{ display: "flex", gap: ".6rem", flexWrap: "wrap" }}>
@@ -161,10 +260,18 @@ export function CustomersClient({ customers, orders }: { customers: Customer[]; 
                   <a className={admin.btn} href={`/api/admin/customers/${encodeURIComponent(selected.email)}/statement?type=open`} target="_blank" rel="noreferrer">Open invoices (PDF)</a>
                 </div>
               </div>
+
               <div className={styles.form}>
                 <label className={admin.field}><span className={admin.label}>Private customer notes</span><textarea className={admin.textarea} value={notes} onChange={(event) => setNotes(event.target.value)} /></label>
                 {error ? <p className={`${admin.notice} ${admin.noticeError}`}>{error}</p> : null}
                 <button className={`${admin.btn} ${admin.btnPrimary}`} type="button" onClick={saveNotes} disabled={busy}>{busy ? "Saving…" : "Save notes"}</button>
+              </div>
+
+              <div className={styles.form}>
+                <span className={admin.label}>Danger zone</span>
+                <button className={`${admin.btn} ${admin.btnDanger}`} type="button" onClick={deleteCustomer} disabled={deleteBusy}>
+                  {deleteBusy ? "Deleting…" : "Delete customer record"}
+                </button>
               </div>
             </aside>
           ) : null}

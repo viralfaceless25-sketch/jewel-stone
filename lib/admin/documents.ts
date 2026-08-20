@@ -1,7 +1,7 @@
 import "server-only";
 
 import { randomBytes } from "node:crypto";
-import { kvGet, kvGetMany, kvSet, kvSetAdd, kvSetMembers } from "@/lib/kv";
+import { kvDel, kvGet, kvGetMany, kvSet, kvSetAdd, kvSetMembers, kvSetRemove } from "@/lib/kv";
 import { nextDocumentNumber } from "@/lib/admin/inventory";
 import { getAdminSettings } from "@/lib/admin/settings";
 import { invoiceDueDate, memoDueDate, memoTermsLabel, resolveTerms } from "@/lib/admin/terms";
@@ -264,4 +264,12 @@ export async function voidDocument(number: string) {
   if (current.status === "void") return current;
   const now = new Date().toISOString();
   return save({ ...current, status: "void", voidedAt: now, updatedAt: now });
+}
+
+/** Removes the document entirely. Unlike voiding, nothing is left behind -
+    use this for mistakes, not for cancelling a real sale (void that instead,
+    so the number and the record stay for the audit trail). */
+export async function deleteDocument(number: string) {
+  await kvDel(recordKey(number));
+  await kvSetRemove(indexKey, number);
 }

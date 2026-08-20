@@ -255,8 +255,28 @@ export function InventoryClient({ initialRows }: { initialRows: InventoryRow[] }
     router.refresh();
   }
 
+  async function hideProduct() {
+    if (!selected || !window.confirm(`Hide ${selected.name} from the website? It stays in your inventory and can be shown again any time.`)) return;
+    setBusy("hide");
+    const response = await fetch("/api/admin/inventory", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug: selected.slug, visible: false }),
+    });
+    setBusy("");
+    if (!response.ok) {
+      setError("Could not hide product.");
+      return;
+    }
+    setDialog("");
+    router.refresh();
+  }
+
   async function deleteProduct() {
-    if (!selected || !window.confirm(`Delete ${selected.name}? This cannot be restored from the admin panel.`)) return;
+    if (!selected) return;
+    if (!window.confirm(
+      `Delete ${selected.name} from inventory entirely? This removes the product, its photos, and its stock record permanently - it cannot be restored. If you just want it off the website, use "Hide from website" instead.`,
+    )) return;
     setBusy("delete");
     const response = await fetch(`/api/admin/inventory/${encodeURIComponent(selected.slug)}`, { method: "DELETE" });
     setBusy("");
@@ -424,7 +444,8 @@ export function InventoryClient({ initialRows }: { initialRows: InventoryRow[] }
             </section>
             {error ? <p className={`${admin.notice} ${admin.noticeError}`}>{error}</p> : null}
             <div className={styles.dialogActions}>
-              <button className={`${admin.btn} ${admin.btnDanger}`} type="button" onClick={deleteProduct} disabled={Boolean(busy)}>Delete</button>
+              <button className={admin.btn} type="button" onClick={hideProduct} disabled={Boolean(busy)}>{busy === "hide" ? "Hiding…" : "Hide from website"}</button>
+              <button className={`${admin.btn} ${admin.btnDanger}`} type="button" onClick={deleteProduct} disabled={Boolean(busy)}>{busy === "delete" ? "Deleting…" : "Delete from inventory"}</button>
               <button className={admin.btn} type="button" onClick={duplicateProduct} disabled={Boolean(busy)}>Duplicate</button>
               <button className={`${admin.btn} ${admin.btnPrimary}`} type="submit" disabled={Boolean(busy)}>{busy === "edit" ? "Saving…" : "Save product"}</button>
             </div>

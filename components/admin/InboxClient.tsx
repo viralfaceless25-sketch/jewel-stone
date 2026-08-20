@@ -35,6 +35,17 @@ export function InboxClient({
     router.refresh();
   }
 
+  async function remove(type: "appointment" | "inquiry" | "custom", id: string, label: string) {
+    if (!window.confirm(`Delete ${label}? This cannot be undone.`)) return;
+    setBusy(id);
+    const url = type === "custom"
+      ? `/api/admin/inbox/custom-requests/${encodeURIComponent(id)}`
+      : `/api/admin/leads/${type}/${encodeURIComponent(id)}`;
+    await fetch(url, { method: "DELETE" });
+    setBusy("");
+    router.refresh();
+  }
+
   return (
     <>
       <div className={admin.actions} style={{ marginBottom: "1rem" }}>
@@ -46,7 +57,7 @@ export function InboxClient({
         {emptyMessage ? <div className={admin.empty}>{emptyMessage}</div> : <div className={admin.tableWrap}>
           {tab === "custom" ? (
             <table className={admin.table}>
-              <thead><tr><th>Date</th><th>Customer</th><th>Design</th><th>Status</th><th /></tr></thead>
+              <thead><tr><th>Date</th><th>Customer</th><th>Design</th><th>Status</th><th /><th /></tr></thead>
               <tbody>{customRequests.map((request) => (
                 <tr key={request.id}>
                   <td>{new Date(request.createdAt).toLocaleDateString()}</td>
@@ -54,30 +65,33 @@ export function InboxClient({
                   <td>{request.choices.type}<br /><small>{request.choices.metal} · {request.choices.shape} · {request.choices.origin} · {request.choices.budget}</small></td>
                   <td><span className={`${admin.badge} ${request.status === "awaiting_quote" ? admin.badgeWarn : admin.badgeGood}`}>{request.status.replaceAll("_", " ")}</span></td>
                   <td><a className={`${admin.btn} ${admin.btnSmall}`} href={`/custom/owner/${request.ownerToken}`} target="_blank">Open quote portal</a></td>
+                  <td><button className={`${admin.btn} ${admin.btnSmall} ${admin.btnDanger}`} type="button" onClick={() => remove("custom", request.id, request.name)} disabled={busy === request.id}>Delete</button></td>
                 </tr>
               ))}</tbody>
             </table>
           ) : tab === "appointments" ? (
             <table className={admin.table}>
-              <thead><tr><th>Requested</th><th>Customer</th><th>Interest</th><th>Status</th></tr></thead>
+              <thead><tr><th>Requested</th><th>Customer</th><th>Interest</th><th>Status</th><th /></tr></thead>
               <tbody>{appointments.map((appointment) => (
                 <tr key={appointment.id}>
                   <td>{appointment.requestedDate} {appointment.requestedTime}</td>
                   <td><strong>{appointment.name}</strong><br /><small>{appointment.email} · {appointment.phone}</small></td>
                   <td>{appointment.interest}<br /><small>{appointment.notes}</small></td>
                   <td><select className={admin.select} value={appointment.status} onChange={(event) => update("appointment", appointment.id, event.target.value)} disabled={busy === appointment.id}>{["new", "confirmed", "completed", "cancelled"].map((value) => <option key={value}>{value}</option>)}</select></td>
+                  <td><button className={`${admin.btn} ${admin.btnSmall} ${admin.btnDanger}`} type="button" onClick={() => remove("appointment", appointment.id, appointment.name)} disabled={busy === appointment.id}>Delete</button></td>
                 </tr>
               ))}</tbody>
             </table>
           ) : (
             <table className={admin.table}>
-              <thead><tr><th>Date</th><th>Customer</th><th>Message</th><th>Status</th></tr></thead>
+              <thead><tr><th>Date</th><th>Customer</th><th>Message</th><th>Status</th><th /></tr></thead>
               <tbody>{inquiries.map((inquiry) => (
                 <tr key={inquiry.id}>
                   <td>{new Date(inquiry.createdAt).toLocaleDateString()}</td>
                   <td><strong>{inquiry.name}</strong><br /><small>{inquiry.email} · {inquiry.phone}</small></td>
                   <td>{inquiry.context}<br /><small>{inquiry.message}</small></td>
                   <td><select className={admin.select} value={inquiry.status} onChange={(event) => update("inquiry", inquiry.id, event.target.value)} disabled={busy === inquiry.id}>{["new", "contacted", "closed"].map((value) => <option key={value}>{value}</option>)}</select></td>
+                  <td><button className={`${admin.btn} ${admin.btnSmall} ${admin.btnDanger}`} type="button" onClick={() => remove("inquiry", inquiry.id, inquiry.name)} disabled={busy === inquiry.id}>Delete</button></td>
                 </tr>
               ))}</tbody>
             </table>

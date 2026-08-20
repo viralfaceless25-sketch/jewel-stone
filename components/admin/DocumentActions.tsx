@@ -16,7 +16,7 @@ type SavePickerWindow = Window & {
 export function DocumentActions({ document }: { document: BusinessDocument }) {
   const router = useRouter();
   const [message, setMessage] = useState("");
-  const [busy, setBusy] = useState<"save" | "send" | "status" | "void" | "">("");
+  const [busy, setBusy] = useState<"save" | "send" | "status" | "void" | "delete" | "">("");
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const pdfUrl = `/api/admin/documents/${encodeURIComponent(document.number)}/pdf`;
@@ -113,6 +113,24 @@ export function DocumentActions({ document }: { document: BusinessDocument }) {
     }
   }
 
+  async function deleteRecord() {
+    const warning = document.status === "paid" || document.status === "returned"
+      ? `Delete ${document.number} permanently? It's marked ${document.status} - this removes it from your records entirely, including revenue history. This cannot be undone. If you just want to cancel it, use Void instead.`
+      : `Delete ${document.number} permanently? This removes it entirely and cannot be undone.`;
+    if (!window.confirm(warning)) return;
+    setBusy("delete");
+    setError("");
+    try {
+      const response = await fetch(`/api/admin/documents/${encodeURIComponent(document.number)}?hard=1`, { method: "DELETE" });
+      if (!response.ok) throw new Error("Could not delete document.");
+      router.push("/admin/invoices");
+      router.refresh();
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Could not delete document.");
+      setBusy("");
+    }
+  }
+
   return (
     <>
       <div className={styles.docActions}>
@@ -130,6 +148,9 @@ export function DocumentActions({ document }: { document: BusinessDocument }) {
         {document.status !== "void" ? (
           <button className={`${admin.btn} ${admin.btnDanger}`} type="button" onClick={voidRecord} disabled={Boolean(busy)}>Void</button>
         ) : null}
+        <button className={`${admin.btn} ${admin.btnDanger}`} type="button" onClick={deleteRecord} disabled={Boolean(busy)}>
+          {busy === "delete" ? "Deleting…" : "Delete permanently"}
+        </button>
       </div>
 
       {document.status !== "void" ? (

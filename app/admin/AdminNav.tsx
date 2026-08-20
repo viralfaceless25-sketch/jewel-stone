@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   Boxes,
   CircleDollarSign,
+  Clock,
   Gem,
   FileText,
   Inbox,
@@ -28,6 +29,7 @@ const links = [
   { href: "/admin/kyc", label: "KYC", Icon: ShieldCheck },
   { href: "/admin/inbox", label: "Inbox", Icon: Inbox },
   { href: "/admin/invoices", label: "Invoices & memos", Icon: FileText },
+  { href: "/admin/open", label: "Open items", Icon: Clock },
   { href: "/admin/promotions", label: "Promotions", Icon: Ticket },
   { href: "/admin/operations", label: "Operations", Icon: CircleDollarSign },
   { href: "/admin/settings", label: "Settings", Icon: Settings },

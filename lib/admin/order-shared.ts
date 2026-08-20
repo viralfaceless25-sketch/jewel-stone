@@ -60,6 +60,8 @@ export type Customer = {
   name: string;
   email: string;
   phone: string;
+  /** Company/mailing address, editable from the admin panel. */
+  address?: string;
   firstPurchase: string;
   lastPurchase: string;
   orderCount: number;

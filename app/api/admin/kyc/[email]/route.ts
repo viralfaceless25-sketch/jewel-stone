@@ -2,6 +2,7 @@ import { requireAdminApi } from "@/lib/admin/auth";
 import {
   KYC_STATUSES,
   approvalBlockers,
+  deleteKyc,
   getKycOrEmpty,
   saveKyc,
   setKycStatus,
@@ -71,4 +72,11 @@ export async function PATCH(request: Request, { params }: Context) {
       : undefined,
   });
   return Response.json({ record, blockers: approvalBlockers(record) });
+}
+
+export async function DELETE(_request: Request, { params }: Context) {
+  const denied = requireAdminApi();
+  if (denied) return denied;
+  await deleteKyc(decodeURIComponent(params.email));
+  return Response.json({ ok: true });
 }
