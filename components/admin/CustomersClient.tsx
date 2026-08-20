@@ -21,10 +21,12 @@ export function CustomersClient({
   customers,
   orders,
   kycByEmail,
+  documentTotalsByEmail,
 }: {
   customers: Customer[];
   orders: Order[];
   kycByEmail: Record<string, KycStatus>;
+  documentTotalsByEmail: Record<string, { invoiced: number; memo: number }>;
 }) {
   const router = useRouter();
   const detailRef = useRef<HTMLElement>(null);
@@ -200,14 +202,26 @@ export function CustomersClient({
       {!customers.length ? <div className={styles.empty}>Customer records appear after first paid order.</div> : (
         <div className={styles.split}>
           <div className={styles.list}>
-            {filtered.map((customer) => (
-              <button className={`${styles.row} ${selectedEmail === customer.email ? styles.rowActive : ""}`} type="button" key={customer.email} onClick={() => choose(customer)}>
-                <strong>{customer.name || customer.email}</strong>
-                <strong>{formatMoney(customer.totalSpent)}</strong>
-                <span>{customer.email} · {customer.phone}</span>
-                <small>{customer.orderCount} order{customer.orderCount === 1 ? "" : "s"} · {customer.orderCount ? `last purchase ${displayDate(customer.lastPurchase)}` : displayDate(customer.lastPurchase)}</small>
-              </button>
-            ))}
+            {filtered.map((customer) => {
+              const totals = documentTotalsByEmail[customer.email.toLowerCase()];
+              return (
+                <button className={`${styles.row} ${selectedEmail === customer.email ? styles.rowActive : ""}`} type="button" key={customer.email} onClick={() => choose(customer)}>
+                  <span>
+                    <strong>{customer.name || customer.email}</strong>
+                    {totals && (totals.invoiced || totals.memo) ? (
+                      <><br /><small>
+                        {totals.invoiced ? `Invoiced ${formatMoney(totals.invoiced)}` : null}
+                        {totals.invoiced && totals.memo ? " · " : null}
+                        {totals.memo ? `Memo ${formatMoney(totals.memo)}` : null}
+                      </small></>
+                    ) : null}
+                  </span>
+                  <strong>{formatMoney(customer.totalSpent)}</strong>
+                  <span>{customer.email} · {customer.phone}</span>
+                  <small>{customer.orderCount} order{customer.orderCount === 1 ? "" : "s"} · {customer.orderCount ? `last purchase ${displayDate(customer.lastPurchase)}` : displayDate(customer.lastPurchase)}</small>
+                </button>
+              );
+            })}
           </div>
           {selected ? (
             <aside ref={detailRef} className={styles.detail}>
@@ -215,6 +229,8 @@ export function CustomersClient({
               <dl className={styles.facts}>
                 <div><dt>Email</dt><dd><a href={`mailto:${selected.email}`}>{selected.email}</a></dd></div>
                 <div><dt>History</dt><dd>{selected.orderCount} orders · {formatMoney(selected.totalSpent)} lifetime</dd></div>
+                <div><dt>Invoiced</dt><dd>{formatMoney(documentTotalsByEmail[selected.email.toLowerCase()]?.invoiced ?? 0)}</dd></div>
+                <div><dt>Memo</dt><dd>{formatMoney(documentTotalsByEmail[selected.email.toLowerCase()]?.memo ?? 0)}</dd></div>
               </dl>
               <ul className={styles.items}>
                 {history.map((order) => <li key={order.id}><span>{order.id}<br /><small>{new Date(order.createdAt).toLocaleDateString()}</small></span><strong>{formatMoney(order.amountTotal, order.currency)}</strong></li>)}
