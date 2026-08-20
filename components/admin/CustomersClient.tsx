@@ -24,8 +24,13 @@ export function CustomersClient({ customers, orders }: { customers: Customer[]; 
   const selected = customers.find((customer) => customer.email === selectedEmail);
   const history = selected ? orders.filter((order) => order.customer.email.toLowerCase() === selected.email.toLowerCase()) : [];
   const [notes, setNotes] = useState(selected?.notes ?? "");
+  const [paymentTerms, setPaymentTerms] = useState(selected?.paymentTerms ?? "");
+  const [memoDays, setMemoDays] = useState(selected?.memoDays?.toString() ?? "");
+  const [invoiceDueDays, setInvoiceDueDays] = useState(selected?.invoiceDueDays?.toString() ?? "");
   const [busy, setBusy] = useState(false);
+  const [termsBusy, setTermsBusy] = useState(false);
   const [error, setError] = useState("");
+  const [termsError, setTermsError] = useState("");
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return needle
@@ -36,7 +41,11 @@ export function CustomersClient({ customers, orders }: { customers: Customer[]; 
   function choose(customer: Customer) {
     setSelectedEmail(customer.email);
     setNotes(customer.notes);
+    setPaymentTerms(customer.paymentTerms ?? "");
+    setMemoDays(customer.memoDays?.toString() ?? "");
+    setInvoiceDueDays(customer.invoiceDueDays?.toString() ?? "");
     setError("");
+    setTermsError("");
     if (window.matchMedia("(max-width: 900px)").matches) {
       window.setTimeout(
         () => detailRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
@@ -61,6 +70,29 @@ export function CustomersClient({ customers, orders }: { customers: Customer[]; 
       setError(caught instanceof Error ? caught.message : "Could not save customer notes.");
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function saveTerms() {
+    if (!selected) return;
+    setTermsBusy(true);
+    setTermsError("");
+    try {
+      const response = await fetch(`/api/admin/customers/${encodeURIComponent(selected.email)}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          paymentTerms: paymentTerms.trim() || null,
+          memoDays: memoDays.trim() === "" ? null : Number(memoDays),
+          invoiceDueDays: invoiceDueDays.trim() === "" ? null : Number(invoiceDueDays),
+        }),
+      });
+      if (!response.ok) throw new Error("Could not save trading terms.");
+      router.refresh();
+    } catch (caught) {
+      setTermsError(caught instanceof Error ? caught.message : "Could not save trading terms.");
+    } finally {
+      setTermsBusy(false);
     }
   }
 
@@ -114,6 +146,21 @@ export function CustomersClient({ customers, orders }: { customers: Customer[]; 
               <ul className={styles.items}>
                 {history.map((order) => <li key={order.id}><span>{order.id}<br /><small>{new Date(order.createdAt).toLocaleDateString()}</small></span><strong>{formatMoney(order.amountTotal, order.currency)}</strong></li>)}
               </ul>
+              <div className={styles.form}>
+                <span className={admin.label}>Trading terms</span>
+                <label className={admin.field}><span className={admin.label}>Payment terms (blank = house default)</span><input className={admin.input} value={paymentTerms} onChange={(event) => setPaymentTerms(event.target.value)} placeholder="Net 30" /></label>
+                <label className={admin.field}><span className={admin.label}>Invoice due (days)</span><input className={admin.input} type="number" min="0" max="365" value={invoiceDueDays} onChange={(event) => setInvoiceDueDays(event.target.value)} placeholder="30" /></label>
+                <label className={admin.field}><span className={admin.label}>Memo hold (days)</span><input className={admin.input} type="number" min="0" max="365" value={memoDays} onChange={(event) => setMemoDays(event.target.value)} placeholder="7" /></label>
+                {termsError ? <p className={`${admin.notice} ${admin.noticeError}`}>{termsError}</p> : null}
+                <button className={admin.btn} type="button" onClick={saveTerms} disabled={termsBusy}>{termsBusy ? "Saving…" : "Save terms"}</button>
+              </div>
+              <div className={styles.form}>
+                <span className={admin.label}>Account statement</span>
+                <div style={{ display: "flex", gap: ".6rem", flexWrap: "wrap" }}>
+                  <a className={admin.btn} href={`/api/admin/customers/${encodeURIComponent(selected.email)}/statement?type=paid`} target="_blank" rel="noreferrer">Paid invoices (PDF)</a>
+                  <a className={admin.btn} href={`/api/admin/customers/${encodeURIComponent(selected.email)}/statement?type=open`} target="_blank" rel="noreferrer">Open invoices (PDF)</a>
+                </div>
+              </div>
               <div className={styles.form}>
                 <label className={admin.field}><span className={admin.label}>Private customer notes</span><textarea className={admin.textarea} value={notes} onChange={(event) => setNotes(event.target.value)} /></label>
                 {error ? <p className={`${admin.notice} ${admin.noticeError}`}>{error}</p> : null}

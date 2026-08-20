@@ -4,7 +4,7 @@ import { randomBytes } from "node:crypto";
 import { kvGet, kvGetMany, kvSet, kvSetAdd, kvSetMembers } from "@/lib/kv";
 import { nextDocumentNumber } from "@/lib/admin/inventory";
 import { getAdminSettings } from "@/lib/admin/settings";
-import { memoDueDate, memoTermsLabel, resolveTerms } from "@/lib/admin/terms";
+import { invoiceDueDate, memoDueDate, memoTermsLabel, resolveTerms } from "@/lib/admin/terms";
 import {
   computeTotals,
   looksLikeEmail,
@@ -153,7 +153,9 @@ export async function createDocument(draft: DocumentDraft) {
   // the house default (advance payment, 7-day memo).
   const terms = await resolveTerms(draft.customer?.email ? String(draft.customer.email) : undefined);
   const fallbackTerms = kind === "memo" ? memoTermsLabel(terms.memoDays) : terms.invoiceTerms;
-  const fallbackDueDate = kind === "memo" ? memoDueDate(terms.memoDays) : undefined;
+  const fallbackDueDate = kind === "memo"
+    ? memoDueDate(terms.memoDays)
+    : invoiceDueDate(terms.invoiceDueDays);
   const enrichedDraft = {
     ...draft,
     taxRate: draft.taxRate === undefined ? settings.defaultTaxRate : draft.taxRate,

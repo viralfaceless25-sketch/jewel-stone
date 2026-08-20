@@ -24,6 +24,8 @@ export type AdminSettings = {
   /** House defaults for a customer with no agreed terms of their own. */
   defaultInvoiceTerms: string;
   defaultMemoDays: number;
+  /** Days after issue an invoice is due, e.g. 30 for "Net 30". */
+  defaultInvoiceDueDays: number;
   updatedAt: string;
 };
 
@@ -50,6 +52,7 @@ export const defaultAdminSettings: AdminSettings = {
   // accounts get their own terms on the customer record.
   defaultInvoiceTerms: "Advance payment",
   defaultMemoDays: 7,
+  defaultInvoiceDueDays: 30,
   updatedAt: new Date(0).toISOString(),
 };
 
@@ -89,6 +92,7 @@ export async function saveAdminSettings(input: Partial<AdminSettings>) {
     zelleId: String(input.zelleId ?? current.zelleId).trim().slice(0, 80),
     defaultInvoiceTerms: clean(input.defaultInvoiceTerms, current.defaultInvoiceTerms, 80),
     defaultMemoDays: Math.max(0, Math.min(365, Math.round(Number(input.defaultMemoDays ?? current.defaultMemoDays) || 0))),
+    defaultInvoiceDueDays: Math.max(0, Math.min(365, Math.round(Number(input.defaultInvoiceDueDays ?? current.defaultInvoiceDueDays) || 0))),
     updatedAt: new Date().toISOString(),
   };
   await kvSet(key, next);

@@ -30,11 +30,13 @@ export async function PATCH(request: Request, { params }: Context) {
     notes?: unknown;
     paymentTerms?: unknown;
     memoDays?: unknown;
+    invoiceDueDays?: unknown;
   };
 
   // Trading terms for this account — blank values fall back to the house default.
-  if (body.paymentTerms !== undefined || body.memoDays !== undefined) {
+  if (body.paymentTerms !== undefined || body.memoDays !== undefined || body.invoiceDueDays !== undefined) {
     const memoDaysRaw = body.memoDays;
+    const invoiceDueDaysRaw = body.invoiceDueDays;
     const updated = await updateCustomerTerms(email, {
       ...(body.paymentTerms !== undefined
         ? { paymentTerms: typeof body.paymentTerms === "string" ? body.paymentTerms : null }
@@ -43,6 +45,12 @@ export async function PATCH(request: Request, { params }: Context) {
         ? {
             memoDays:
               memoDaysRaw === null || memoDaysRaw === "" ? null : Number(memoDaysRaw),
+          }
+        : {}),
+      ...(body.invoiceDueDays !== undefined
+        ? {
+            invoiceDueDays:
+              invoiceDueDaysRaw === null || invoiceDueDaysRaw === "" ? null : Number(invoiceDueDaysRaw),
           }
         : {}),
     });

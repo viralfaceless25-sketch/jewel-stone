@@ -70,6 +70,8 @@ export type Customer = {
       (advance payment for invoices, 7 days for memoranda). */
   paymentTerms?: string;
   memoDays?: number;
+  /** Days after issue an invoice is due, e.g. 30 for "Net 30". */
+  invoiceDueDays?: number;
   updatedAt: string;
 };
 

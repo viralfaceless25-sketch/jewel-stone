@@ -200,7 +200,7 @@ export async function getCustomer(email: string) {
 /** Agreed trading terms for an account. Blank/undefined restores the default. */
 export async function updateCustomerTerms(
   email: string,
-  patch: { paymentTerms?: string | null; memoDays?: number | null },
+  patch: { paymentTerms?: string | null; memoDays?: number | null; invoiceDueDays?: number | null },
 ) {
   const customer = await getCustomer(email);
   if (!customer) return null;
@@ -213,6 +213,10 @@ export async function updateCustomerTerms(
   if (patch.memoDays !== undefined) {
     if (patch.memoDays === null || Number.isNaN(Number(patch.memoDays))) delete next.memoDays;
     else next.memoDays = Math.max(0, Math.min(365, Math.round(Number(patch.memoDays))));
+  }
+  if (patch.invoiceDueDays !== undefined) {
+    if (patch.invoiceDueDays === null || Number.isNaN(Number(patch.invoiceDueDays))) delete next.invoiceDueDays;
+    else next.invoiceDueDays = Math.max(0, Math.min(365, Math.round(Number(patch.invoiceDueDays))));
   }
   await kvSet(customerRecordKey(email), next);
   return next;
