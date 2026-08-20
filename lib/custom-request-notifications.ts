@@ -14,7 +14,7 @@ type Email = {
 
 const apiKey = process.env.RESEND_API_KEY;
 const ownerEmail = process.env.INQUIRY_TO_EMAIL;
-const from = process.env.INQUIRY_FROM_EMAIL ?? "Jewel Stone <inquiries@jewelstonenyc.com>";
+const from = process.env.INQUIRY_FROM_EMAIL ?? "Jewel Stone <onboarding@resend.dev>";
 
 export function customNotificationsConfigured() {
   return Boolean(apiKey && ownerEmail);
