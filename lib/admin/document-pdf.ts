@@ -19,6 +19,7 @@ const PAGE_HEIGHT = 792;
 const MARGIN = 42;
 const CONTENT_WIDTH = PAGE_WIDTH - MARGIN * 2;
 
+// Black-and-white by design: no gold/brown accent anywhere on the document.
 const color = {
   paper: rgb(1, 1, 1),
   ink: rgb(0.09, 0.08, 0.07),
@@ -26,8 +27,8 @@ const color = {
   soft: rgb(0.32, 0.30, 0.27),
   muted: rgb(0.49, 0.46, 0.42),
   line: rgb(0.86, 0.83, 0.78),
-  gold: rgb(0.55, 0.40, 0.20),
-  goldPale: rgb(0.96, 0.94, 0.90),
+  gold: rgb(0.13, 0.13, 0.13),
+  goldPale: rgb(0.93, 0.93, 0.93),
   white: rgb(1, 1, 1),
   red: rgb(0.53, 0.15, 0.13),
 };
@@ -256,14 +257,6 @@ export async function renderDocumentPdf(
         size: 20,
         color: color.ink,
       });
-      page.drawText(safeText(issuer.tagline.toUpperCase()), {
-        x: 84,
-        y: 720,
-        font: bold,
-        size: 6.2,
-        color: color.gold,
-      });
-
       const heading = document.kind === "memo" ? "MEMORANDUM" : "INVOICE";
       drawRight(page, heading, PAGE_WIDTH - MARGIN, 737, display, 23);
       drawRight(page, document.number, PAGE_WIDTH - MARGIN, 714, bold, 8.5, color.gold);
