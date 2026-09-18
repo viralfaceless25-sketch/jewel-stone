@@ -11,9 +11,11 @@ type CheckoutClientProps = {
   paymentsEnabled: boolean;
   /** Mirrors STRIPE_ALLOW_SIGNATURE_CHECKOUT so the button matches what the API will do. */
   allowSignatureCheckout?: boolean;
+  /** Signed-in customer's e-mail, if any — pre-fills checkout so they don't retype it. */
+  customerEmail?: string | null;
 };
 
-export function CheckoutClient({ paymentsEnabled, allowSignatureCheckout = false }: CheckoutClientProps) {
+export function CheckoutClient({ paymentsEnabled, allowSignatureCheckout = false, customerEmail }: CheckoutClientProps) {
   const { items, clear } = useCartStore();
   const [done, setDone] = useState(false);
   const [sending, setSending] = useState(false);
@@ -26,7 +28,7 @@ export function CheckoutClient({ paymentsEnabled, allowSignatureCheckout = false
   const [promo, setPromo] = useState<{ code: string; amountOff: number; label: string } | null>(null);
   const [promoBusy, setPromoBusy] = useState(false);
   const [promoError, setPromoError] = useState("");
-  const [checkoutEmail, setCheckoutEmail] = useState("");
+  const [checkoutEmail, setCheckoutEmail] = useState(customerEmail ?? "");
   const discount = promo ? promo.amountOff / 100 : 0;
   const payable = Math.max(0, total - discount);
 
@@ -195,17 +197,19 @@ export function CheckoutClient({ paymentsEnabled, allowSignatureCheckout = false
             <strong>Hosted by Stripe</strong>
             <span>Encrypted payment · address collection · receipt confirmation</span>
           </div>
-          <label>
-            E-mail
-            <input
-              required
-              name="email"
-              type="email"
-              autoComplete="email"
-              value={checkoutEmail}
-              onChange={(event) => setCheckoutEmail(event.target.value)}
-            />
-          </label>
+          <div className={styles.field}>
+            <label>
+              E-mail
+              <input
+                required
+                name="email"
+                type="email"
+                autoComplete="email"
+                value={checkoutEmail}
+                onChange={(event) => setCheckoutEmail(event.target.value)}
+              />
+            </label>
+          </div>
           {error ? <p className={styles.error} role="alert">{error}</p> : null}
           <button type="submit" className={styles.submit} disabled={sending}>
             {sending ? "Opening Stripe…" : `Continue to secure payment · $${payable.toLocaleString("en-US")}`}

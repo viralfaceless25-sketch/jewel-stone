@@ -192,6 +192,12 @@ export function SiteNav() {
                 <path d="m20 20-3.2-3.2" strokeLinecap="round" />
               </svg>
             </Link>
+            <Link href="/account" className={styles.iconBtn} aria-label="Account">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <circle cx="12" cy="8" r="3.5" />
+                <path d="M4.5 20c1.4-3.8 4.6-6 7.5-6s6.1 2.2 7.5 6" strokeLinecap="round" />
+              </svg>
+            </Link>
             <Link href="/wishlist" className={styles.iconBtn} aria-label="Wishlist">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M12 20s-7-4.5-7-9.5A3.5 3.5 0 0 1 12 7a3.5 3.5 0 0 1 7 3.5C19 15.5 12 20 12 20Z" strokeLinejoin="round" />
@@ -334,6 +340,7 @@ export function SiteNav() {
               <div className={styles.mobileUtility}>
                 <Link className={styles.mobileAppointment} href="/contact" onClick={() => setOpen(false)}>Book appointment ↗</Link>
                 <Link href="/contact" onClick={() => setOpen(false)}>Contact</Link>
+                <Link href="/account" onClick={() => setOpen(false)}>Account</Link>
                 <Link href="/wishlist" onClick={() => setOpen(false)}>Wishlist</Link>
               </div>
             </div>

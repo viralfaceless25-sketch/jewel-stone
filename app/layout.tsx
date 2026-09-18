@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
   authors: [{ name: "Ishan Vaghani", url: "/about" }],
   creator: "Jewel Stone",
-  publisher: "Jewel Stone NY LLC",
+  publisher: "Jewel Stone USA LLC",
   category: "Fine jewelry",
   openGraph: {
     title: "Jewel Stone NYC | Natural, PIECUT & Lab-Grown Diamond Jewelry",
@@ -60,8 +60,11 @@ export const metadata: Metadata = {
       "Rare PIECUT and antique pieces, certified diamonds, and bespoke jewelry from NYC's Diamond District — viewable in 3D and AR.",
     images: [`${SITE_URL}/images/hero/campaign-01.webp`],
   },
-  ...(process.env.GOOGLE_SITE_VERIFICATION ? {
-    verification: { google: process.env.GOOGLE_SITE_VERIFICATION },
+  ...(process.env.GOOGLE_SITE_VERIFICATION || process.env.BING_SITE_VERIFICATION ? {
+    verification: {
+      ...(process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : {}),
+      ...(process.env.BING_SITE_VERIFICATION ? { other: { "msvalidate.1": process.env.BING_SITE_VERIFICATION } } : {}),
+    },
   } : {}),
   robots: {
     index: true,

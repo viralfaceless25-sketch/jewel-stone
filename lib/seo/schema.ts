@@ -49,7 +49,7 @@ export function organizationSchema() {
     "@type": "JewelryStore",
     "@id": `${SITE_URL}/#organization`,
     name: brand.name,
-    legalName: "Jewel Stone NY LLC",
+    legalName: "Jewel Stone USA LLC",
     url: SITE_URL,
     logo: absoluteUrl("/logo-transparent.png"),
     foundingDate: "1980",
@@ -70,6 +70,8 @@ export function organizationSchema() {
       { "@type": "City", name: "New York" },
       { "@type": "Country", name: "United States" },
     ],
+    priceRange: "$350–$21,000+",
+    ...(brand.socialLinks.length ? { sameAs: brand.socialLinks } : {}),
     knowsAbout: [
       "Natural diamonds",
       "Lab-grown diamonds",

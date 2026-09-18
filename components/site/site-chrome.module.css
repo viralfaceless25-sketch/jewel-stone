@@ -297,9 +297,16 @@
    whenever the left and right navigation groups had different widths, which
    varies with viewport size and font rendering. */
 .navInner { height:var(--nav-height); grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(.7rem,1.4vw,1.2rem); }
-.navLeft { display:flex; gap:clamp(.8rem,1.7vw,2rem); align-items:center; min-width:0; justify-self:start; padding-right:clamp(5.5rem,12vw,8.5rem); }
-.navRight { display:flex; justify-content:flex-end; align-items:center; gap:clamp(.7rem,1.5vw,1.9rem); min-width:0; justify-self:end; padding-left:clamp(5.5rem,12vw,8.5rem); }
-.navSecondary { display:flex; align-items:center; gap:clamp(1rem,2vw,2rem); }
+/* navLeft and navRight each get half the bar and are anchored to its outer
+   edges; the wordmark is absolutely centred over them (see above), so the
+   padding here is only a minimum breathing gap, not the thing doing the
+   centring. It has to stay small enough that navRight's real content
+   (Diamonds/Custom Design/About + the four action icons) fits inside its
+   own half without overflowing into the wordmark — a fixed 5.5rem+ reservation
+   didn't, and pushed live text under the logo at ordinary laptop widths. */
+.navLeft { display:flex; gap:clamp(.8rem,1.7vw,2rem); align-items:center; min-width:0; justify-self:start; padding-right:clamp(1.5rem,4vw,3.5rem); }
+.navRight { display:flex; justify-content:flex-end; align-items:center; gap:clamp(.6rem,1.2vw,1.5rem); min-width:0; justify-self:end; padding-left:clamp(1.5rem,4vw,3.5rem); }
+.navSecondary { display:flex; align-items:center; gap:clamp(.6rem,1.4vw,2rem); }
 .navActions { display:flex; align-items:center; gap:.3rem; }
 .navItem { position:relative; display:flex; align-items:center; gap:.28rem; height:var(--nav-height); }
 
@@ -619,8 +626,12 @@
    Declared last so they override the base .wordmarkText rule above. The
    wordmark is absolutely centred in the bar, so at narrow desktop widths it
    has to give width back to keep clear of the two navigation groups. */
-@media (min-width: 861px) and (max-width: 1260px) {
+@media (min-width: 861px) and (max-width: 1420px) {
   .wordmarkText { font-size: 1.06rem; letter-spacing: .09em; padding-left: .09em; }
+  .navLeft { padding-right: .5rem; }
+  .navRight { padding-left: .5rem; gap: .4rem; }
+  .navSecondary { gap: .4rem; }
+  .navLink { letter-spacing: .04em; font-size: .64rem; }
 }
 @media (max-width: 600px) {
   .wordmarkText { font-size: 1.28rem; letter-spacing: .13em; padding-left: .13em; }

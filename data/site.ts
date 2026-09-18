@@ -7,7 +7,15 @@ export const brand = {
   email: "ishan@thejewelstone.com",
   website: "https://thejewelstone.com",
   address: "62 W 47th St, Suite 505, New York, NY 10036",
-  hours: "Monday to Saturday, by appointment"
+  hours: "Monday to Saturday, by appointment",
+  /** Live profile URLs only (Google Business Profile, Instagram, Yelp, etc) —
+   * feeds schema.org `sameAs`, a trust signal both Google and AI answer
+   * engines use to corroborate the business. Add each URL here the day the
+   * profile goes live; nothing else needs to change. */
+  socialLinks: [
+    "https://share.google/n3M2u4Xc4glmBY0FY",
+    "https://www.instagram.com/the_jewelstone/",
+  ] as string[],
 };
 
 export const navigation = [
