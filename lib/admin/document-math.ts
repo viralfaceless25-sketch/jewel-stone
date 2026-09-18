@@ -1,3 +1,5 @@
+import { customerKey } from "./order-items";
+
 export type DocumentKind = "invoice" | "memo";
 export type DocumentStatus = "draft" | "sent" | "paid" | "returned" | "void";
 export type DocumentItemKind = "jewelry" | "loose_stone" | "service";
@@ -158,3 +160,27 @@ export function statusLabel(status: DocumentStatus) {
           : "Void";
 }
 
+
+export type CustomerDocumentTotals = { invoiced: number; memo: number };
+
+/**
+ * Invoiced/memo totals per customer, keyed by the canonical customerKey()
+ * form so a stray space or capital letter in a legacy record can never split
+ * one customer into two buckets (which showed as $0 in the admin list).
+ * Voided documents count toward neither figure.
+ */
+export function documentTotalsByEmail(
+  documents: Array<{ kind: DocumentKind; status: DocumentStatus; total: number; customer: { email?: string } }>,
+): Record<string, CustomerDocumentTotals> {
+  const byEmail: Record<string, CustomerDocumentTotals> = {};
+  for (const document of documents) {
+    if (document.status === "void") continue;
+    const email = customerKey(document.customer.email ?? "");
+    if (!email) continue;
+    const totals = (byEmail[email] ??= { invoiced: 0, memo: 0 });
+    const amount = Number.isFinite(document.total) ? document.total : 0;
+    if (document.kind === "invoice") totals.invoiced += amount;
+    else totals.memo += amount;
+  }
+  return byEmail;
+}

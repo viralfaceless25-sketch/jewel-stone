@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatMoney, type Customer, type Order } from "@/lib/admin/order-shared";
 import { KYC_STATUS_LABELS, type KycStatus } from "@/lib/admin/kyc-shared";
+import { customerKey } from "@/lib/admin/order-items";
 import admin from "@/app/admin/admin.module.css";
 import styles from "./records.module.css";
 
@@ -33,8 +34,8 @@ export function CustomersClient({
   const [query, setQuery] = useState("");
   const [selectedEmail, setSelectedEmail] = useState(customers[0]?.email ?? "");
   const selected = customers.find((customer) => customer.email === selectedEmail);
-  const history = selected ? orders.filter((order) => order.customer.email.toLowerCase() === selected.email.toLowerCase()) : [];
-  const kycStatus = selected ? kycByEmail[selected.email.toLowerCase()] : undefined;
+  const history = selected ? orders.filter((order) => customerKey(order.customer.email) === customerKey(selected.email)) : [];
+  const kycStatus = selected ? kycByEmail[customerKey(selected.email)] : undefined;
   const [notes, setNotes] = useState(selected?.notes ?? "");
   const [name, setName] = useState(selected?.name ?? "");
   const [phone, setPhone] = useState(selected?.phone ?? "");
@@ -203,7 +204,7 @@ export function CustomersClient({
         <div className={styles.split}>
           <div className={styles.list}>
             {filtered.map((customer) => {
-              const totals = documentTotalsByEmail[customer.email.toLowerCase()];
+              const totals = documentTotalsByEmail[customerKey(customer.email)];
               return (
                 <button className={`${styles.row} ${selectedEmail === customer.email ? styles.rowActive : ""}`} type="button" key={customer.email} onClick={() => choose(customer)}>
                   <span>
@@ -229,8 +230,8 @@ export function CustomersClient({
               <dl className={styles.facts}>
                 <div><dt>Email</dt><dd><a href={`mailto:${selected.email}`}>{selected.email}</a></dd></div>
                 <div><dt>History</dt><dd>{selected.orderCount} orders · {formatMoney(selected.totalSpent)} lifetime</dd></div>
-                <div><dt>Invoiced</dt><dd>{formatMoney(documentTotalsByEmail[selected.email.toLowerCase()]?.invoiced ?? 0)}</dd></div>
-                <div><dt>Memo</dt><dd>{formatMoney(documentTotalsByEmail[selected.email.toLowerCase()]?.memo ?? 0)}</dd></div>
+                <div><dt>Invoiced</dt><dd>{formatMoney(documentTotalsByEmail[customerKey(selected.email)]?.invoiced ?? 0)}</dd></div>
+                <div><dt>Memo</dt><dd>{formatMoney(documentTotalsByEmail[customerKey(selected.email)]?.memo ?? 0)}</dd></div>
               </dl>
               <ul className={styles.items}>
                 {history.map((order) => <li key={order.id}><span>{order.id}<br /><small>{new Date(order.createdAt).toLocaleDateString()}</small></span><strong>{formatMoney(order.amountTotal, order.currency)}</strong></li>)}

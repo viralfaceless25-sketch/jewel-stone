@@ -1,7 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { customerKey } from "../lib/admin/order-items.ts";
 import {
   computeTotals,
+  documentTotalsByEmail,
   lineTotal,
   normalizeLineItems,
   parseMoneyToCents,
@@ -67,4 +69,24 @@ test("quantity and rate inputs are bounded", () => {
   assert.equal(parseQuantity(20000), 9999);
   assert.equal(parseRate("7.1238"), 7.124);
   assert.equal(parseRate(200), 100);
+});
+
+test("customer document totals bucket dirty emails under one canonical key", () => {
+  const totals = documentTotalsByEmail([
+    { kind: "invoice", status: "paid", total: 120000, customer: { email: " Buyer@Example.com " } },
+    { kind: "invoice", status: "sent", total: 80000, customer: { email: "buyer@example.com" } },
+    { kind: "memo", status: "sent", total: 50000, customer: { email: "BUYER@example.com\n" } },
+    { kind: "invoice", status: "void", total: 999900, customer: { email: "buyer@example.com" } },
+    { kind: "memo", status: "sent", total: 4200, customer: { email: "" } },
+    { kind: "invoice", status: "sent", total: Number.NaN, customer: { email: "buyer@example.com" } },
+  ]);
+  assert.deepEqual(Object.keys(totals), ["buyer@example.com"]);
+  assert.deepEqual(totals["buyer@example.com"], { invoiced: 200000, memo: 50000 });
+});
+
+test("customer lookups use the same key the totals map is built with", () => {
+  const totals = documentTotalsByEmail([
+    { kind: "invoice", status: "paid", total: 65000, customer: { email: "Trade@Buyer.com" } },
+  ]);
+  assert.equal(totals[customerKey(" trade@buyer.com ")].invoiced, 65000);
 });

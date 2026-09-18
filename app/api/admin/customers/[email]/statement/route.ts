@@ -1,6 +1,7 @@
 import { requireAdminApi } from "@/lib/admin/auth";
 import { getCustomer } from "@/lib/admin/orders";
 import { listDocuments } from "@/lib/admin/documents";
+import { customerKey } from "@/lib/admin/order-items";
 import { renderStatementPdf, type StatementType } from "@/lib/admin/statement-pdf";
 
 export const runtime = "nodejs";
@@ -22,7 +23,7 @@ export async function GET(request: Request, { params }: Context) {
 
   const allDocuments = await listDocuments().catch(() => []);
   const documents = allDocuments.filter(
-    (document) => document.customer.email?.toLowerCase() === email.toLowerCase(),
+    (document) => document.customer.email && customerKey(document.customer.email) === customerKey(email),
   );
 
   const pdf = await renderStatementPdf(customer, documents, type);

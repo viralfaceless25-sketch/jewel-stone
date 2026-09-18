@@ -4,6 +4,8 @@ import { listCustomers, listOrders } from "@/lib/admin/orders";
 import { listKyc } from "@/lib/admin/kyc";
 import { listDocuments } from "@/lib/admin/documents";
 import { formatMoney } from "@/lib/admin/order-shared";
+import { customerKey } from "@/lib/admin/order-items";
+import { documentTotalsByEmail } from "@/lib/admin/document-math";
 import { CustomersClient } from "@/components/admin/CustomersClient";
 import { StatTile, TileGrid } from "../StatTile";
 import styles from "../admin.module.css";
@@ -19,19 +21,12 @@ export default async function CustomersPage() {
     listDocuments().catch(() => []),
   ]);
   const lifetime = customers.reduce((sum, customer) => sum + customer.totalSpent, 0);
-  const kycByEmail = Object.fromEntries(kycRecords.map((record) => [record.email.toLowerCase(), record.status]));
+  const kycByEmail = Object.fromEntries(kycRecords.map((record) => [customerKey(record.email), record.status]));
 
   // Invoiced/memo totals per customer, next to their name in the list -
-  // voided documents don't count toward either figure.
-  const documentTotalsByEmail: Record<string, { invoiced: number; memo: number }> = {};
-  for (const document of documents) {
-    if (document.status === "void") continue;
-    const email = document.customer.email?.toLowerCase();
-    if (!email) continue;
-    const totals = (documentTotalsByEmail[email] ??= { invoiced: 0, memo: 0 });
-    if (document.kind === "invoice") totals.invoiced += document.total;
-    else totals.memo += document.total;
-  }
+  // voided documents don't count toward either figure. Keyed by customerKey()
+  // so the list and the client component agree on one email form.
+  const totalsByEmail = documentTotalsByEmail(documents);
 
   return (
     <>
@@ -41,7 +36,7 @@ export default async function CustomersPage() {
         <StatTile label="Lifetime sales" value={formatMoney(lifetime)} tone="gold" />
       </TileGrid>
       <section style={{ marginTop: "1.2rem" }}>
-        <CustomersClient customers={customers} orders={orders} kycByEmail={kycByEmail} documentTotalsByEmail={documentTotalsByEmail} />
+        <CustomersClient customers={customers} orders={orders} kycByEmail={kycByEmail} documentTotalsByEmail={totalsByEmail} />
       </section>
     </>
   );

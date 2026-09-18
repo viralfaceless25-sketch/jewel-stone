@@ -7,6 +7,7 @@ import { getKyc } from "@/lib/admin/kyc";
 import { KYC_STATUS_LABELS } from "@/lib/admin/kyc-shared";
 import { resolveTerms } from "@/lib/admin/terms";
 import { formatMoney } from "@/lib/admin/order-shared";
+import { customerKey } from "@/lib/admin/order-items";
 import { AccountPortal } from "@/components/account/AccountPortal";
 import pages from "@/components/pages/pages.module.css";
 
@@ -31,7 +32,7 @@ export default async function AccountPage() {
 
   // Only this customer's paperwork, and never anything still in draft.
   const documents = allDocuments
-    .filter((document) => document.customer.email?.toLowerCase() === email.toLowerCase())
+    .filter((document) => document.customer.email && customerKey(document.customer.email) === customerKey(email))
     .filter((document) => document.status !== "draft")
     .map((document) => ({
       number: document.number,
